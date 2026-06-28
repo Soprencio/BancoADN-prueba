@@ -1,0 +1,76 @@
+idIncremental=75
+1 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+2 - 1 - 9 - 2026-06-24 - nombrecreo se creo una cuenta
+3 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+4 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+5 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+6 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+7 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+8 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+9 - 1 - 10 - 2026-06-24 - nombrecreo se creo una cuenta
+10 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+11 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+12 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+13 - 9 - 9 - 2026-06-24 - nombrecreo creo una solicitud de perfil
+14 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+15 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+16 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+17 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+18 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+19 - 2 - 10 - 2026-06-24 - nombrecreo inicio sesion
+20 - 9 - 9 - 2026-06-24 - nombrecreo creo una solicitud de perfil
+21 - 9 - 10 - 2026-06-24 - nombrecreo creo una solicitud de perfil
+22 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+23 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+24 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+25 - 2 - 10 - 2026-06-24 - nombrecreo inicio sesion
+26 - 6 - 9 - 2026-06-24 - nombrecreo creo el perfilgenetico de:NombreCompletowawz
+27 - 7 - 9 - 2026-06-24 - nombrecreo modifico la solicitud: 11 y ahora esta aceptada
+28 - 7 - 10 - 2026-06-24 - nombrecreo modifico la solicitud: 11 y ahora esta aceptada
+29 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
+30 - 1 - 11 - 2026-06-26 - juan se creo una cuenta
+31 - 2 - 11 - 2026-06-26 - juan inicio sesion
+32 - 10 - 11 - 2026-06-26 - juan busco perfiles por nombre con el siguiente: Buscar...
+33 - 10 - 11 - 2026-06-26 - juan busco perfiles por id con el siguiente: 9
+34 - 10 - 11 - 2026-06-26 - juan busco perfiles por id con el siguiente: 1
+35 - 9 - 11 - 2026-06-26 - juan creo una solicitud de perfil
+36 - 1 - 12 - 2026-06-26 - aaa se creo una cuenta
+37 - 2 - 12 - 2026-06-26 - aaa inicio sesion
+38 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+39 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+40 - 6 - 12 - 2026-06-26 - aaa creo el perfilgenetico de:juancito
+41 - 7 - 12 - 2026-06-26 - aaa intento de modificar la solicitud: 13 pero fallo
+42 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+43 - 10 - 12 - 2026-06-26 - aaa busco perfiles por id con el siguiente: 11
+44 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+45 - 6 - 12 - 2026-06-26 - aaa creo el perfilgenetico de:NombreCompletomewmew
+46 - 7 - 12 - 2026-06-26 - aaa intento de modificar la solicitud: 12 pero fallo
+47 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+48 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+49 - 7 - 12 - 2026-06-26 - aaa intento de modificar la solicitud: 10 pero fallo
+50 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+51 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
+52 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
+53 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
+54 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
+55 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
+56 - 2 - 12 - 2026-06-26 - aaa inicio sesion
+57 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+58 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+59 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+60 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
+61 - 2 - 12 - 2026-06-26 - aaa inicio sesion
+62 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+63 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+64 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+65 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
+66 - 2 - 12 - 2026-06-26 - aaa inicio sesion
+67 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
+68 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+69 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+70 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+71 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
+72 - 10 - 12 - 2026-06-26 - aaa busco perfiles por id con el siguiente: 10
+73 - 3 - 12 - 2026-06-26 - aaa dio de baja el perfil de:q@gmail.com
+74 - 10 - 12 - 2026-06-26 - aaa busco perfiles por id con el siguiente: 10
+75 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
