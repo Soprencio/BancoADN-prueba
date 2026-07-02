@@ -1,4 +1,4 @@
-idIncremental=75
+idIncremental=126
 1 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
 2 - 1 - 9 - 2026-06-24 - nombrecreo se creo una cuenta
 3 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
@@ -74,3 +74,54 @@ idIncremental=75
 73 - 3 - 12 - 2026-06-26 - aaa dio de baja el perfil de:q@gmail.com
 74 - 10 - 12 - 2026-06-26 - aaa busco perfiles por id con el siguiente: 10
 75 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
+76 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+77 - 1 - 13 - 2026-07-02 - 111111 se creo una cuenta
+78 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+79 - 1 - 14 - 2026-07-02 - 121212 se creo una cuenta
+80 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+81 - 1 - 15 - 2026-07-02 - yonaikerson se creo una cuenta
+82 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+83 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
+84 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+85 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+86 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
+87 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+88 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+89 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
+90 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+91 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
+92 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
+93 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+94 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
+95 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
+96 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+97 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
+98 - 9 - 15 - 2026-07-02 - yonaikerson creo una solicitud de perfil
+99 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+100 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
+101 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
+102 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+103 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+104 - 1 - 16 - 2026-07-02 - bbb se creo una cuenta
+105 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+106 - 2 - 16 - 2026-07-02 - bbb inicio sesion
+107 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+108 - 2 - 16 - 2026-07-02 - bbb inicio sesion
+109 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
+110 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+111 - 2 - 16 - 2026-07-02 - bbb inicio sesion
+112 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
+113 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+114 - 2 - 16 - 2026-07-02 - bbb inicio sesion
+115 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
+116 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+117 - 2 - 16 - 2026-07-02 - bbb inicio sesion
+118 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
+119 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+120 - 2 - 16 - 2026-07-02 - bbb inicio sesion
+121 - 6 - 16 - 2026-07-02 - bbb creo el perfilgenetico de:aaa
+122 - 7 - 16 - 2026-07-02 - bbb intento de modificar la solicitud: 14 pero fallo
+123 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
+124 - 2 - 16 - 2026-07-02 - bbb inicio sesion
+125 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
+126 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor

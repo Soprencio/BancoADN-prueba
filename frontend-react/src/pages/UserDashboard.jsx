@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { solicitudesService, perfilesService } from '../services/mockService';
+import { solicitudesService, perfilesService } from '../services/apiService';
 import { useToast } from '../contexts/ToastContext';
 import ConfirmationModal from '../components/ConfirmationModal';
 import FormModal from '../components/FormModal';
@@ -21,100 +21,131 @@ const UserDashboard = () => {
   const [showConfirmRestaurar, setShowConfirmRestaurar] = useState(false);
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [requestType, setRequestType] = useState('');
-  const [formValues, setFormValues] = useState({
-    nombrePerfil: '',
-    codigoSecuencia: '',
-    descripcion: '',
-    fechaMuestra: '',
-  });
+  const [formInitialValues, setFormInitialValues] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchType, setSearchType] = useState('nombre');
+  const [searchResults, setSearchResults] = useState([]);
 
-  // Load pending requests for current user
-  const loadPending = async () => {
+  const loadPendingRequests = async () => {
     if (!user) return;
-    const allPending = await solicitudesService.getPending();
-    const userPending = allPending.filter((s) => s.idCuenta === user.idCuenta);
-    setPendingRequests(userPending);
+    try {
+      const allPending = await solicitudesService.getPending(user.email);
+      const userPending = allPending.filter(s => s.email === user.email);
+      setPendingRequests(userPending);
+    } catch (err) {
+      addToast('Error al cargar solicitudes pendientes', 'error');
+    }
   };
 
   useEffect(() => {
     if (user) {
-      loadPending();
+      loadPendingRequests();
     }
   }, [user]);
 
-  const hasPending = (type) => {
-    return pendingRequests.some((p) => p.tipo === type);
+  const hasPending = (tipo) => {
+    return pendingRequests.some(p => p.tipo === tipo);
   };
 
-  const handleRequestSubmit = async (values) => {
-    const datos = {
-      nombreCompleto: values.nombrePerfil,
-      codigoSecuencia: values.codigoSecuencia,
-      descripcion: values.descripcion,
-      fechaMuestra: values.fechaMuestra,
-      email: user.email,
-      idCuenta: user.idCuenta,
-    };
+  const handleVerPerfil = async () => {
+    setLoadingProfile(true);
     try {
-      await solicitudesService.createRequest(requestType, datos);
-      addToast('Solicitud enviada exitosamente', 'success');
-      setShowRequestModal(false);
-      // reset form
-      setFormValues({
-        nombrePerfil: '',
-        codigoSecuencia: '',
-        descripcion: '',
-        fechaMuestra: '',
-      });
-      await loadPending();
+      const p = await perfilesService.getMyProfile(user.email);
+      setPerfil(p);
+      setShowPerfil(true);
     } catch (err) {
-      addToast('Error al enviar solicitud', 'error');
+      addToast('Error al cargar perfil', 'error');
+    } finally {
+      setLoadingProfile(false);
     }
   };
 
-  const handlePerfilToggle = () => {
-    setShowPerfil(!showPerfil);
-    if (showPerfil) {
-      setPerfil(null);
-      setLoadingProfile(true);
-      if (user?.idCuenta) {
-        perfilesService.getMyProfile(user.idCuenta).then((p) => {
-          setPerfil(p);
-          setLoadingProfile(false);
-        });
-      }
-    }
+  const handleOpenRegistrar = () => {
+    setRequestType('REGISTRAR');
+    setFormInitialValues({});
+    setShowRequestModal(true);
   };
 
-  // Helper to set form defaults based on request type and current profile
-  const setFormDefaults = async (type) => {
-    setRequestType(type);
-    if (type === 'MODIFICAR' && user?.idCuenta) {
-      const p = await perfilesService.getMyProfile(user.idCuenta);
+  const handleOpenModificar = async () => {
+    setRequestType('MODIFICAR');
+    try {
+      const p = await perfilesService.getMyProfile(user.email);
       if (p) {
-        setFormValues({
-          nombrePerfil: p.nombreCompleto,
+        setFormInitialValues({
+          nombreCompleto: p.nombreCompleto,
           codigoSecuencia: p.codigoSecuencia,
           descripcion: p.descripcion,
           fechaMuestra: p.fechaMuestra,
         });
       } else {
-        // empty
-        setFormValues({
-          nombrePerfil: '',
-          codigoSecuencia: '',
-          descripcion: '',
-          fechaMuestra: '',
-        });
+        setFormInitialValues({});
       }
-    } else {
-      // REGISTRAR or others: empty
-      setFormValues({
-        nombrePerfil: '',
-        codigoSecuencia: '',
-        descripcion: '',
-        fechaMuestra: '',
+    } catch (err) {
+      addToast('Error al cargar perfil para modificar', 'error');
+      setFormInitialValues({});
+    } finally {
+      setShowRequestModal(true);
+    }
+  };
+
+  const handleRequestSubmit = async (values) => {
+    const solicitud = {
+      tipo: requestType,
+      email: user.email,
+      nombreCompleto: values.nombreCompleto || '',
+      codigoSecuencia: values.codigoSecuencia || '',
+      descripcion: values.descripcion || '',
+      fechaMuestra: values.fechaMuestra || '',
+    };
+    try {
+      await solicitudesService.createRequest(solicitud);
+      addToast('Solicitud enviada', 'success');
+      setShowRequestModal(false);
+      await loadPendingRequests();
+    } catch (err) {
+      addToast('Error al enviar solicitud', 'error');
+    }
+  };
+
+  const handleConfirmBaja = async () => {
+    try {
+      await solicitudesService.createRequest({
+        tipo: 'BAJA',
+        email: user.email,
       });
+      addToast('Solicitud de baja enviada', 'success');
+      setShowConfirmBaja(false);
+      await loadPendingRequests();
+    } catch (err) {
+      addToast('Error al enviar solicitud de baja', 'error');
+    }
+  };
+
+  const handleConfirmRestaurar = async () => {
+    try {
+      await solicitudesService.createRequest({
+        tipo: 'RESTAURAR',
+        email: user.email,
+      });
+      addToast('Solicitud de restauración enviada', 'success');
+      setShowConfirmRestaurar(false);
+      await loadPendingRequests();
+    } catch (err) {
+      addToast('Error al enviar solicitud de restauración', 'error');
+    }
+  };
+
+  const handleBuscar = async () => {
+    try {
+      const results = await perfilesService.buscarPerfiles(
+        searchTerm,
+        searchType,
+        user.idRol,
+        user.email
+      );
+      setSearchResults(results);
+    } catch (err) {
+      addToast('Error al buscar perfiles', 'error');
     }
   };
 
@@ -124,189 +155,131 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="dashboard">
-      {/* TopBar */}
+    <div className="user-dashboard">
       <header className="topbar">
-        <div className="left">
-          <button
-            className="btn btn-transparent"
-            onClick={() => setShowSearch(true)}
-          >
-            Buscar Perfil
-          </button>
+        <div className="topbar-left">
+          <span className="user-avatar">&#128100;</span>
+          {user?.nombreCuenta} — {user?.email}
         </div>
-        <div className="center">
+        <div className="topbar-center">
           <h1>
-            <span style={{ color: '#d32f2f' }}>Simple</span>
-            <span style={{ color: '#1976d2' }}>ADN</span>
+            <span style={{ color: '#e25c6b' }}>Simple</span>
+            <span style={{ color: '#2b94c8' }}>ADN</span>
           </h1>
         </div>
-        <div className="right">
-          <button className="btn btn-link" onClick={handleLogout}>
-            Cerrar Sesión
-          </button>
+        <div className="topbar-right">
+          <button onClick={() => setShowSearch(true)}>🔍 Buscar Perfil</button>
+          <button onClick={handleLogout}>Cerrar Sesión</button>
         </div>
       </header>
 
-      {/* Main */}
       <main className="main-content">
         {showSearch ? (
           <div className="search-view">
-            <h2>Buscar Perfil</h2>
-            <p>Contenido de búsqueda de perfiles (pendiente de implementar).</p>
-            <button
-              className="btn btn-secondary"
-              onClick={() => setShowSearch(false)}
-            >
-              Volver al Panel
-            </button>
+            <button onClick={() => setShowSearch(false)}>← Volver</button>
+            <h2>Buscar Perfiles</h2>
+            <div className="search-bar">
+              <select value={searchType} onChange={e => setSearchType(e.target.value)}>
+                <option value="nombre">Por Nombre</option>
+                <option value="codigo">Por Código</option>
+              </select>
+              <input
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                placeholder="Buscar..."
+              />
+              <button onClick={handleBuscar}>Buscar</button>
+            </div>
+            {searchResults.length === 0 ? (
+              <p>No se encontraron resultados.</p>
+            ) : (
+              searchResults.map(p => (
+                <div key={p.idPerfil} className="profile-card">
+                  <p><strong>{p.nombreCompleto}</strong></p>
+                  <p>Código: {p.codigoSecuencia}</p>
+                  <p>Fecha: {p.fechaMuestra}</p>
+                  <p>{p.descripcion}</p>
+                </div>
+              ))
+            )}
           </div>
         ) : (
-          <>
-            <section className="dashboard-body">
-              <div className="left-panel">
-                <h3>Solicitudes</h3>
-                <div className="btn-group">
-                  <button
-                    className={`btn btn-primary ${hasPending('REGISTRAR') ? 'active' : ''}`}
-                    onClick={() => {
-                      setFormDefaults('REGISTRAR');
-                      setShowRequestModal(true);
-                    }}
-                  >
-                    Solicitar Registro de Perfil
-                    {hasPending('REGISTRAR') && (
-                      <span className="badge">Pendiente</span>
-                    )}
-                  </button>
-                  <button
-                    className={`btn btn-primary ${hasPending('MODIFICAR') ? 'active' : ''}`}
-                    onClick={() => {
-                      setFormDefaults('MODIFICAR');
-                      setShowRequestModal(true);
-                    }}
-                  >
-                    Solicitar Modificación de Perfil
-                    {hasPending('MODIFICAR') && (
-                      <span className="badge">Pendiente</span>
-                    )}
-                  </button>
-                  <button
-                    className={`btn btn-danger ${hasPending('BAJA') ? 'active' : ''}`}
-                    onClick={() => {
-                      setShowConfirmBaja(true);
-                    }}
-                  >
-                    Solicitar Baja de Perfil
-                    {hasPending('BAJA') && (
-                      <span className="badge">Pendiente</span>
-                    )}
-                  </button>
-                  <button
-                    className={`btn btn-success ${hasPending('RESTAURAR') ? 'active' : ''}`}
-                    onClick={() => {
-                      setShowConfirmRestaurar(true);
-                    }}
-                  >
-                    Solicitar Restauración de Perfil
-                    {hasPending('RESTAURAR') && (
-                      <span className="badge">Pendiente</span>
-                    )}
-                  </button>
-                </div>
-              </div>
+          <section className="dashboard-body">
+            <div className="left-panel">
+              <h3>Mis Solicitudes</h3>
+              <div className="btn-group">
+                <button className="btn btn-primary" onClick={handleOpenRegistrar}>
+                  Solicitar Registro
+                  {hasPending('REGISTRAR') && <span className="badge">Pendiente</span>}
+                </button>
 
-              <div className="right-panel">
-                <div className="profile-section">
-                  <button
-                    className="btn btn-primary"
-                    onClick={handlePerfilToggle}
-                  >
-                    {showPerfil ? 'Ocultar mi Perfil' : 'Ver mi Perfil'}
-                  </button>
-                  {showPerfil && (
-                    <div className="profile-card">
-                      {loadingProfile ? (
-                        <p>Cargando perfil...</p>
-                      ) : perfil ? (
-                        <>
-                          <p><strong>Nombre:</strong> {perfil.nombreCompleto}</p>
-                          <p><strong>Código de Secuencia:</strong> {perfil.codigoSecuencia}</p>
-                          <p><strong>Fecha de Muestra:</strong> {perfil.fechaMuestra}</p>
-                          <p><strong>Descripción:</strong> {perfil.descripcion}</p>
-                          <p>
-                            <span
-                              className={`status-chip ${
-                                perfil.estado === 1 ? 'active' : 'inactive'
-                              }`}
-                            >
-                              {perfil.estado === 1 ? 'Activo' : 'Inactivo'}
-                            </span>
-                          </p>
-                        </>
-                      ) : (
-                        <p>No tienes un perfil registrado.</p>
-                      )}
-                    </div>
-                  )}
-                </div>
+                <button className="btn btn-primary" onClick={handleOpenModificar}>
+                  Solicitar Modificación
+                  {hasPending('MODIFICAR') && <span className="badge">Pendiente</span>}
+                </button>
+
+                <button className="btn btn-danger" onClick={() => setShowConfirmBaja(true)}>
+                  Solicitar Baja
+                  {hasPending('BAJA') && <span className="badge">Pendiente</span>}
+                </button>
+
+                <button className="btn btn-success" onClick={() => setShowConfirmRestaurar(true)}>
+                  Solicitar Restauración
+                  {hasPending('RESTAURAR') && <span className="badge">Pendiente</span>}
+                </button>
               </div>
-            </section>
-          </>
+            </div>
+
+            <div className="right-panel">
+              <h3>Mi Perfil Genético</h3>
+              <button className="btn btn-primary" onClick={handleVerPerfil}>
+                Consultar mis datos
+              </button>
+
+              {showPerfil && (
+                loadingProfile ? (
+                  <p>Cargando...</p>
+                ) : perfil === null ? (
+                  <p>No tenés un perfil registrado. Usá "Solicitar Registro".</p>
+                ) : perfil.estado === 0 ? (
+                  <>
+                    <span className="status-chip inactive">Inactivo</span>
+                    <p>Tu perfil está dado de baja.</p>
+                    <p>Usá "Solicitar Restauración" para reactivarlo.</p>
+                  </>
+                ) : (
+                  <>
+                    <span className="status-chip active">Activo</span>
+                    <p><strong>Nombre:</strong> {perfil.nombreCompleto}</p>
+                    <p><strong>Código:</strong> {perfil.codigoSecuencia}</p>
+                    <p><strong>Fecha de muestra:</strong> {perfil.fechaMuestra}</p>
+                    <p><strong>Descripción:</strong> {perfil.descripcion}</p>
+                  </>
+                )
+              )}
+            </div>
+          </section>
         )}
       </main>
 
-      {/* Modals */}
       <ConfirmationModal
         isOpen={showConfirmBaja}
         onClose={() => setShowConfirmBaja(false)}
         title="Confirmar Baja"
-        message="¿Estás seguro que deseas enviar una solicitud de baja de tu perfil? Esta acción ocultará tu perfil hasta que un administrador la apruebe."
+        message="¿Confirmás que querés dar de baja tu perfil? Quedará oculto hasta que un admin lo apruebe."
         confirmLabel="Enviar Solicitud"
         confirmVariant="danger"
-        onConfirm={() => {
-          const datos = {
-            nombreCompleto: '',
-            codigoSecuencia: '',
-            descripcion: '',
-            fechaMuestra: '',
-            email: user?.email,
-            idCuenta: user?.idCuenta,
-          };
-          solicitudesService.createRequest('BAJA', { ...datos, datosSolicitud: null }).then(() => {
-            addToast('Solicitud de baja enviada', 'success');
-            setShowConfirmBaja(false);
-            loadPending();
-          }).catch(() => {
-            addToast('Error al enviar solicitud', 'error');
-          });
-        }}
+        onConfirm={handleConfirmBaja}
       />
 
       <ConfirmationModal
         isOpen={showConfirmRestaurar}
         onClose={() => setShowConfirmRestaurar(false)}
         title="Confirmar Restauración"
-        message="¿Estás seguro que deseas enviar una solicitud de restauración de tu perfil? Esta acción reactivará tu perfil si estaba inactivo."
+        message="¿Confirmás que querés restaurar tu perfil?"
         confirmLabel="Enviar Solicitud"
         confirmVariant="success"
-        onConfirm={() => {
-          const datos = {
-            nombreCompleto: '',
-            codigoSecuencia: '',
-            descripcion: '',
-            fechaMuestra: '',
-            email: user?.email,
-            idCuenta: user?.idCuenta,
-          };
-          solicitudesService.createRequest('RESTAURAR', { ...datos, datosSolicitud: null }).then(() => {
-            addToast('Solicitud de restauración enviada', 'success');
-            setShowConfirmRestaurar(false);
-            loadPending();
-          }).catch(() => {
-            addToast('Error al enviar solicitud', 'error');
-          });
-        }}
+        onConfirm={handleConfirmRestaurar}
       />
 
       <FormModal
@@ -314,11 +287,12 @@ const UserDashboard = () => {
         onClose={() => setShowRequestModal(false)}
         title={requestType === 'REGISTRAR' ? 'Solicitar Registro de Perfil' : 'Solicitar Modificación de Perfil'}
         fields={[
-          { name: 'nombrePerfil', label: 'Nombre del Perfil', required: true },
-          { name: 'codigoSecuencia', label: 'Código de Secuencia', required: true, pattern: '^[0-9]+$' },
+          { name: 'nombreCompleto', label: 'Nombre Completo', required: true },
+          { name: 'codigoSecuencia', label: 'Código de Secuencia', required: true },
           { name: 'descripcion', label: 'Descripción', required: true },
-          { name: 'fechaMuestra', label: 'Fecha de Muestra (YYYY-MM-DD)', required: true, type: 'date' },
+          { name: 'fechaMuestra', label: 'Fecha de Muestra', type: 'date', required: true },
         ]}
+        initialValues={formInitialValues}
         submitLabel="Enviar Solicitud"
         onSubmit={handleRequestSubmit}
       />

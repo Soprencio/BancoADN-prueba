@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import UserDashboard from './pages/UserDashboard';
@@ -9,22 +9,15 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import './App.css';
 
-// Helper route that requires authentication and optional role
-const PrivateRoute = ({ children, role }) => {
+// Wrapper for role-based protection
+const PrivateRole = ({ role, children }) => {
   const { user, loading } = useAuth();
-  const location = useLocation();
-
   if (loading) return <div>Cargando...</div>;
-
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  if (role && user.idRol !== role) {
-    // Not authorized for this role
+  if (!user) return <Navigate to="/login" replace />;
+  if (user.idRol !== role) {
+    // Optionally redirect to a not found page
     return <Navigate to="/" replace />;
   }
-
   return children;
 };
 
@@ -60,17 +53,5 @@ function App() {
     </AuthProvider>
   );
 }
-
-// Wrapper for role-based protection
-const PrivateRole = ({ role, children }) => {
-  const { user, loading } = useAuth();
-  if (loading) return <div>Cargando...</div>;
-  if (!user) return <Navigate to="/login" replace />;
-  if (user.idRol !== role) {
-    // Optionally redirect to a not found page
-    return <Navigate to="/" replace />;
-  }
-  return children;
-};
 
 export default App;

@@ -3,37 +3,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.bancoadn.cliente;
- 
-import javax.swing.SwingUtilities;
- 
+
+import com.mycompany.bancoadn.cliente.httpapi.ApiServer;
+
 /**
- * Punto de entrada de la aplicación cliente SimpleADN.
+ * Entry point of the SimpleADN client application.
  * 
- * Arranca la conexión al servidor y abre la pantalla de login.
- * @author Admin
+ * Starts the HTTP server that exposes the existing socket-based functionality
+ * as REST endpoints for the React frontend.
  */
 public class BancoADN_Grupo6_Main {
- 
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
- 
-            // 1. Crear y conectar el socket (puerto 4990 del servidor)
-            BancoADN_Grupo6_ClienteSocket clienteSocket = new BancoADN_Grupo6_ClienteSocket();
- 
-            if (!clienteSocket.estaConectado()) {
-                System.err.println("ADVERTENCIA: No se pudo conectar al servidor.");
-                System.err.println("Asegurate de que LadoServer esté corriendo en el puerto 4990.");
-                // La app igual abre, mostrará error al intentar usar el servidor
-            }
- 
-            // 2. Crear la pantalla de login
-            BancoADN_Grupo6_Pant_IniciarSesion vistaLogin = new BancoADN_Grupo6_Pant_IniciarSesion();
- 
-            // 3. Crear el controlador (vincula la vista con el socket)
-            BancoADN_Grupo6_Ctrl_IniciarSesion ctrl = new BancoADN_Grupo6_Ctrl_IniciarSesion(vistaLogin, clienteSocket);
- 
-            // 4. Mostrar la pantalla
-            vistaLogin.setVisible(true);
-        });
+        // Start the HTTP server on port 7000
+        ApiServer server = new ApiServer();
+        server.start(7000);
+        
+        // Keep the application running (the server runs in its own threads)
+        // In a real application, you might want to add a shutdown hook.
+        System.out.println("HTTP server running on port 7000. Press Ctrl+C to stop.");
+        // Wait indefinitely
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

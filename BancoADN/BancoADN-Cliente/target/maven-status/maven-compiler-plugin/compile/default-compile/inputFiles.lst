@@ -29,3 +29,17 @@ C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\my
 C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\ClasesModelo\Rol.java
 C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\ClasesModelo\Solicitud.java
 C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\ClasesModelo\TipoAccion.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\ApiServer.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\dto\AuthDto.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\dto\LogDto.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\dto\PerfilDto.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\dto\SolicitudDto.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\endpoint\AuthEndpoints.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\endpoint\LogEndpoints.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\endpoint\PerfilEndpoints.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\endpoint\SolicitudEndpoints.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\service\AuthService.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\service\CreateAccountResult.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\service\LogService.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\service\PerfilService.java
+C:\Users\Admin\Downloads\BancoADN\BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\service\SolicitudService.java

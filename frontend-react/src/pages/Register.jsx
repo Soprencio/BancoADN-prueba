@@ -25,7 +25,7 @@ const RegisterPage = () => {
       return;
     }
     try {
-      const res = await register(nombre, email, password);
+      const res = await register(email, password, nombre);
       if (!res.success) {
         setError(res.message || 'Error al registrar');
         addToast(res.message || 'Error al registrar', 'error');

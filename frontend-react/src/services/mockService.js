@@ -38,45 +38,47 @@ let solicitudes = [
   {
     idSolicitud: 1,
     tipo: 'REGISTRAR',
-    datosSolicitud: {
-      nombreCompleto: 'Carlos López',
-      codigoSecuencia: 'XYZ789',
-      fechaMuestra: '2024-02-01',
-      descripcion: 'Muestra de sangre',
-    },
-    estado: 1, // pending
+    estado: 0, // pendiente (0)
     fechaSolicitud: '2024-03-01',
     idCuentaAdmin: null,
+    email: 'juan@example.com', // requester email
+    nombreCompleto: 'Carlos López',
+    codigoSecuencia: 'XYZ789',
+    fechaMuestra: '2024-02-01',
+    descripcion: 'Muestra de sangre',
   },
   {
     idSolicitud: 2,
     tipo: 'MODIFICAR',
-    datosSolicitud: {
-      nombreCompleto: 'Juan Pérez',
-      codigoSecuencia: 'ABC123',
-      fechaMuestra: '2024-01-15',
-      descripcion: 'Actualizar datos',
-    },
-    estado: 2, // rejected
+    estado: 2, // rechazado (2)
     fechaSolicitud: '2024-03-02',
     idCuentaAdmin: 1,
+    email: 'juan@example.com', // requester email
+    nombreCompleto: 'Juan Pérez',
+    codigoSecuencia: 'ABC123',
+    fechaMuestra: '2024-01-15',
+    descripcion: 'Actualizar datos',
   },
 ];
 
 let logs = [
   {
     idRegistro: 1,
-    idTipoAccion: 1,
-    idCuenta: 1,
     fecha: '2024-03-01',
-    detalle: 'admin@example.com se creo una cuenta',
+    nombreCuenta: 'Administrador',
+    email: 'admin@example.com',
+    descripcion: 'admin@example.com se creó una cuenta',
+    acciones: 'Registro',
+    esAdmin: true,
   },
   {
     idRegistro: 2,
-    idTipoAccion: 5,
-    idCuenta: 1,
     fecha: '2024-03-02',
-    detalle: 'admin@example.com modifico perfil de: Juan Pérez',
+    nombreCuenta: 'Administrador',
+    email: 'admin@example.com',
+    descripcion: 'admin@example.com modificó perfil de Juan Pérez',
+    acciones: 'Modificación de perfil',
+    esAdmin: true,
   },
 ];
 
@@ -91,6 +93,8 @@ const authService = {
     const user = accounts.find((a) => a.email === email);
     if (user) {
       const { password, ...userWithoutPass } = user;
+      // Set the currently assigned cuenta for mock session
+      cuentaAsignada = user.idCuenta;
       return { success: true, user: userWithoutPass };
     }
     return { success: false, message: 'Credenciales inválidas' };
@@ -111,11 +115,12 @@ const authService = {
     };
     accounts.push(newAccount);
     const { password: _, ...userWithoutPass } = newAccount;
+    // Optionally set cuentaAsignada on registration? Not needed.
     return { success: true, user: userWithoutPass };
   },
 };
 
-const comptesService = {
+const cuentasService = {
   getAll: async () => {
     await delay();
     return [...accounts];
@@ -133,16 +138,16 @@ const perfilesService = {
   },
   getByEmail: async (email) => {
     await delay();
-    // find perfil by account email? For simplicity, return first perfil that matches email via cuentaAsignada? We'll implement later.
     const account = accounts.find((a) => a.email === email);
     if (!account) return null;
-    // Find perfil associated with this account (maybe via cuentaAsignada)
-    // For mock, return first perfil if any
-    return perfiles.length > 0 ? { ...perfiles[0] } : null;
+    const perfil = perfiles.find((p) => p.idCuenta === account.idCuenta);
+    return perfil ? { ...perfil } : null;
   },
-  getMyProfile: async (idCuenta) => {
+  getMyProfile: async (email) => {
     await delay();
-    return perfiles.find((p) => p.idCuenta === idCuenta) || null;
+    const account = accounts.find((a) => a.email === email);
+    if (!account) return null;
+    return perfiles.find((p) => p.idCuenta === account.idCuenta) || null;
   },
   updateProfile: async (id, data) => {
     await delay();
@@ -165,6 +170,26 @@ const perfilesService = {
     perfiles[index].estado = 1;
     return perfiles[index];
   },
+  buscarPerfiles: async (termino, tipoBusqueda, rol) => {
+    await delay();
+    let filtered = perfiles;
+    if (rol === 1) {
+      filtered = filtered.filter(p => p.estado === 1);
+    }
+    if (termino.trim() !== '') {
+      const lowerTerm = termino.toLowerCase();
+      if (tipoBusqueda === 'nombre') {
+        filtered = filtered.filter(p =>
+          p.nombreCompleto.toLowerCase().includes(lowerTerm)
+        );
+      } else if (tipoBusqueda === 'codigo') {
+        filtered = filtered.filter(p =>
+          p.codigoSecuencia.toLowerCase().includes(lowerTerm)
+        );
+      }
+    }
+    return filtered.map(p => ({ ...p }));
+  },
 };
 
 const solicitudesService = {
@@ -174,27 +199,33 @@ const solicitudesService = {
   },
   getPending: async () => {
     await delay();
-    return solicitudes.filter((s) => s.estado === 1);
+    return solicitudes.filter((s) => s.estado === 0);
   },
   getRecent: async () => {
     await delay();
-    // Return approved or rejected (estado !== 1) sorted by date descending
+    // Return approved or rejected (estado !== 0) sorted by date descending
     return solicitudes
-      .filter((s) => s.estado !== 1)
+      .filter((s) => s.estado !== 0)
       .sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud))
       .slice(0, 10);
   },
   createRequest: async (solicitud) => {
     await delay();
     const newId = solicitudes.length > 0 ? Math.max(...solicitudes.map((s) => s.idSolicitud)) + 1 : 1;
+    // solicitud should contain email of requester email
+    const requesterAccount = accounts.find((a) => a.email === solicitud.email);
+    const requesterIdCuenta = requesterAccount ? requesterAccount.idCuenta : null;
     const request = {
       idSolicitud: newId,
       tipo: solicitud.tipo,
-      datosSolicitud: solicitud.datosSolicitud,
-      estado: 1, // pending
+      estado: 0, // pending
       fechaSolicitud: new Date().toISOString().split('T')[0],
       idCuentaAdmin: null,
-      idCuenta: solicitud.idCuenta,
+      email: solicitud.email, // requester email
+      nombreCompleto: solicitud.nombreCompleto,
+      codigoSecuencia: solicitud.codigoSecuencia,
+      fechaMuestra: solicitud.fechaMuestra,
+      descripcion: solicitud.descripcion,
     };
     solicitudes.push(request);
     return request;
@@ -208,10 +239,16 @@ const solicitudesService = {
     // If registro or modificar, create/update perfil
     const request = solicitudes[index];
     if (request.tipo === 'REGISTRAR' || request.tipo === 'MODIFICAR') {
-      const data = request.datosSolicitud;
-      const existingIndex = perfiles.findIndex(
-        (p) => p.nombreCompleto === data.nombreCompleto && p.codigoSecuencia === data.codigoSecuencia
-      );
+      const data = {
+        nombreCompleto: request.nombreCompleto,
+        codigoSecuencia: request.codigoSecuencia,
+        descripcion: request.descripcion,
+        fechaMuestra: request.fechaMuestra,
+      };
+      // Find requester account via email to get idCuenta
+      const requesterAccount = accounts.find((a) => a.email === request.email);
+      const requesterIdCuenta = requesterAccount ? requesterAccount.idCuenta : null;
+      const existingIndex = perfiles.findIndex(p => p.idCuenta === requesterIdCuenta);
       if (existingIndex >= 0) {
         // update
         perfiles[existingIndex] = {
@@ -221,7 +258,7 @@ const solicitudesService = {
           descripcion: data.descripcion,
           fechaMuestra: data.fechaMuestra,
           estado: 1,
-          idCuenta: request.idCuenta,
+          idCuenta: requesterIdCuenta,
         };
       } else {
         // create
@@ -233,26 +270,53 @@ const solicitudesService = {
           descripcion: data.descripcion,
           fechaMuestra: data.fechaMuestra,
           estado: 1,
-          idCuenta: request.idCuenta,
+          idCuenta: requesterIdCuenta,
         });
       }
     } else if (request.tipo === 'BAJA') {
-      // deactivate profile based on datosSolicitud? We'll need to find perfil by nombre/completo? For simplicity, ignore.
+      // deactivate profile based on requester idCuenta
+      const requesterAccount = accounts.find((a) => a.email === request.email);
+      const requesterIdCuenta = requesterAccount ? requesterAccount.idCuenta : null;
+      const perfilIndex = perfiles.findIndex(p => p.idCuenta === requesterIdCuenta);
+      if (perfilIndex !== -1) {
+        perfiles[perfilIndex].estado = 0; // inactive
+      }
     } else if (request.tipo === 'RESTAURAR') {
-      // activate profile
+      // activate profile based on requester idCuenta
+      const requesterAccount = accounts.find((a) => a.email === request.email);
+      const requesterIdCuenta = requesterAccount ? requesterAccount.idCuenta : null;
+      const perfilIndex = perfiles.findIndex(p => p.idCuenta === requesterIdCuenta);
+      if (perfilIndex !== -1) {
+        perfiles[perfilIndex].estado = 1; // active
+      }
     }
     // Add log
-    await logsService.addLog(adminEmail, request.tipo === 'REGISTRAR' ? 1 : 5, ` procesó solicitud ${request.tipo}`);
+    const accionMap = {
+      REGISTRAR: 1,
+      MODIFICAR: 2,
+      BAJA: 3,
+      RESTAURAR: 4,
+    };
+    const accionId = accionMap[request.tipo] || 5; // default to modificacion de perfil
+    await logsService.addLog(adminEmail, accionId, ` procesó solicitud ${request.tipo}`);
     return solicitudes[index];
   },
   rejectRequest: async (id, adminEmail) => {
     await delay();
     const index = solicitudes.findIndex((s) => s.idSolicitud === id);
     if (index === -1) throw new Error('Solicitud no encontrada');
+    const request = solicitudes[index];
     solicitudes[index].estado = 2; // rejected
     solicitudes[index].idCuentaAdmin = accounts.find((a) => a.email === adminEmail)?.idCuenta || null;
     // Add log
-    await logsService.addLog(adminEmail, request.tipo === 'REGISTRAR' ? 1 : 5, ` rechazó solicitud ${request.tipo}`);
+    const accionMap = {
+      REGISTRAR: 1,
+      MODIFICAR: 2,
+      BAJA: 3,
+      RESTAURAR: 4,
+    };
+    const accionId = accionMap[request.tipo] || 5; // default to modificacion de perfil
+    await logsService.addLog(adminEmail, accionId, ` rechazó solicitud ${request.tipo}`);
     return solicitudes[index];
   },
 };
@@ -268,11 +332,11 @@ const logsService = {
   },
   addLog: async (email, idTipoAccion, detalle) => {
     await delay();
-    const newId = logs.length > 0 ? Math.max(...logs.map((l) => l.idRegistro)) + 1 : 1;
+    const newId = logs.length > 0
+      ? Math.max(...logs.map((l) => l.idRegistro)) + 1 : 1;
     const account = accounts.find((a) => a.email === email);
-    const idCuenta = account ? account.idCuenta : 0;
     const accountEmail = account ? account.email : 'usuario';
-    // Get action name from idTipoAccion (we need a mapping)
+    const accountNombreCuenta = account ? account.nombreCuenta : 'Desconocido';
     const accionMap = {
       1: 'Registro',
       2: 'Modificación',
@@ -281,14 +345,14 @@ const logsService = {
       5: 'Modificación de perfil',
     };
     const accionNombre = accionMap[idTipoAccion] || 'Acción';
-    const detalleTexto = detalle ? `${detalle}` : '';
-    const fullDetalle = `${accountEmail} ${accionNombre.toLowerCase()}${detalleTexto ? ': ' + detalleTexto : ''}`;
     logs.push({
       idRegistro: newId,
-      idTipoAccion: idTipoAccion,
-      idCuenta,
       fecha: new Date().toISOString().split('T')[0],
-      detalle: fullDetalle.trim(),
+      nombreCuenta: accountNombreCuenta,
+      email: accountEmail,
+      descripcion: detalle ? detalle.trim() : accionNombre.toLowerCase(),
+      acciones: accionNombre,
+      esAdmin: account ? account.idRol === 2 : false,
     });
     return { idRegistro: newId };
   },
@@ -296,7 +360,7 @@ const logsService = {
 
 export {
   authService,
-  comptesService,
+  cuentasService,
   perfilesService,
   solicitudesService,
   logsService,
