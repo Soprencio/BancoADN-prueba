@@ -1,0 +1,10 @@
+idIncremental=9
+1 - CrearCuenta
+2 - IniciarSesion
+3 - DarBajaPerfil
+4 - RestaurarPerfil
+5 - ModificarPerfil
+6 - CrearPerfil
+7 - ResolverSolicitud
+8 - CrearSolicitudP
+9 - CrearPerfilSolicitud

@@ -24,7 +24,13 @@ public class LogEndpoints {
 
     // Handler for GET /api/logs
     private static final Handler getLogs = ctx -> {
-        List<LogDto> logs = LogService.getLogs();
+        String adminEmail = ctx.header("X-Admin-Email");
+        List<LogDto> logs;
+        if (adminEmail != null && !adminEmail.isEmpty()) {
+            logs = LogService.getLogs(adminEmail);
+        } else {
+            logs = LogService.getLogs();
+        }
         if (logs == null) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).result("Failed to retrieve logs");
             return;

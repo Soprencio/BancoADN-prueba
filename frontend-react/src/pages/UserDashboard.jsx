@@ -140,7 +140,6 @@ const UserDashboard = () => {
       const results = await perfilesService.buscarPerfiles(
         searchTerm,
         searchType,
-        user.idRol,
         user.email
       );
       setSearchResults(results);
@@ -158,18 +157,30 @@ const UserDashboard = () => {
     <div className="user-dashboard">
       <header className="topbar">
         <div className="topbar-left">
-          <span className="user-avatar">&#128100;</span>
-          {user?.nombreCuenta} — {user?.email}
+          <div className="user-info">
+            <span className="user-avatar">
+              {user?.nombreCuenta?.charAt(0)?.toUpperCase() || 'U'}
+            </span>
+            <div className="user-details">
+              <span className="user-name">{user?.nombreCuenta || 'Usuario'}</span>
+              <span className="user-email">{user?.email}</span>
+            </div>
+          </div>
         </div>
         <div className="topbar-center">
           <h1>
-            <span style={{ color: '#e25c6b' }}>Simple</span>
-            <span style={{ color: '#2b94c8' }}>ADN</span>
+            <span className="brand-coral">Simple</span>
+            <span className="brand-blue">ADN</span>
           </h1>
         </div>
         <div className="topbar-right">
-          <button onClick={() => setShowSearch(true)}>🔍 Buscar Perfil</button>
-          <button onClick={handleLogout}>Cerrar Sesión</button>
+          <button className="btn-icon" onClick={() => setShowSearch(true)} title="Buscar Perfil">
+            <span className="material-symbols-outlined">search</span>
+            <span className="btn-label">Buscar</span>
+          </button>
+          <button className="btn-icon btn-logout" onClick={handleLogout} title="Cerrar Sesión">
+            <span className="material-symbols-outlined">logout</span>
+          </button>
         </div>
       </header>
 
@@ -210,22 +221,22 @@ const UserDashboard = () => {
               <div className="btn-group">
                 <button className="btn btn-primary" onClick={handleOpenRegistrar}>
                   Solicitar Registro
-                  {hasPending('REGISTRAR') && <span className="badge">Pendiente</span>}
+                  {hasPending('REGISTRAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
                 <button className="btn btn-primary" onClick={handleOpenModificar}>
                   Solicitar Modificación
-                  {hasPending('MODIFICAR') && <span className="badge">Pendiente</span>}
+                  {hasPending('MODIFICAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
                 <button className="btn btn-danger" onClick={() => setShowConfirmBaja(true)}>
                   Solicitar Baja
-                  {hasPending('BAJA') && <span className="badge">Pendiente</span>}
+                  {hasPending('BAJA') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
                 <button className="btn btn-success" onClick={() => setShowConfirmRestaurar(true)}>
                   Solicitar Restauración
-                  {hasPending('RESTAURAR') && <span className="badge">Pendiente</span>}
+                  {hasPending('RESTAURAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
               </div>
             </div>

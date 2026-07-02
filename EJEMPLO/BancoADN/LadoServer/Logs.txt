@@ -1,0 +1,37 @@
+idIncremental=36
+1 - 1 - 13 - 2026-06-16 - vicente se creo una cuenta
+2 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+3 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+4 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+5 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+6 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+7 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+8 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+9 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+10 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+11 - 2 - 13 - 2026-06-16 - vicente inicio sesion
+12 - 9 - 13 - 2026-06-16 - vicente creo una solicitud de perfil
+13 - 2 - 5 - 2026-06-16 - nombresito inicio sesion
+14 - 2 - 5 - 2026-06-16 - nombresito inicio sesion
+15 - 2 - 5 - 2026-06-16 - nombresito inicio sesion
+16 - 8 - 5 - 2026-06-16 - nombresito creo una solicitud de baja con los datos:  
+17 - 1 - 14 - 2026-06-19 - juan se creo una cuenta
+18 - 2 - 14 - 2026-06-19 - juan inicio sesion
+19 - 3 - 14 - 2026-06-19 - juan dio de baja el perfil de:mail2@gmail.com
+20 - 2 - 14 - 2026-06-19 - juan inicio sesion
+21 - 7 - 14 - 2026-06-19 - juan modifico la solicitud: 5 y ahora esta1
+22 - 7 - 14 - 2026-06-19 - juan modifico la solicitud: 6 y ahora esta1
+23 - 7 - 14 - 2026-06-19 - juan modifico la solicitud: 7 y ahora esta1
+24 - 2 - 14 - 2026-06-19 - juan inicio sesion
+25 - 7 - 14 - 2026-06-19 - juan modifico la solicitud: 1 y ahora esta1
+26 - 4 - 14 - 2026-06-19 - juan restauro el perfil de:mail2@gmail.com
+27 - 2 - 14 - 2026-06-19 - juan inicio sesion
+28 - 5 - 14 - 2026-06-19 - juan modifico perfil de:Nuevo@gmail.comcon los siguientes datos:5 _ NombreCompleto _ CadSec _ Descripcion1234 _ 1 _ 2026-04-24 _ 2
+29 - 5 - 14 - 2026-06-19 - juan modifico perfil de:Nuevo@gmail.comcon los siguientes datos:5 _ NombreCompleto _ CadSec _ Descripcion _ 1 _ 2026-04-24 _ 2
+30 - 7 - 14 - 2026-06-19 - juan modifico la solicitud: 2 y ahora esta1
+31 - 3 - 14 - 2026-06-19 - juan dio de baja el perfil de:ytr@gmail.com
+32 - 4 - 14 - 2026-06-19 - juan restauro el perfil de:ytr@gmail.com
+33 - 7 - 14 - 2026-06-19 - juan modifico la solicitud: 9 y ahora esta1
+34 - 6 - 14 - 2026-06-19 - juan creo el perfilgenetico de:pepito
+35 - 7 - 14 - 2026-06-19 - juan modifico la solicitud: 8 y ahora esta1
+36 - 2 - 14 - 2026-06-19 - juan inicio sesion

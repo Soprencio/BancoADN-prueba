@@ -285,13 +285,13 @@ const perfilesService = {
    * @param {string} userEmail
    * @returns {Promise<Array>}
    */
-  buscarPerfiles: async (term, type, userEmail) => {
+  buscarPerfiles: async (term, type, userEmail, isAdmin = false) => {
     try {
       const response = await fetch(
         `${API_BASE}/perfiles/buscar?tipo=${type}&texto=${encodeURIComponent(term)}`,
         {
           method: 'GET',
-          headers: getHeaders(false, userEmail),
+          headers: getHeaders(isAdmin, userEmail),
         }
       );
       return await handleResponse(response);
@@ -474,12 +474,18 @@ const solicitudesService = {
 const logsService = {
   /**
    * Get all logs
+   * @param {string} adminEmail - Admin email for re-login (required for server-side authentication)
    * @returns {Promise<Array>}
    */
-  getLogs: async () => {
+  getLogs: async (adminEmail) => {
     try {
+      const headers = {};
+      if (adminEmail) {
+        headers['X-Admin-Email'] = adminEmail;
+      }
       const response = await fetch(`${API_BASE}/logs`, {
         method: 'GET',
+        headers,
       });
       return await handleResponse(response);
     } catch (error) {

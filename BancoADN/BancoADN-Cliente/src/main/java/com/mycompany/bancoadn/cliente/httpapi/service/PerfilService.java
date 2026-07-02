@@ -9,6 +9,53 @@ import java.util.List;
 public class PerfilService {
 
     /**
+     * Open a fresh socket, re-login (to set mailusr on LadoServer), send a command,
+     * read a single-line response, and close.
+     * Required because BuscarPerfiles on LadoServer calls obtenerNombre() which
+     * accesses mailusr ThreadLocal — IniciarS must be sent on every fresh socket.
+     */
+    private static String enviarConLoginPerfil(String email, String comando) {
+        String password = AuthService.getPassword(email);
+        if (password == null) {
+            return null;
+        }
+        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
+        if (!socket.estaConectado()) {
+            return null;
+        }
+        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
+        if (loginResp == null) {
+            socket.desconectar();
+            return null;
+        }
+        String respuesta = socket.enviarYRecibir(comando);
+        socket.desconectar();
+        return respuesta;
+    }
+
+    /**
+     * Open a fresh socket, re-login, send a list command, read until FINISH, and close.
+     */
+    private static List<String> enviarConLoginListaPerfil(String email, String comando) {
+        String password = AuthService.getPassword(email);
+        if (password == null) {
+            return null;
+        }
+        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
+        if (!socket.estaConectado()) {
+            return null;
+        }
+        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
+        if (loginResp == null) {
+            socket.desconectar();
+            return null;
+        }
+        List<String> respuestas = socket.enviarYSolicitarLista(comando);
+        socket.desconectar();
+        return respuestas;
+    }
+
+    /**
      * Get the profile of the user with the given email.
      * Protocol: "BuscarDat - {email}"
      * If response is "No se encontro el perfil", return null.
@@ -18,15 +65,7 @@ public class PerfilService {
      * @return the profile or null if not found
      */
     public static PerfilGenetico getPerfilByEmail(String email) {
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-
-        String mensaje = "BuscarDat - " + email;
-        String respuesta = socket.enviarYRecibir(mensaje);
-        socket.desconectar();
-
+        String respuesta = enviarConLoginPerfil(email, "BuscarDat - " + email);
         if (respuesta == null || respuesta.isEmpty() || respuesta.equals("No se encontro el perfil")) {
             return null;
         }
@@ -50,32 +89,19 @@ public class PerfilService {
 
     /**
      * Search for profiles by criteria.
-     * Protocol: "BuscarIDNOM - {id o NULL} - {nombre o NULL}" (poné NULL literal en el campo que no se usa)
-     * Usá clienteSocket.enviarYSolicitarLista(), que ya devuelve la lista de líneas sin el "FINISH" final.
-     * Cada línea tiene 7 campos separados por " - ": idPerfil, nombreCompleto, codigoSecuencia, descripcion, estado, fechaMuestra, email.
-     * Para buscar "todos", enviá NULL en ambos campos. Filtrá los resultados a solo estado=activo si quien busca tiene rol Usuario;
-     * si es Administrador, devolvé todos sin filtrar.
-     * @param tipo   "ID" or "Nombre"
-     * @param texto  the value to search for
+     * Protocol: "BuscarIDNOM - NULL - NULL" (always fetch all, then filter client-side)
+     * because LadoServer only supports exact-match (equalsIgnoreCase), not partial/contains.
+     * To allow searching by "a" and finding "Juan", "Maria", etc., we filter on the gateway.
+     *
+     * @param tipo       "ID", "Nombre", or "Todos"
+     * @param texto      search text (case-insensitive partial match for name/code/desc)
+     * @param esAdmin    whether the caller is an admin
+     * @param adminEmail admin's email for re-login (to set mailusr on LadoServer)
      * @return list of matching profiles
      */
-    public static List<PerfilGenetico> buscarPerfiles(String tipo, String texto, boolean esAdmin) {
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return new ArrayList<>();
-        }
-
-        String comando;
-        if (tipo.equalsIgnoreCase("ID") && !texto.isEmpty()) {
-            comando = "BuscarIDNOM - " + texto + " - NULL";
-        } else if (tipo.equalsIgnoreCase("Nombre") && !texto.isEmpty()) {
-            comando = "BuscarIDNOM - NULL - " + texto;
-        } else {
-            // "Todos" or empty
-            comando = "BuscarIDNOM - NULL - NULL";
-        }
-
-        List<String> lineas = socket.enviarYSolicitarLista(comando);
+    public static List<PerfilGenetico> buscarPerfiles(String tipo, String texto, boolean esAdmin, String adminEmail) {
+        // Always fetch ALL profiles, then filter client-side for partial matching
+        List<String> lineas = enviarConLoginListaPerfil(adminEmail, "BuscarIDNOM - NULL - NULL");
         List<PerfilGenetico> results = new ArrayList<>();
 
         if (lineas == null) {
@@ -92,19 +118,38 @@ public class PerfilService {
             }
 
             try {
+                int idPerfil = Integer.parseInt(p[0].trim());
+                String nombreCompleto = p[1].trim();
+                String codigoSecuencia = p[2].trim();
+                String descripcion = p[3].trim();
+                int estado = Integer.parseInt(p[4].trim());
+                String fechaMuestra = p[5].trim();
+
                 PerfilGenetico perfil = new PerfilGenetico(
-                        Integer.parseInt(p[0].trim()), // idPerfil
-                        p[1].trim(),                   // nombreCompleto
-                        p[2].trim(),                   // codigoSecuencia
-                        p[3].trim(),                   // descripcion
-                        Integer.parseInt(p[4].trim()), // estado
-                        p[5].trim(),                   // fechaMuestra
-                        -1 // idCuenta - we don't have it here, but the caller might know it from session
+                        idPerfil, nombreCompleto, codigoSecuencia, descripcion,
+                        estado, fechaMuestra, -1
                 );
-                // Filter by role: if user is not admin, only active (estado == 1)
+
+                // Role filter: non-admin users only see active profiles
                 if (!esAdmin && perfil.getEstado() != 1) {
                     continue;
                 }
+
+                // Client-side partial matching (contains, case-insensitive)
+                if (tipo.equalsIgnoreCase("ID") && !texto.isEmpty()) {
+                    // Match by ID (exact) or string contains in ID string
+                    String textLower = texto.trim().toLowerCase();
+                    boolean matches = String.valueOf(idPerfil).contains(textLower);
+                    if (!matches) continue;
+                } else if (tipo.equalsIgnoreCase("Nombre") && !texto.isEmpty()) {
+                    String textLower = texto.trim().toLowerCase();
+                    boolean matches = nombreCompleto.toLowerCase().contains(textLower)
+                            || codigoSecuencia.toLowerCase().contains(textLower)
+                            || descripcion.toLowerCase().contains(textLower);
+                    if (!matches) continue;
+                }
+                // "Todos": no additional filter, include all
+
                 results.add(perfil);
             } catch (NumberFormatException e) {
                 // Skip malformed line
@@ -147,16 +192,9 @@ public class PerfilService {
         if (email == null || email.equals("—")) {
             return false;
         }
-        // Use the direct modification protocol (not via solicitud)
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return false;
-        }
 
         String mensaje = "ModificP - " + email + " - " + nombreCompleto + " - " + codigoSecuencia + " - " + descripcion + " - " + fechaMuestra;
-        String respuesta = socket.enviarYRecibir(mensaje);
-        socket.desconectar();
-
+        String respuesta = enviarConLoginPerfil(adminEmail, mensaje);
         return respuesta != null && respuesta.trim().equals("1");
     }
 
@@ -165,7 +203,7 @@ public class PerfilService {
      * Protocol: "DarDBaja - {emailDelTitular}"
      * Respuesta éxito si contiene "true".
      * @param idPerfil   the ID of the profile to deactivate
-     * @param adminEmailertificating the action
+     * @param adminEmail the email of the admin performing the action
      * @return true if successful
      */
     public static boolean deactivatePerfil(int idPerfil, String adminEmail) {
@@ -173,16 +211,9 @@ public class PerfilService {
         if (email == null || email.equals("—")) {
             return false;
         }
-        // Use the direct deactivation protocol (not via solicitud)
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return false;
-        }
 
         String mensaje = "DarDBaja - " + email;
-        String respuesta = socket.enviarYRecibir(mensaje);
-        socket.desconectar();
-
+        String respuesta = enviarConLoginPerfil(adminEmail, mensaje);
         return respuesta != null && respuesta.contains("true");
     }
 
@@ -199,16 +230,9 @@ public class PerfilService {
         if (email == null || email.equals("—")) {
             return false;
         }
-        // Use the direct reactivation protocol (not via solicitud)
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return false;
-        }
 
         String mensaje = "DarDRestaur - " + email;
-        String respuesta = socket.enviarYRecibir(mensaje);
-        socket.desconectar();
-
+        String respuesta = enviarConLoginPerfil(adminEmail, mensaje);
         return respuesta != null && respuesta.contains("true");
     }
 }

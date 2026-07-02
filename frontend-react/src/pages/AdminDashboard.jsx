@@ -41,7 +41,7 @@ function AdminDashboard() {
     if (!user) return;
     setLoading(true);
     try {
-      const perfiles = await perfilesService.buscarPerfiles(term || '', type || 'Todos', user.idRol, user.email);
+      const perfiles = await perfilesService.buscarPerfiles(term || '', type || 'Todos', user.email, true);
       setPerfilesList(perfiles);
     } catch (error) {
       addToast('Error al cargar perfiles', 'error');
@@ -55,7 +55,7 @@ function AdminDashboard() {
     if (!user) return;
     setLoading(true);
     try {
-      const logs = await logsService.getLogs();
+      const logs = await logsService.getLogs(user.email);
       setLogsList(logs);
     } catch (error) {
       addToast('Error al cargar logs', 'error');
@@ -198,161 +198,264 @@ function AdminDashboard() {
     <div className="admin-dashboard">
       <header className="topbar">
         <div className="topbar-left">
-          {user?.email}
+          <span className="material-symbols-outlined topbar-icon">account_circle</span>
+          <span className="topbar-admin-email">{user?.email}</span>
         </div>
         <div className="topbar-center">
           <h1>
-            <span style={{ color: '#e25c6b' }}>Simple</span>
-            <span style={{ color: '#2b94c8' }}>ADN</span>
+            <span className="brand-coral">Simple</span>
+            <span className="brand-blue">ADN</span>
           </h1>
         </div>
-        <div className="topbar-right">
+        <nav className="topbar-right">
           <button
-            className={vistaActiva === 'pendientes' ? 'active' : ''}
+            className={vistaActiva === 'pendientes' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('pendientes')}
           >
-            Solicitudes Pendientes
+            Solicitudes
           </button>
           <button
-            className={vistaActiva === 'perfiles' ? 'active' : ''}
+            className={vistaActiva === 'perfiles' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('perfiles')}
           >
-            Administrar Perfiles
+            Perfiles
           </button>
           <button
-            className={vistaActiva === 'logs' ? 'active' : ''}
+            className={vistaActiva === 'logs' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('logs')}
           >
             Logs
           </button>
           <button
-            className={vistaActiva === 'ultimas' ? 'active' : ''}
+            className={vistaActiva === 'ultimas' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('ultimas')}
           >
-            Últimas Solicitudes
+            Últimas
           </button>
-          <button onClick={handleLogout}>Cerrar Sesión</button>
-        </div>
+          <button className="btn-icon btn-logout" onClick={handleLogout} title="Cerrar Sesión">
+            <span className="material-symbols-outlined">logout</span>
+          </button>
+        </nav>
       </header>
 
       <main className="main-content">
         {vistaActiva === 'pendientes' && (
           <div className="vista-pendientes">
-            <h2>Solicitudes Pendientes</h2>
+            <div className="page-header">
+              <div>
+                <h2>Solicitudes Pendientes</h2>
+                <p className="page-subtitle">Revisa y gestiona las solicitudes de alta y baja de perfiles genéticos.</p>
+              </div>
+            </div>
             {solicitudesPendientes.length === 0 ? (
-              <p className="empty-state">No hay solicitudes pendientes.</p>
+              <div className="empty-state-card">
+                <span className="material-symbols-outlined empty-icon">inbox</span>
+                <p>No hay más solicitudes pendientes.</p>
+              </div>
             ) : (
-              solicitudesPendientes.map(sol => (
-                <div key={sol.idSolicitud} className="solicitud-card">
-                  <div className="card-info">
-                    <strong>{sol.email}</strong>
-                    <span className="chip tipo">{sol.tipo}</span>
-                    <span>{sol.fechaSolicitud}</span>
-                    {(sol.tipo === 'REGISTRAR' || sol.tipo === 'MODIFICAR') && (
-                      <>
-                        <p>Nombre: {sol.nombreCompleto}</p>
-                        <p>Código: {sol.codigoSecuencia}</p>
-                        <p>Descripción: {sol.descripcion}</p>
-                      </>
-                    )}
-                  </div>
-                  <div className="card-actions">
-                    <button className="btn btn-success" onClick={() => handleAprobar(sol.idSolicitud)}>
-                      Aprobar
-                    </button>
-                    <button className="btn btn-danger" onClick={() => handleRechazar(sol.idSolicitud)}>
-                      Rechazar
-                    </button>
-                  </div>
-                </div>
-              ))
+              <div className="solicitudes-grid">
+                {solicitudesPendientes.map(sol => {
+                  const tipoLower = sol.tipo?.toLowerCase() || 'registrar';
+                  const chipIcons = { registrar: 'add_circle', modificar: 'edit', baja: 'remove_circle', restaurar: 'settings_backup_restore' };
+                  const chipIcon = chipIcons[tipoLower] || 'circle';
+                  return (
+                    <div key={sol.idSolicitud} className="solicitud-card">
+                      <div className="card-header">
+                        <div>
+                          <h3 className="card-title">{sol.email}</h3>
+                          {sol.codigoSecuencia && <p className="card-ref">ID Ref: {sol.codigoSecuencia}</p>}
+                        </div>
+                        <span className={`chip-tipo chip-${tipoLower}`}>
+                          <span className="material-symbols-outlined chip-icon">{chipIcon}</span>
+                          {sol.tipo}
+                        </span>
+                      </div>
+                      <p className="card-desc">
+                        {sol.descripcion || (tipoLower === 'baja' ? 'Solicitud de baja de perfil genético.' : tipoLower === 'restaurar' ? 'Solicitud de restauración de perfil genético.' : 'Solicitud de registro de perfil genético.')}
+                      </p>
+                      <div className="card-footer">
+                        <button className="btn-accept" onClick={() => handleAprobar(sol.idSolicitud)}>
+                          <span className="material-symbols-outlined">check</span>
+                          Aceptar
+                        </button>
+                        <button className="btn-reject" onClick={() => handleRechazar(sol.idSolicitud)}>
+                          <span className="material-symbols-outlined">close</span>
+                          Rechazar
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             )}
           </div>
         )}
 
         {vistaActiva === 'perfiles' && (
           <div className="vista-perfiles">
-            <h2>Administrar Perfiles</h2>
-            <div className="search-bar">
-              <select value={searchType} onChange={e => setSearchType(e.target.value)}>
-                <option value="Todos">Todos</option>
-                <option value="nombre">Por Nombre</option>
-                <option value="codigo">Por Código</option>
-              </select>
-              <input
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                placeholder="Buscar..."
-              />
-              <button onClick={() => cargarPerfiles(searchTerm, searchType)}>
-                Buscar
-              </button>
-            </div>
-            {perfilesList.map(p => (
-              <div key={p.idPerfil} className="perfil-card">
-                <div className="card-info">
-                  <strong>{p.nombreCompleto}</strong>
-                  <span className={`status-chip ${p.estado === 1 ? 'active' : 'inactive'}`}>
-                    {p.estado === 1 ? 'Activo' : 'Inactivo'}
-                  </span>
-                  <p>Código: {p.codigoSecuencia}</p>
-                  <p>Fecha: {p.fechaMuestra}</p>
-                  <p>{p.descripcion}</p>
-                </div>
-                <div className="card-actions">
-                  <button onClick={() => setEditModal({ open: true, perfil: p })}>
-                    Modificar
-                  </button>
-                  {p.estado === 1 ? (
-                    <button className="btn btn-danger" onClick={() => handleDarDeBaja(p)}>
-                      Dar de baja
-                    </button>
-                  ) : (
-                    <button className="btn btn-success" onClick={() => handleRestaurar(p)}>
-                      Restaurar
-                    </button>
-                  )}
-                </div>
+            <div className="page-header search-header">
+              <div>
+                <h2>Administrar Perfiles</h2>
+                <p className="page-subtitle">Gestiona los perfiles genéticos registrados en el banco de datos.</p>
               </div>
-            ))}
+              <div className="search-bar">
+                <div className="search-input-group">
+                  <span className="material-symbols-outlined search-icon">search</span>
+                  <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Buscar..." />
+                </div>
+                <div className="search-divider" />
+                <select value={searchType} onChange={e => setSearchType(e.target.value)}>
+                  <option value="Todos">Todos</option>
+                  <option value="nombre">Nombre</option>
+                  <option value="codigo">Código</option>
+                </select>
+                <button className="btn-search-exec" onClick={() => cargarPerfiles(searchTerm, searchType)}>
+                  Buscar
+                </button>
+              </div>
+            </div>
+            {loading ? (
+              <p className="empty-state-text">Cargando perfiles...</p>
+            ) : perfilesList.length === 0 ? (
+              <div className="empty-state-card">
+                <span className="material-symbols-outlined empty-icon">group_off</span>
+                <p>No se encontraron perfiles.</p>
+              </div>
+            ) : (
+              <div className="perfiles-grid">
+                {perfilesList.map(p => (
+                  <div key={p.idPerfil} className={`perfil-card${p.estado !== 1 ? ' inactive' : ''}`}>
+                    <div className="perfil-header">
+                      <div className="perfil-avatar">
+                        <span>{p.nombreCompleto?.charAt(0)?.toUpperCase() || '?'}</span>
+                      </div>
+                      <div className="perfil-name-block">
+                        <h3 className={`perfil-name${p.estado !== 1 ? ' line-through' : ''}`}>{p.nombreCompleto}</h3>
+                        <p className="perfil-code">{p.codigoSecuencia}</p>
+                      </div>
+                      <span className={`status-dot ${p.estado === 1 ? 'active' : 'inactive'}`}>
+                        <span className="dot" />
+                        {p.estado === 1 ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </div>
+                    <div className="perfil-meta">
+                      <div className="meta-item">
+                        <span className="meta-label">Fecha de Muestra</span>
+                        <span className="meta-value">{p.fechaMuestra || '—'}</span>
+                      </div>
+                      <div className="meta-item">
+                        <span className="meta-label">Descripción</span>
+                        <span className="meta-value truncate">{p.descripcion || '—'}</span>
+                      </div>
+                    </div>
+                    <div className="card-footer">
+                      <button className="btn-outline" onClick={() => setEditModal({ open: true, perfil: p })}>
+                        <span className="material-symbols-outlined">edit</span>
+                        Modificar
+                      </button>
+                      {p.estado === 1 ? (
+                        <button className="btn-destructive" onClick={() => handleDarDeBaja(p)}>
+                          <span className="material-symbols-outlined">block</span>
+                          Dar de baja
+                        </button>
+                      ) : (
+                        <button className="btn-primary-sm" onClick={() => handleRestaurar(p)}>
+                          <span className="material-symbols-outlined">settings_backup_restore</span>
+                          Restaurar
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {vistaActiva === 'logs' && (
           <div className="vista-logs">
-            <div className="vista-header">
-              <h2>Logs del Sistema</h2>
-              <button onClick={cargarLogs}>Actualizar</button>
-            </div>
-            {logsList.map(log => (
-              <div key={log.idRegistro} className="log-entry">
-                <span className="log-id">#{log.idRegistro}</span>
-                <span className="log-responsable">
-                  {log.nombreCuenta}
-                  {log.esAdmin && <span className="chip admin">Admin</span>}
-                </span>
-                <span className="log-email">{log.email}</span>
-                <span className="log-accion">{log.acciones}</span>
-                {log.descripcion && <span className="log-desc">{log.descripcion}</span>}
-                <span className="log-fecha">{log.fecha}</span>
+            <div className="page-header">
+              <div>
+                <h2>Logs del Sistema</h2>
+                <p className="page-subtitle">Historial de actividad del sistema y acciones administrativas.</p>
               </div>
-            ))}
+              <button className="btn-icon-refresh" onClick={cargarLogs} title="Actualizar">
+                <span className="material-symbols-outlined">refresh</span>
+              </button>
+            </div>
+            <div className="logs-table-container">
+              <div className="logs-table-header">
+                <div className="col-id">ID</div>
+                <div className="col-user">Usuario</div>
+                <div className="col-email">Email</div>
+                <div className="col-action">Acción</div>
+                <div className="col-date">Fecha</div>
+              </div>
+              <div className="logs-table-body">
+                {logsList.length === 0 ? (
+                  <div className="empty-row">No hay registros.</div>
+                ) : (
+                  logsList.map(log => (
+                    <div key={log.idRegistro} className={`log-row${log.esAdmin ? ' admin-row' : ''}`}>
+                      <div className="col-id mono">#{log.idRegistro}</div>
+                      <div className="col-user">
+                        <span className="material-symbols-outlined user-icon">{log.esAdmin ? 'admin_panel_settings' : 'person'}</span>
+                        <span className={log.esAdmin ? 'admin-name' : ''}>{log.nombreCuenta}</span>
+                        {log.esAdmin && <span className="admin-chip">Admin</span>}
+                      </div>
+                      <div className="col-email">{log.email}</div>
+                      <div className="col-action">{log.acciones}</div>
+                      <div className="col-date">{log.fecha}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         )}
 
         {vistaActiva === 'ultimas' && (
           <div className="vista-ultimas">
-            <h2>Últimas Solicitudes Resueltas</h2>
-            {ultimasList.map(sol => (
-              <div key={sol.idSolicitud} className="solicitud-card">
-                <span className="chip tipo">{sol.tipo}</span>
-                <span>{sol.email}</span>
-                <span className={`status-chip ${sol.estado === 1 ? 'active' : 'inactive'}`}>
-                  {sol.estado === 1 ? 'Aprobada' : 'Rechazada'}
-                </span>
-                <span>{sol.fechaSolicitud}</span>
+            <div className="page-header">
+              <div>
+                <h2>Últimas Solicitudes Resueltas</h2>
+                <p className="page-subtitle">Solicitudes aprobadas y rechazadas recientemente.</p>
               </div>
-            ))}
+            </div>
+            {ultimasList.length === 0 ? (
+              <div className="empty-state-card">
+                <span className="material-symbols-outlined empty-icon">inbox</span>
+                <p>No hay solicitudes resueltas recientemente.</p>
+              </div>
+            ) : (
+              <div className="solicitudes-grid">
+                {ultimasList.map(sol => {
+                  const tipoLower = sol.tipo?.toLowerCase() || 'registrar';
+                  const chipIcon = { registrar: 'add_circle', modificar: 'edit', baja: 'remove_circle', restaurar: 'settings_backup_restore' }[tipoLower] || 'circle';
+                  return (
+                    <div key={sol.idSolicitud} className="solicitud-card resolved-card">
+                      <div className="card-header">
+                        <div>
+                          <h3 className="card-title">{sol.email}</h3>
+                          {sol.codigoSecuencia && <p className="card-ref">ID Ref: {sol.codigoSecuencia}</p>}
+                        </div>
+                        <span className={`chip-tipo chip-${tipoLower}`}>
+                          <span className="material-symbols-outlined chip-icon">{chipIcon}</span>
+                          {sol.tipo}
+                        </span>
+                      </div>
+                      <div className="resolved-meta">
+                        <span className={`status-dot ${sol.estado === 1 ? 'approved' : 'rejected'}`}>
+                          <span className="dot" />
+                          {sol.estado === 1 ? 'Aprobada' : 'Rechazada'}
+                        </span>
+                        <span className="resolved-date">{sol.fecha}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </main>

@@ -1,0 +1,7 @@
+idIncremental=6
+1 - Mamuel - 1234567 - desc - 1 - 2026-01-10 - 1
+2 - Raton Perez - dgrhdtfegtrh5 - vivito y coleando - 1 - 2026-01-22 - 3
+3 - Raton Perez - dgrhdtfegtrh5 - vivito y coleando - 1 - 2026-01-22 - 5
+4 - Raton Perez - dgrhdtfegtrh5 - vivito y coleando - 1 - 2026-01-22 - 7
+5 - NombreCompleto - CadSec - Descripcion - 1 - 2026-04-24 - 2
+6 - pepito - JKSNHGJKSHUSJHGJK - JSFHSLFHSFHJLDH - 1 - 2026-04-23 - 13

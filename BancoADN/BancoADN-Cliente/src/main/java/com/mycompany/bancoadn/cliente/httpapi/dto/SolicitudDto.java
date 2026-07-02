@@ -119,12 +119,14 @@ public class SolicitudDto {
         private String codigoSecuencia;
         private String descripcion;
         private String fechaMuestra;
+        private String nombreCuenta; // account holder name (person name for REGISTRAR/MODIFICAR, null for BAJA/RESTAURAR)
 
         // Constructors, getters, setters
         public SolicitudSummary() {}
 
         public SolicitudSummary(int idSolicitud, String tipo, int estado, String email, String fecha,
-                                String nombreCompleto, String codigoSecuencia, String descripcion, String fechaMuestra) {
+                                String nombreCompleto, String codigoSecuencia, String descripcion, String fechaMuestra,
+                                String nombreCuenta) {
             this.idSolicitud = idSolicitud;
             this.tipo = tipo;
             this.estado = estado;
@@ -134,6 +136,7 @@ public class SolicitudDto {
             this.codigoSecuencia = codigoSecuencia;
             this.descripcion = descripcion;
             this.fechaMuestra = fechaMuestra;
+            this.nombreCuenta = nombreCuenta;
         }
 
         // Getters and setters
@@ -216,6 +219,14 @@ public class SolicitudDto {
 
         public void setFechaMuestra(String fechaMuestra) {
             this.fechaMuestra = fechaMuestra;
+        }
+
+        public String getNombreCuenta() {
+            return nombreCuenta;
+        }
+
+        public void setNombreCuenta(String nombreCuenta) {
+            this.nombreCuenta = nombreCuenta;
         }
     }
 }

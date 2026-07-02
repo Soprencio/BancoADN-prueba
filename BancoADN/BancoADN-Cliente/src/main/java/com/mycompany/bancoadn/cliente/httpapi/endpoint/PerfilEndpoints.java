@@ -61,8 +61,16 @@ public class PerfilEndpoints {
             return;
         }
 
-        boolean esAdmin = ctx.header("X-Admin-Email") != null && !ctx.header("X-Admin-Email").isEmpty();
-        List<PerfilDto> perfiles = PerfilService.buscarPerfiles(tipo, texto, esAdmin)
+        String adminEmail = ctx.header("X-Admin-Email");
+        boolean esAdmin = adminEmail != null && !adminEmail.isEmpty();
+        // Fallback to user email if admin header not present (for normal users browsing profiles)
+        String callerEmail = esAdmin ? adminEmail : ctx.header("X-User-Email");
+        if (callerEmail == null || callerEmail.isEmpty()) {
+            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-Admin-Email or X-User-Email header");
+            return;
+        }
+
+        List<PerfilDto> perfiles = PerfilService.buscarPerfiles(tipo, texto, esAdmin, callerEmail)
                 .stream()
                 .map(PerfilDto::fromModel)
                 .toList();

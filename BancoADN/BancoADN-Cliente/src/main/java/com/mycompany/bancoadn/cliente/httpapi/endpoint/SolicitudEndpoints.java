@@ -152,26 +152,34 @@ public class SolicitudEndpoints {
                 List<SolicitudDto.SolicitudSummary> pending = SolicitudService.getPendingRequests(email)
                 .stream()
                 .map(solicitud -> {
-                    // Extract requester's email from datosSolicitud (format: "email _ nombreCompleto _ codigoSecuencia _ descripcion _ fechaMuestra")
-                    String requesterEmail = null;
+                    String tipo = solicitud.getTipo();
                     String datos = solicitud.getDatosSolicitud();
-                    if (datos != null) {
-                        String[] parts = datos.split(" _ ", -1);
-                        if (parts.length > 0) {
-                            requesterEmail = parts[0].trim();
-                        }
+                    int idPerfil = solicitud.getIdPerfil();
+
+                    // For BAJA/RESTAURAR, email must be resolved via EmailPorPerfil
+                    // (identical to Ctrl_MenuAdmin.obtenerEmailPorPerfil() in old Swing)
+                    String requesterEmail;
+                    String nombreCuenta;
+                    if ("baja".equalsIgnoreCase(tipo) || "restaurar".equalsIgnoreCase(tipo)) {
+                        requesterEmail = idPerfil > 0 ? SolicitudService.obtenerEmailPorPerfil(email, idPerfil) : null;
+                        nombreCuenta = null;
+                    } else {
+                        // REGISTRAR/MODIFICAR: datosSolicitud = "email _ nombre _ codigoSec _ descripcion _ fecha"
+                        requesterEmail = extractEmail(datos);
+                        nombreCuenta = extractNombreCompleto(datos); // Person's name from solicitud
                     }
 
                     return new SolicitudDto.SolicitudSummary(
                             solicitud.getIdSolicitud(),
                             solicitud.getTipo(),
                             solicitud.getEstado(),
-                            requesterEmail, // Requester's email extracted from datosSolicitud
+                            requesterEmail,
                             solicitud.getFechaCreacion(),
                             extractNombreCompleto(datos),
                             extractCodigoSecuencia(datos),
                             extractDescripcion(datos),
-                            extractFechaMuestra(datos)
+                            extractFechaMuestra(datos),
+                            nombreCuenta
                     );
                 })
                 .toList();
@@ -180,6 +188,12 @@ public class SolicitudEndpoints {
     };
 
     // Helper methods to extract data from the datosSolicitud string (format: "email _ nombreCompleto _ codigoSecuencia _ descripcion _ fechaMuestra")
+    private static String extractEmail(String datos) {
+        if (datos == null) return null;
+        String[] parts = datos.split(" _ ", -1);
+        return parts.length > 0 ? parts[0].trim() : null;
+    }
+
     private static String extractNombreCompleto(String datos) {
         if (datos == null) return null;
         String[] parts = datos.split(" _ ", -1);
@@ -215,26 +229,32 @@ public class SolicitudEndpoints {
                 List<SolicitudDto.SolicitudSummary> recientes = SolicitudService.getRecentRequests(email)
                 .stream()
                 .map(solicitud -> {
-                    // Extract requester's email from datosSolicitud (format: "email _ nombreCompleto _ codigoSecuencia _ descripcion _ fechaMuestra")
-                    String requesterEmail = null;
+                    String tipo = solicitud.getTipo();
                     String datos = solicitud.getDatosSolicitud();
-                    if (datos != null) {
-                        String[] parts = datos.split(" _ ", -1);
-                        if (parts.length > 0) {
-                            requesterEmail = parts[0].trim();
-                        }
+                    int idPerfil = solicitud.getIdPerfil();
+
+                    // For BAJA/RESTAURAR, email must be resolved via EmailPorPerfil
+                    String requesterEmail;
+                    String nombreCuenta;
+                    if ("baja".equalsIgnoreCase(tipo) || "restaurar".equalsIgnoreCase(tipo)) {
+                        requesterEmail = SolicitudService.obtenerEmailPorPerfil(email, idPerfil);
+                        nombreCuenta = null;
+                    } else {
+                        requesterEmail = extractEmail(datos);
+                        nombreCuenta = extractNombreCompleto(datos);
                     }
 
                     return new SolicitudDto.SolicitudSummary(
                             solicitud.getIdSolicitud(),
                             solicitud.getTipo(),
                             solicitud.getEstado(),
-                            requesterEmail, // Requester's email extracted from datosSolicitud
+                            requesterEmail,
                             solicitud.getFechaCreacion(),
                             extractNombreCompleto(datos),
                             extractCodigoSecuencia(datos),
                             extractDescripcion(datos),
-                            extractFechaMuestra(datos)
+                            extractFechaMuestra(datos),
+                            nombreCuenta
                     );
                 })
                 .toList();

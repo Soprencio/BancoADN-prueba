@@ -1,6 +1,6 @@
-idIncremental=14
+idIncremental=15
 1 - registrar - 0 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
-2 - modificar - 0 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - 2 - 2026-05-20
+2 - modificar - 2 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - 2 - 2026-05-20
 3 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
 4 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-06-10
 5 - restaurar - 0 -   - 4 - 2026-06-10
@@ -13,3 +13,4 @@ idIncremental=14
 12 - registrar - 1 - mewmew@gmail.com _ NombreCompletomewmew _ CadSecmewmew _ Descripcionmewmew _ 2026-07-24 - NULL - 2026-06-24
 13 - registrar - 1 - q@gmail.com _ juancito _ 1144 _ no lo se _ 2026-04-23 - NULL - 2026-06-26
 14 - registrar - 1 - yon@gmail.com _ aaa _ 123123 _ aaabbb _ 2026-07-02 - NULL - 2026-07-02
+15 - baja - 0 -   - 9 - 2026-07-02

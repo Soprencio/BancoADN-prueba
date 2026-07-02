@@ -232,6 +232,19 @@ public class SolicitudService {
     }
 
     /**
+     * Get email associated with a genetic profile, by profile id.
+     * Protocol: "EmailPorPerfil - {idPerfil}"
+     * Replicates Ctrl_MenuAdmin.obtenerEmailPorPerfil() from the old Swing client.
+     */
+    public static String obtenerEmailPorPerfil(String callerEmail, int idPerfil) {
+        String respuesta = enviarConLogin(callerEmail, "EmailPorPerfil - " + idPerfil);
+        if (respuesta == null || respuesta.trim().equals("—")) {
+            return null;
+        }
+        return respuesta.trim();
+    }
+
+    /**
      * Approve a pending request (admin only).
      * Protocol: "ResSol - {idSolicitud} - 1 - {adminEmail}"
      * Success if response trimmed is "1" or "0".
