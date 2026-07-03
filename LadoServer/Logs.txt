@@ -1,595 +1,180 @@
-idIncremental=594
+idIncremental=179
 1 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
 2 - 1 - 9 - 2026-06-24 - nombrecreo se creo una cuenta
-3 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-4 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-5 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-6 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
-7 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-8 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-9 - 1 - 10 - 2026-06-24 - nombrecreo se creo una cuenta
-10 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
-11 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-12 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
-13 - 9 - 9 - 2026-06-24 - nombrecreo creo una solicitud de perfil
-14 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-15 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-16 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-17 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
-18 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-19 - 2 - 10 - 2026-06-24 - nombrecreo inicio sesion
-20 - 9 - 9 - 2026-06-24 - nombrecreo creo una solicitud de perfil
-21 - 9 - 10 - 2026-06-24 - nombrecreo creo una solicitud de perfil
-22 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-23 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
-24 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
-25 - 2 - 10 - 2026-06-24 - nombrecreo inicio sesion
-26 - 6 - 9 - 2026-06-24 - nombrecreo creo el perfilgenetico de:NombreCompletowawz
-27 - 7 - 9 - 2026-06-24 - nombrecreo modifico la solicitud: 11 y ahora esta aceptada
-28 - 7 - 10 - 2026-06-24 - nombrecreo modifico la solicitud: 11 y ahora esta aceptada
-29 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
-30 - 1 - 11 - 2026-06-26 - juan se creo una cuenta
-31 - 2 - 11 - 2026-06-26 - juan inicio sesion
-32 - 10 - 11 - 2026-06-26 - juan busco perfiles por nombre con el siguiente: Buscar...
-33 - 10 - 11 - 2026-06-26 - juan busco perfiles por id con el siguiente: 9
-34 - 10 - 11 - 2026-06-26 - juan busco perfiles por id con el siguiente: 1
-35 - 9 - 11 - 2026-06-26 - juan creo una solicitud de perfil
-36 - 1 - 12 - 2026-06-26 - aaa se creo una cuenta
-37 - 2 - 12 - 2026-06-26 - aaa inicio sesion
-38 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-39 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-40 - 6 - 12 - 2026-06-26 - aaa creo el perfilgenetico de:juancito
-41 - 7 - 12 - 2026-06-26 - aaa intento de modificar la solicitud: 13 pero fallo
-42 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-43 - 10 - 12 - 2026-06-26 - aaa busco perfiles por id con el siguiente: 11
-44 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-45 - 6 - 12 - 2026-06-26 - aaa creo el perfilgenetico de:NombreCompletomewmew
-46 - 7 - 12 - 2026-06-26 - aaa intento de modificar la solicitud: 12 pero fallo
-47 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-48 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-49 - 7 - 12 - 2026-06-26 - aaa intento de modificar la solicitud: 10 pero fallo
-50 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-51 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
-52 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
-53 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
-54 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
-55 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
-56 - 2 - 12 - 2026-06-26 - aaa inicio sesion
-57 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-58 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-59 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-60 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
-61 - 2 - 12 - 2026-06-26 - aaa inicio sesion
-62 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-63 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-64 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-65 - 14 - Cliente - 2026-06-26 - Se conecto un cliente al servidor
-66 - 2 - 12 - 2026-06-26 - aaa inicio sesion
-67 - 11 - 12 - 2026-06-26 - aaa busco la lista de solicitudes
-68 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-69 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-70 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-71 - 13 - 12 - 2026-06-26 - aaa busco la lista de logs
-72 - 10 - 12 - 2026-06-26 - aaa busco perfiles por id con el siguiente: 10
-73 - 3 - 12 - 2026-06-26 - aaa dio de baja el perfil de:q@gmail.com
-74 - 10 - 12 - 2026-06-26 - aaa busco perfiles por id con el siguiente: 10
-75 - 12 - 12 - 2026-06-26 - aaa busco la lista de las ultimas solicitudes
-76 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-77 - 1 - 13 - 2026-07-02 - 111111 se creo una cuenta
-78 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-79 - 1 - 14 - 2026-07-02 - 121212 se creo una cuenta
-80 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-81 - 1 - 15 - 2026-07-02 - yonaikerson se creo una cuenta
-82 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-83 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-84 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-85 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-86 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-87 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-88 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-89 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-90 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-91 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-92 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-93 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-94 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-95 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-96 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-97 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-98 - 9 - 15 - 2026-07-02 - yonaikerson creo una solicitud de perfil
-99 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-100 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-101 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-102 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-103 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-104 - 1 - 16 - 2026-07-02 - bbb se creo una cuenta
-105 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-106 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-107 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-108 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-109 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-110 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-111 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-112 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-113 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-114 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-115 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-116 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-117 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-118 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-119 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-120 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-121 - 6 - 16 - 2026-07-02 - bbb creo el perfilgenetico de:aaa
-122 - 7 - 16 - 2026-07-02 - bbb intento de modificar la solicitud: 14 pero fallo
-123 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-124 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-125 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-126 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-127 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-128 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-129 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-130 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-131 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-132 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-133 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-134 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-135 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-136 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-137 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-138 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-139 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-140 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-141 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-142 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-143 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-144 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-145 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-146 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-147 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-148 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-149 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-150 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-151 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-152 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-153 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-154 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-155 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-156 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-157 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-158 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-159 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-160 - 8 - 15 - 2026-07-02 - yonaikerson creo una solicitud de baja con los datos:  
-161 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-162 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-163 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-164 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-165 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-166 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-167 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-168 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-169 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-170 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-171 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-172 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-173 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-174 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-175 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-176 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-177 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-178 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-179 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-180 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-181 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-182 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-183 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-184 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-185 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-186 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-187 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-188 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-189 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-190 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-191 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-192 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-193 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-194 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-195 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-196 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-197 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-198 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-199 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-200 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-201 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-202 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-203 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-204 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-205 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-206 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-207 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-208 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-209 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-210 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-211 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-212 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-213 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-214 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-215 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-216 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-217 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-218 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-219 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-220 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-221 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-222 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-223 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-224 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-225 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-226 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-227 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-228 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-229 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-230 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-231 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-232 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-233 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-234 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-235 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-236 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-237 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-238 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-239 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-240 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-241 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-242 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-243 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-244 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-245 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-246 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-247 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-248 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-249 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-250 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-251 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-252 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-253 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-254 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-255 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-256 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-257 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-258 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-259 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-260 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-261 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-262 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-263 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-264 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-265 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-266 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-267 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-268 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-269 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-270 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-271 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-272 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-273 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-274 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-275 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-276 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-277 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-278 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-279 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-280 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-281 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-282 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-283 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-284 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-285 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-286 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-287 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-288 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-289 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-290 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-291 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-292 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-293 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-294 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-295 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-296 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-297 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-298 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-299 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-300 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-301 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-302 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-303 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-304 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-305 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-306 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-307 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-308 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-309 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-310 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-311 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-312 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-313 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-314 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-315 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-316 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-317 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-318 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-319 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-320 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-321 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-322 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-323 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-324 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-325 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-326 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-327 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-328 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-329 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-330 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-331 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-332 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-333 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-334 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-335 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-336 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-337 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-338 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-339 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-340 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-341 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-342 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-343 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-344 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-345 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-346 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-347 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-348 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-349 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-350 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-351 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-352 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-353 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-354 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-355 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-356 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-357 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-358 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-359 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-360 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-361 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-362 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-363 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-364 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-365 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-366 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-367 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-368 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-369 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-370 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-371 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-372 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-373 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-374 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-375 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-376 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-377 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-378 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-379 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-380 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-381 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-382 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-383 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-384 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-385 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-386 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-387 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-388 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-389 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-390 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-391 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-392 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-393 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-394 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-395 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-396 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-397 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-398 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-399 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-400 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-401 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-402 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-403 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-404 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-405 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-406 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-407 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-408 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-409 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-410 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-411 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-412 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-413 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-414 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-415 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-416 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-417 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-418 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-419 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-420 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-421 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-422 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-423 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-424 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-425 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-426 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-427 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-428 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-429 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-430 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-431 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-432 - 13 - 16 - 2026-07-02 - bbb busco la lista de logs
-433 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-434 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-435 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-436 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-437 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-438 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-439 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-440 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-441 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-442 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-443 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-444 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-445 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-446 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-447 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-448 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-449 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-450 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-451 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-452 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-453 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-454 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-455 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-456 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-457 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-458 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-459 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-460 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-461 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-462 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-463 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-464 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-465 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-466 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-467 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-468 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-469 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-470 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-471 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-472 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-473 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-474 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-475 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-476 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-477 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-478 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-479 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-480 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-481 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-482 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-483 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-484 - 13 - 16 - 2026-07-02 - bbb busco la lista de logs
-485 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-486 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-487 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-488 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-489 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-490 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-491 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-492 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-493 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-494 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-495 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-496 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-497 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-498 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-499 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-500 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-501 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-502 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-503 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-504 - 13 - 16 - 2026-07-02 - bbb busco la lista de logs
-505 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-506 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-507 - 12 - 16 - 2026-07-02 - bbb busco la lista de las ultimas solicitudes
-508 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-509 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-510 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-511 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-512 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-513 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-514 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-515 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-516 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-517 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-518 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-519 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-520 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-521 - 7 - 16 - 2026-07-02 - bbb intento de modificar la solicitud: 2 pero fallo
-522 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-523 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-524 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-525 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-526 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-527 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-528 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-529 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-530 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-531 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-532 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-533 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-534 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-535 - 12 - 16 - 2026-07-02 - bbb busco la lista de las ultimas solicitudes
-536 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-537 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-538 - 13 - 16 - 2026-07-02 - bbb busco la lista de logs
-539 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-540 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-541 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-542 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-543 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-544 - 13 - 16 - 2026-07-02 - bbb busco la lista de logs
-545 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-546 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-547 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-548 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-549 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-550 - 11 - 16 - 2026-07-02 - bbb busco la lista de solicitudes
-551 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-552 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-553 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-554 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-555 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-556 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-557 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-558 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-559 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-560 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-561 - 10 - 16 - 2026-07-02 - bbb busco perfiles por id con el siguiente: 15
-562 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-563 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-564 - 13 - 16 - 2026-07-02 - bbb busco la lista de logs
-565 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-566 - 2 - 16 - 2026-07-02 - bbb inicio sesion
-567 - 12 - 16 - 2026-07-02 - bbb busco la lista de las ultimas solicitudes
-568 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-569 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-570 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-571 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-572 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-573 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-574 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-575 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-576 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-577 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-578 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-579 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-580 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-581 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-582 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-583 - 11 - 15 - 2026-07-02 - yonaikerson busco la lista de solicitudes
-584 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-585 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-586 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-587 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-588 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-589 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-590 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-591 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-592 - 14 - Cliente - 2026-07-02 - Se conecto un cliente al servidor
-593 - 2 - 15 - 2026-07-02 - yonaikerson inicio sesion
-594 - 10 - 15 - 2026-07-02 - yonaikerson busco perfiles por id con el siguiente: 9
+3 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+4 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+5 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+6 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+7 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+8 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+9 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+10 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+11 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+12 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+13 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+14 - 10 - 16 - 2026-07-03 - bbb busco perfiles por nombre con el siguiente: aaa
+15 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+16 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+17 - 10 - 16 - 2026-07-03 - bbb busco perfiles por id con el siguiente: 2
+18 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+19 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+20 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+21 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+22 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+23 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+24 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:q@gmail.com
+25 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:q@gmail.com
+26 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:q@gmail.com
+27 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:mewmew@gmail.com
+28 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+29 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+30 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+31 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+32 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:mewmew@gmail.com
+33 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+34 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:wawzers@gmail.com
+35 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+36 - 5 - 16 - 2026-07-03 - bbb modifico perfil de:yon@gmail.comcon los siguientes datos:9 _ bbb _ 456456 _ algo _ 1 _ null _ 15
+37 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+38 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+39 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+40 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+41 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+42 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:wawzers@gmail.com
+43 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+44 - 5 - 16 - 2026-07-03 - bbb modifico perfil de:yon@gmail.comcon los siguientes datos:9 _ ccc _ 789789 _ guagyad _ 1 _ null _ 15
+45 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+46 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+47 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+48 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+49 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+50 - 5 - 16 - 2026-07-03 - bbb modifico perfil de:yon@gmail.comcon los siguientes datos:9 _ ddd _ 101010 _ sewasd _ 1 _ 2026-06-30 _ 15
+51 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+52 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+53 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+54 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+55 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+56 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+57 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:yon@gmail.com
+58 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 15 pero fallo
+59 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+60 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+61 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+62 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+63 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+64 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+65 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+66 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:PEpeelperez2@gmail.com
+67 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+68 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:4@gmail.com
+69 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+70 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:ytr@gmail.com
+71 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+72 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:wawzers@gmail.com
+73 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+74 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:Nuevo@gmail.com
+75 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+76 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:mail2@gmail.com
+77 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+78 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:q@gmail.com
+79 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+80 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:mewmew@gmail.com
+81 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+82 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+83 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+84 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:mail2@gmail.com
+85 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 5 pero fallo
+86 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+87 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+88 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+89 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+90 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 6 pero fallo
+91 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+92 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+93 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+94 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+95 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 7 pero fallo
+96 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+97 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+98 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+99 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+100 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+101 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+102 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+103 - 3 - 16 - 2026-07-03 - bbb dio de baja el perfil de:mail2@gmail.com
+104 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+105 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+106 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 9 pero fallo
+107 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+108 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+109 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+110 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+111 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 1 pero fallo
+112 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+113 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 8 pero fallo
+114 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+115 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+116 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+117 - 1 - 17 - 2026-07-03 - pedrito se creo una cuenta
+118 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+119 - 2 - 17 - 2026-07-03 - pedrito inicio sesion
+120 - 11 - 17 - 2026-07-03 - pedrito busco la lista de solicitudes
+121 - 9 - 17 - 2026-07-03 - pedrito creo una solicitud de perfil
+122 - 11 - 17 - 2026-07-03 - pedrito busco la lista de solicitudes
+123 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+124 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+125 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+126 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+127 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+128 - 6 - 16 - 2026-07-03 - bbb creo el perfilgenetico de:pepito
+129 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 16 pero fallo
+130 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+131 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+132 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
+133 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+134 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+135 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+136 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+137 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
+138 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+139 - 2 - 17 - 2026-07-03 - pedrito inicio sesion
+140 - 11 - 17 - 2026-07-03 - pedrito busco la lista de solicitudes
+141 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+142 - 2 - 16 - 2026-07-03 - bbb inicio sesion
+143 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
+144 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+145 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:mewmew@gmail.com
+146 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+147 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:Nuevo@gmail.com
+148 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+149 - 4 - 16 - 2026-07-03 - bbb restauro el perfil de:4@gmail.com
+150 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
+151 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+152 - 2 - 17 - 2026-07-03 - pedrito inicio sesion
+153 - 11 - 17 - 2026-07-03 - pedrito busco la lista de solicitudes
+154 - 10 - 17 - 2026-07-03 - pedrito busco perfiles por nombre con el siguiente: ra
+155 - 10 - 17 - 2026-07-03 - pedrito busco perfiles por nombre con el siguiente: ra
+156 - 10 - 17 - 2026-07-03 - pedrito busco perfiles por nombre con el siguiente: r
+157 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+158 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+159 - 2 - 17 - 2026-07-03 - pedrito inicio sesion
+160 - 11 - 17 - 2026-07-03 - pedrito busco la lista de solicitudes
+161 - 10 - 17 - 2026-07-03 - pedrito busco todos los perfiles
+162 - 10 - 17 - 2026-07-03 - pedrito busco perfiles por nombre con el siguiente: a
+163 - 10 - 17 - 2026-07-03 - pedrito busco todos los perfiles
+164 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+165 - 2 - 17 - 2026-07-03 - pedrito inicio sesion
+166 - 11 - 17 - 2026-07-03 - pedrito busco la lista de solicitudes
+167 - 10 - 17 - 2026-07-03 - pedrito busco todos los perfiles
+168 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+169 - 1 - 18 - 2026-07-03 - barbara se creo una cuenta
+170 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
+171 - 2 - 18 - 2026-07-03 - barbara inicio sesion
+172 - 11 - 18 - 2026-07-03 - barbara busco la lista de solicitudes
+173 - 10 - 18 - 2026-07-03 - barbara busco todos los perfiles
+174 - 13 - 18 - 2026-07-03 - barbara busco la lista de logs
+175 - 10 - 18 - 2026-07-03 - barbara busco todos los perfiles
+176 - 13 - 18 - 2026-07-03 - barbara busco la lista de logs
+177 - 11 - 18 - 2026-07-03 - barbara busco la lista de solicitudes
+178 - 13 - 18 - 2026-07-03 - barbara busco la lista de logs
+179 - 12 - 18 - 2026-07-03 - barbara busco la lista de las ultimas solicitudes

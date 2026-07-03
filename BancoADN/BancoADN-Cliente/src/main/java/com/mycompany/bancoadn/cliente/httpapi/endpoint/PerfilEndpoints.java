@@ -7,6 +7,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.Handler;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Endpoints for profile operations.
@@ -115,9 +116,9 @@ public class PerfilEndpoints {
         );
 
         if (success) {
-            ctx.status(HttpStatus.OK).result("Profile updated successfully");
+            ctx.status(HttpStatus.OK).json(Map.of("message", "Profile updated successfully"));
         } else {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Failed to update profile");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Failed to update profile"));
         }
     };
 
@@ -126,7 +127,7 @@ public class PerfilEndpoints {
         String idStr = ctx.pathParam("id");
         String adminEmail = ctx.header("X-Admin-Email");
         if (adminEmail == null || adminEmail.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-Admin-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Missing X-Admin-Email header"));
             return;
         }
 
@@ -134,15 +135,15 @@ public class PerfilEndpoints {
         try {
             id = Integer.parseInt(idStr);
         } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid profile ID");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Invalid profile ID"));
             return;
         }
 
         boolean success = PerfilService.deactivatePerfil(id, adminEmail);
         if (success) {
-            ctx.status(HttpStatus.OK).result("Profile deactivated successfully");
+            ctx.status(HttpStatus.OK).json(Map.of("message", "Profile deactivated successfully"));
         } else {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Failed to deactivate profile");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Failed to deactivate profile"));
         }
     };
 
@@ -151,7 +152,7 @@ public class PerfilEndpoints {
         String idStr = ctx.pathParam("id");
         String adminEmail = ctx.header("X-Admin-Email");
         if (adminEmail == null || adminEmail.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-Admin-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Missing X-Admin-Email header"));
             return;
         }
 
@@ -159,15 +160,15 @@ public class PerfilEndpoints {
         try {
             id = Integer.parseInt(ctx.pathParam("id"));
         } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid profile ID");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Invalid profile ID"));
             return;
         }
 
         boolean success = PerfilService.activatePerfil(id, adminEmail);
         if (success) {
-            ctx.status(HttpStatus.OK).result("Profile reactivated successfully");
+            ctx.status(HttpStatus.OK).json(Map.of("message", "Profile reactivated successfully"));
         } else {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Failed to reactivate profile");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Failed to reactivate profile"));
         }
     };
 }

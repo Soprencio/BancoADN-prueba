@@ -363,62 +363,6 @@ public class BancoADN6RequestHandler implements Runnable {
     }
     
     List<String> BuscarPerfiles(Integer id,String nombre) throws Exception{
-//        String mail;
-//        List<String> Respuesta = new ArrayList<>();
-//        mutexModPerfilGenetico.acquire();
-//        mutexModCuenta.acquire();
-//        if(nombre!=null && nombre.equals("NULL") && id==null){
-//            for(String aux : leerRegistros("PerfilGenetico.txt")){
-//                String[]perfil=aux.split(" - ");
-//                id=Integer.parseInt(perfil[6]);  // BUG: pisás el parámetro id → el log después dice "por id" incorrectamente
-//                String[] aux2= buscarPorId("CuentaPersonal.txt", id);
-//                if(aux2!=null){
-//                    mail=aux2[2];
-//                    Respuesta.add(perfil[0]+" - "+perfil[1]+" - "+perfil[2]+" - "+perfil[3]+" - "+perfil[4]+" - "+perfil[5]+" - "+mail);                
-//                }
-//            }
-//        }
-//        else if(id==null){
-//            for(String[] perfil : buscarMultiplesPorCampo("PerfilGenetico.txt", 1 , nombre)){
-//                id=Integer.parseInt(perfil[6]);  // BUG: pisás el parámetro id → el log después dice "por id" incorrectamente
-//                String[] aux= buscarPorId("CuentaPersonal.txt", id);
-//                if(aux!=null){
-//                    mail=aux[2];
-//                    Respuesta.add(perfil[0]+" - "+perfil[1]+" - "+perfil[2]+" - "+perfil[3]+" - "+perfil[4]+" - "+perfil[5]+" - "+mail);                
-//                }
-//            }
-//        }
-//        else if(id!=0){
-//            String[] perfil=buscarPorId("PerfilGenetico.txt", id);
-//            String[] aux= buscarPorId("CuentaPersonal.txt", id);
-//            if(aux!=null){
-//                mail=aux[2];
-//                Respuesta.add(perfil[0]+" - "+perfil[1]+" - "+perfil[2]+" - "+perfil[3]+" - "+perfil[4]+" - "+perfil[5]+" - "+mail);                
-//            }
-//        }
-//        
-//        mutexModCuenta.release();
-//        mutexModPerfilGenetico.release();
-//        
-//        mutexModRegistro.acquire();
-//        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//        
-//        if(nombre!=null && nombre.equals("NULL") && id==null){
-//            agregarRegistro("Logs.txt", "10 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " busco todos los perfiles");
-//        
-//        }
-//        else if(id==null){
-//            agregarRegistro("Logs.txt", "10 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " busco perfiles por nombre con el siguiente: " + nombre);
-//        
-//        }
-//        else if(id!=0){
-//            agregarRegistro("Logs.txt", "10 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " busco perfiles por id con el siguiente: " + id);
-//        
-//        }
-//        
-//        mutexModRegistro.release();
-//        
-//        return Respuesta;
         String mail;
         List<String> Respuesta = new ArrayList<>();
         mutexModPerfilGenetico.acquire();
@@ -426,8 +370,8 @@ public class BancoADN6RequestHandler implements Runnable {
         if(nombre!=null && nombre.equals("NULL") && id==null){
             for(String aux : leerRegistros("PerfilGenetico.txt")){
                 String[]perfil=aux.split(" - ");
-                int idCuenta = Integer.parseInt(perfil[6]);  // FIX: variable local, no pisás id
-                String[] aux2= buscarPorId("CuentaPersonal.txt", idCuenta);
+                id=Integer.parseInt(perfil[6]);
+                String[] aux2= buscarPorId("CuentaPersonal.txt", id);
                 if(aux2!=null){
                     mail=aux2[2];
                     Respuesta.add(perfil[0]+" - "+perfil[1]+" - "+perfil[2]+" - "+perfil[3]+" - "+perfil[4]+" - "+perfil[5]+" - "+mail);                
@@ -436,8 +380,8 @@ public class BancoADN6RequestHandler implements Runnable {
         }
         else if(id==null){
             for(String[] perfil : buscarMultiplesPorCampo("PerfilGenetico.txt", 1 , nombre)){
-                int idCuenta = Integer.parseInt(perfil[6]);  // FIX: variable local, no pisás id
-                String[] aux= buscarPorId("CuentaPersonal.txt", idCuenta);
+                id=Integer.parseInt(perfil[6]);
+                String[] aux= buscarPorId("CuentaPersonal.txt", id);
                 if(aux!=null){
                     mail=aux[2];
                     Respuesta.add(perfil[0]+" - "+perfil[1]+" - "+perfil[2]+" - "+perfil[3]+" - "+perfil[4]+" - "+perfil[5]+" - "+mail);                
@@ -541,61 +485,25 @@ public class BancoADN6RequestHandler implements Runnable {
         return lista;
     }
     
-//    List<String> ObtenerUltimasSolicitudes() throws Exception {
-//        List<String> lista=new ArrayList<>();
-//        
-//        mutexModSolicitud.acquire();
-//        
-//        for(String valor : leerRegistros("Solicitud.txt")){
-//            if(!valor.split(" - ")[2].equals("0")){
-//                lista.add(valor);
-//            }
-//        }
-//        mutexModSolicitud.release();
-//        int aux = Math.max(lista.size() - 10, 0); 
-//        lista = lista.subList(aux, lista.size());
-//        
-//        mutexModRegistro.acquire();
-//        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//        
-//        agregarRegistro("Logs.txt", "12 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " busco la lista de las ultimas solicitudes");
-//        
-//        mutexModRegistro.release();
-//        
-//        return lista;
-//    }
-    
     List<String> ObtenerUltimasSolicitudes() throws Exception {
-        List<String> lista = new ArrayList<>();
-        List<String> idsResueltas = new ArrayList<>();
+        List<String> lista=new ArrayList<>();
         
-        // Leer CuentaAsignada.txt y filtrar solo las resueltas (con fecha, no NULL)
-        mutexModCuentaAsignada.acquire();
-        for (String valor : leerRegistros("CuentaAsignada.txt")) {
-            String[] p = valor.split(" - ");
-            if (p.length >= 3 && !p[2].equals("NULL")) {
-                idsResueltas.add(p[0]); // idSol en orden de resolución (más vieja primero)
-            }
-        }
-        mutexModCuentaAsignada.release();
-        
-        // Últimas 10 resueltas (más recientes)
-        int aux = Math.max(idsResueltas.size() - 10, 0);
-        idsResueltas = idsResueltas.subList(aux, idsResueltas.size());
-        
-        // Buscar cada solicitud en Solicitud.txt
         mutexModSolicitud.acquire();
-        for (String idStr : idsResueltas) {
-            String[] sol = buscarPorCampo("Solicitud.txt", 0, idStr);
-            if (sol != null) {
-                lista.add(String.join(" - ", sol));
+        
+        for(String valor : leerRegistros("Solicitud.txt")){
+            if(!valor.split(" - ")[2].equals("0")){
+                lista.add(valor);
             }
         }
         mutexModSolicitud.release();
+        int aux = Math.max(lista.size() - 10, 0); 
+        lista = lista.subList(aux, lista.size());
         
         mutexModRegistro.acquire();
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        
         agregarRegistro("Logs.txt", "12 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " busco la lista de las ultimas solicitudes");
+        
         mutexModRegistro.release();
         
         return lista;
@@ -626,90 +534,26 @@ public class BancoADN6RequestHandler implements Runnable {
         writer.close();
     }
     
-//    int ResolverSolicitud(int idSol, int estadoNuevo, String Mail) throws Exception {
-//        int Respuesta=-1;
-//        
-//        mutexModSolicitud.acquire();
-//        String[] aux = buscarPorCampo("Solicitud.txt", 0, String.valueOf(idSol));
-//        
-//        
-//        
-//        if (aux!=null && aux[2].equals("0")){
-//            if(estadoNuevo==2){
-//                String fecha = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//                agregarUsuarioAsignado(idSol, obtenerIdCuenta(Mail));
-//                 mutexModCuentaAsignada.acquire();
-//                String[] ponerfecha = buscarPorCampo("CuentaAsignada.txt", 0,  String.valueOf(idSol));
-//                editarRegistroCuentaAsignada("CuentaAsignada.txt", idSol,  ponerfecha[0] + " - " + ponerfecha[1] + " - " + fecha);
-//                
-//                editarRegistro("Solicitud.txt", idSol,  aux[0]+" - "+aux[1]+" - 2 - "+aux[3]+" - "+aux[4]+" - "+aux[5]);
-//                Respuesta=0;
-//                mutexModCuentaAsignada.release();
-//            }
-//            else if(estadoNuevo==1){
-//        
-//                if(aux[1].equals("restaurar")){
-//                    RestaurarPerfil(obtenerEmailPorPerfil(Integer.parseInt(aux[4])));
-//                }
-//                else if(aux[1].equals("baja")){
-//                    DarBajaPerfil(obtenerEmailPorPerfil(Integer.parseInt(aux[4])));
-//                }
-//                else if(aux[1].equals("modificar")){
-//                    String[]aus=aux[3].split(" _ ");
-//                    ModificarPerfil(aus[0], aus[1], aus[2], aus[3], aus[4]);
-//                }
-//                else if(aux[1].equals("registrar")){
-//                    String[]aus=aux[3].split(" _ ");
-//                    crearPerfil(obtenerIdCuenta(aus[0]), aus[1], aus[2], aus[3], aus[4]);
-//                }
-//                String fecha = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//                agregarUsuarioAsignado(idSol, obtenerIdCuenta(Mail));
-//                 mutexModCuentaAsignada.acquire();
-//                String[] ponerfecha = buscarPorCampo("CuentaAsignada.txt", 0,  String.valueOf(idSol));
-//                editarRegistroCuentaAsignada("CuentaAsignada.txt", idSol,  ponerfecha[0] + " - " + ponerfecha[1] + " - " + fecha);
-//                
-//                editarRegistro("Solicitud.txt", idSol,  aux[0]+" - "+aux[1]+" - 1 - "+aux[3]+" - "+aux[4]+" - "+aux[5]);
-//                Respuesta=1;
-//                mutexModCuentaAsignada.release();
-//            }
-//        }
-//        mutexModSolicitud.release();
-//        
-//        mutexModRegistro.acquire();
-//        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//        
-//        if(aux!=null && aux[2].equals("0")){
-//        agregarRegistro("Logs.txt", "7 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " intento de modificar la solicitud: " + idSol + " pero fallo");
-//        }
-//        else if (estadoNuevo==1){
-//            agregarRegistro("Logs.txt", "7 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " modifico la solicitud: " + idSol + " y ahora esta aceptada");
-//        }else{
-//        agregarRegistro("Logs.txt", "7 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " modifico la solicitud: " + idSol + " y ahora esta rechazada");
-//        }
-//        mutexModRegistro.release();
-//        
-//        return Respuesta;
-//    }
-    
     int ResolverSolicitud(int idSol, int estadoNuevo, String Mail) throws Exception {
         int Respuesta=-1;
         
         mutexModSolicitud.acquire();
+        Thread.sleep(10000);
         String[] aux = buscarPorCampo("Solicitud.txt", 0, String.valueOf(idSol));
+        
+        
         
         if (aux!=null && aux[2].equals("0")){
             if(estadoNuevo==2){
                 String fecha = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                // FIX: escribir directo el registro con fecha, sin agregarUsuarioAsignado + buscar + editar
-                mutexModCuentaAsignada.acquire();
-                BufferedWriter writer = new BufferedWriter(new FileWriter("CuentaAsignada.txt", true));
-                writer.write(idSol + " - " + obtenerIdCuenta(Mail) + " - " + fecha);
-                writer.newLine();
-                writer.close();
-                mutexModCuentaAsignada.release();
+                agregarUsuarioAsignado(idSol, obtenerIdCuenta(Mail));
+                 mutexModCuentaAsignada.acquire();
+                String[] ponerfecha = buscarPorCampo("CuentaAsignada.txt", 0,  String.valueOf(idSol));
+                editarRegistroCuentaAsignada("CuentaAsignada.txt", idSol,  ponerfecha[0] + " - " + ponerfecha[1] + " - " + fecha);
                 
                 editarRegistro("Solicitud.txt", idSol,  aux[0]+" - "+aux[1]+" - 2 - "+aux[3]+" - "+aux[4]+" - "+aux[5]);
                 Respuesta=0;
+                mutexModCuentaAsignada.release();
             }
             else if(estadoNuevo==1){
         
@@ -728,16 +572,14 @@ public class BancoADN6RequestHandler implements Runnable {
                     crearPerfil(obtenerIdCuenta(aus[0]), aus[1], aus[2], aus[3], aus[4]);
                 }
                 String fecha = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                // FIX: escribir directo el registro con fecha, sin agregarUsuarioAsignado + buscar + editar
-                mutexModCuentaAsignada.acquire();
-                BufferedWriter writer = new BufferedWriter(new FileWriter("CuentaAsignada.txt", true));
-                writer.write(idSol + " - " + obtenerIdCuenta(Mail) + " - " + fecha);
-                writer.newLine();
-                writer.close();
-                mutexModCuentaAsignada.release();
+                agregarUsuarioAsignado(idSol, obtenerIdCuenta(Mail));
+                 mutexModCuentaAsignada.acquire();
+                String[] ponerfecha = buscarPorCampo("CuentaAsignada.txt", 0,  String.valueOf(idSol));
+                editarRegistroCuentaAsignada("CuentaAsignada.txt", idSol,  ponerfecha[0] + " - " + ponerfecha[1] + " - " + fecha);
                 
                 editarRegistro("Solicitud.txt", idSol,  aux[0]+" - "+aux[1]+" - 1 - "+aux[3]+" - "+aux[4]+" - "+aux[5]);
                 Respuesta=1;
+                mutexModCuentaAsignada.release();
             }
         }
         mutexModSolicitud.release();
@@ -778,10 +620,6 @@ public class BancoADN6RequestHandler implements Runnable {
                 if (i > 4) detalle.append(" - ");
                 detalle.append(aux[i]);
             }
-            if(idCuenta.equals("Cliente")){
-                String filaLog = aux[0] + " - " + 0 + " - " + "Cliente" + " - " + "" + " - " + detalle.toString() + " - " + fecha + " - " + "Se conecto al servidor" + " - " + 1;
-                logsFormateados.add(filaLog);
-            }else{
             mutexModCuenta.acquire();
             String[] cuenta = buscarPorId("CuentaPersonal.txt", Integer.parseInt(idCuenta));
             mutexModCuenta.release();
@@ -802,7 +640,6 @@ public class BancoADN6RequestHandler implements Runnable {
 
             String filaLog = aux[0] + " - " + idCuenta + " - " + nombreCuenta + " - " + email + " - " + detalle.toString() + " - " + fecha + " - " + nombreAccion + " - " + admin;
             logsFormateados.add(filaLog);
-            }
         }
         
         mutexModRegistro.acquire();

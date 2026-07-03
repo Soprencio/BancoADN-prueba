@@ -1,16 +1,17 @@
-idIncremental=15
-1 - registrar - 0 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
+idIncremental=16
+1 - registrar - 2 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
 2 - modificar - 2 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - 2 - 2026-05-20
 3 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
 4 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-06-10
-5 - restaurar - 0 -   - 4 - 2026-06-10
-6 - restaurar - 0 -   - 4 - 2026-06-10
-7 - restaurar - 0 -   - 4 - 2026-06-10
-8 - registrar - 0 - wawzers@gmail.com _ NombreCompletowawz _ CadSecwawz _ Descripcionwawz _ 2026-05-24 - NULL - 2026-06-24
-9 - registrar - 0 - wawzers@gmail.com _ NombreCompletowawz _ CadSecwawz _ Descripcionwawz _ 2026-05-24 - NULL - 2026-06-24
+5 - restaurar - 1 -   - 4 - 2026-06-10
+6 - restaurar - 2 -   - 4 - 2026-06-10
+7 - restaurar - 2 -   - 4 - 2026-06-10
+8 - registrar - 2 - wawzers@gmail.com _ NombreCompletowawz _ CadSecwawz _ Descripcionwawz _ 2026-05-24 - NULL - 2026-06-24
+9 - registrar - 2 - wawzers@gmail.com _ NombreCompletowawz _ CadSecwawz _ Descripcionwawz _ 2026-05-24 - NULL - 2026-06-24
 10 - registrar - 1 - mewmew@gmail.com _ NombreCompletomewmew _ CadSecmewmew _ Descripcionmewmew _ 2026-07-24 - NULL - 2026-06-24
 11 - registrar - 1 - wawzers@gmail.com _ NombreCompletowawz _ CadSecwawz _ Descripcionwawz _ 2026-05-24 - NULL - 2026-06-24
 12 - registrar - 1 - mewmew@gmail.com _ NombreCompletomewmew _ CadSecmewmew _ Descripcionmewmew _ 2026-07-24 - NULL - 2026-06-24
 13 - registrar - 1 - q@gmail.com _ juancito _ 1144 _ no lo se _ 2026-04-23 - NULL - 2026-06-26
 14 - registrar - 1 - yon@gmail.com _ aaa _ 123123 _ aaabbb _ 2026-07-02 - NULL - 2026-07-02
-15 - baja - 0 -   - 9 - 2026-07-02
+15 - baja - 1 -   - 9 - 2026-07-02
+16 - registrar - 1 - pep@gmail.com _ pepito _ 123123 _ aaaaaa _ 2026-07-01 - NULL - 2026-07-03

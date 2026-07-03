@@ -1,6 +1,5 @@
 package com.mycompany.bancoadn.cliente.httpapi.service;
 
-import com.mycompany.bancoadn.cliente.BancoADN_Grupo6_ClienteSocket;
 import com.mycompany.bancoadn.cliente.ClasesModelo.Solicitud;
 
 import java.util.ArrayList;
@@ -9,69 +8,23 @@ import java.util.List;
 /**
  * Service layer for solicitud operations, communicating directly with the socket server
  * using the exact protocol defined in the requirements.
- * 
- * IMPORTANT: LadoServer uses a ThreadLocal (mailusr) set only by the iniciarSesion command.
- * Each fresh socket connection MUST send "IniciarS" before any other command to set mailusr,
- * otherwise methods like obtenerNombre() and obtenerIdCuenta(mailusr.get()) will throw NPE.
- * This mirrors the Swing client behavior which keeps one persistent authenticated connection.
+ * Uses a persistent session socket (SessionSocket) to avoid duplicate
+ * "Iniciar sesión" and "Conectarse al servidor" logs on every command.
  */
 public class SolicitudService {
 
     /**
-     * Open a socket, re-login (to set mailusr on LadoServer), send the command,
-     * read response, and close.
+     * Send a single-line command using the persistent session socket.
      */
     private static String enviarConLogin(String email, String comando) {
-        String password = AuthService.getPassword(email);
-        if (password == null) {
-            System.err.println("No stored password for " + email + " - cannot re-login");
-            return null;
-        }
-
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-
-        // Step 1: login to set mailusr ThreadLocal on LadoServer
-        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
-        if (loginResp == null) {
-            socket.desconectar();
-            return null;
-        }
-
-        // Step 2: send the actual command
-        String respuesta = socket.enviarYRecibir(comando);
-        socket.desconectar();
-        return respuesta;
+        return SessionSocket.sendCommand(email, comando);
     }
 
     /**
-     * Open a socket, re-login, send a list command, read multi-line response until FINISH, and close.
+     * Send a list command using the persistent session socket.
      */
     private static List<String> enviarConLoginLista(String email, String comando) {
-        String password = AuthService.getPassword(email);
-        if (password == null) {
-            System.err.println("No stored password for " + email + " - cannot re-login");
-            return null;
-        }
-
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-
-        // Step 1: login to set mailusr
-        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
-        if (loginResp == null) {
-            socket.desconectar();
-            return null;
-        }
-
-        // Step 2: send the list command
-        List<String> respuestas = socket.enviarYSolicitarLista(comando);
-        socket.desconectar();
-        return respuestas;
+        return SessionSocket.sendListCommand(email, comando);
     }
 
     /**
@@ -228,6 +181,8 @@ public class SolicitudService {
                 // skip malformed line
             }
         }
+        // Reverse so most recent (newest idSolicitud) appears first
+        java.util.Collections.reverse(result);
         return result;
     }
 

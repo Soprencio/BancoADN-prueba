@@ -27,6 +27,7 @@ com\mycompany\bancoadn\cliente\httpapi\endpoint\PerfilEndpoints.class
 com\mycompany\bancoadn\cliente\httpapi\service\CreateAccountResult.class
 com\mycompany\bancoadn\cliente\BancoADN_Grupo6_Pant_CrearCuenta.class
 com\mycompany\bancoadn\cliente\httpapi\dto\PerfilDto.class
+com\mycompany\bancoadn\cliente\httpapi\service\SessionSocket.class
 com\mycompany\bancoadn\cliente\ClasesModelo\Solicitud.class
 com\mycompany\bancoadn\cliente\BancoADN_Grupo6_Ctrl_ModificarPerfilAdmin.class
 com\mycompany\bancoadn\cliente\ClasesModelo\Rol.class

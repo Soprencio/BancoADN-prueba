@@ -39,24 +39,21 @@ public class AuthService {
      * @return a CuentaPersonal object representing the logged-in user, or null if failed
      */
     public static CuentaPersonal login(String email, String password) {
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
+        // Save password FIRST so SessionSocket.openSession() can find it.
+        // If login fails, we remove it below.
+        passwordStore.put(email, password);
 
-        String mensaje = "IniciarS - " + email + " - " + password;
-        String respuesta = socket.enviarYRecibir(mensaje);
-        socket.desconectar();
+        String respuesta = SessionSocket.openSession(email);
 
         if (respuesta == null) {
+            passwordStore.remove(email);
             return null;
         }
 
         try {
-            int codigo = Integer.parseInt(respuesta.trim());
+            int codigo = Integer.parseInt(respuesta);
             switch (codigo) {
                 case 1: // USUARIO NORMAL
-                    passwordStore.put(email, password);
                     return new CuentaPersonal(
                             -1, // idCuenta not available in login
                             email.split("@")[0], // nombreCuenta derived from email
@@ -65,7 +62,6 @@ public class AuthService {
                             1 // idRol: 1 = USUARIO
                     );
                 case 2: // ADMINISTRADOR
-                    passwordStore.put(email, password);
                     return new CuentaPersonal(
                             -1,
                             email.split("@")[0],
@@ -75,9 +71,11 @@ public class AuthService {
                     );
                 case -1: // NO ENCONTRADO
                 default:
+                    passwordStore.remove(email);
                     return null;
             }
         } catch (NumberFormatException e) {
+            passwordStore.remove(email);
             return null;
         }
     }

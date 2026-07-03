@@ -1,6 +1,5 @@
 package com.mycompany.bancoadn.cliente.httpapi.service;
 
-import com.mycompany.bancoadn.cliente.BancoADN_Grupo6_ClienteSocket;
 import com.mycompany.bancoadn.cliente.ClasesModelo.PerfilGenetico;
 
 import java.util.ArrayList;
@@ -9,50 +8,18 @@ import java.util.List;
 public class PerfilService {
 
     /**
-     * Open a fresh socket, re-login (to set mailusr on LadoServer), send a command,
-     * read a single-line response, and close.
-     * Required because BuscarPerfiles on LadoServer calls obtenerNombre() which
-     * accesses mailusr ThreadLocal — IniciarS must be sent on every fresh socket.
+     * Send a single-line command using the persistent session socket.
+     * Opens a new socket + login only on first use; reuses the session socket afterwards.
      */
     private static String enviarConLoginPerfil(String email, String comando) {
-        String password = AuthService.getPassword(email);
-        if (password == null) {
-            return null;
-        }
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
-        if (loginResp == null) {
-            socket.desconectar();
-            return null;
-        }
-        String respuesta = socket.enviarYRecibir(comando);
-        socket.desconectar();
-        return respuesta;
+        return SessionSocket.sendCommand(email, comando);
     }
 
     /**
-     * Open a fresh socket, re-login, send a list command, read until FINISH, and close.
+     * Send a list command using the persistent session socket.
      */
     private static List<String> enviarConLoginListaPerfil(String email, String comando) {
-        String password = AuthService.getPassword(email);
-        if (password == null) {
-            return null;
-        }
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
-        if (loginResp == null) {
-            socket.desconectar();
-            return null;
-        }
-        List<String> respuestas = socket.enviarYSolicitarLista(comando);
-        socket.desconectar();
-        return respuestas;
+        return SessionSocket.sendListCommand(email, comando);
     }
 
     /**
@@ -89,19 +56,39 @@ public class PerfilService {
 
     /**
      * Search for profiles by criteria.
-     * Protocol: "BuscarIDNOM - NULL - NULL" (always fetch all, then filter client-side)
-     * because LadoServer only supports exact-match (equalsIgnoreCase), not partial/contains.
-     * To allow searching by "a" and finding "Juan", "Maria", etc., we filter on the gateway.
+     * Uses the same protocol commands as the original Swing EJEMPLO:
+     *   - "ID":      BuscarIDNOM - <id>  - NULL
+     *   - "Nombre":  BuscarIDNOM - NULL  - <nombre>
+     *   - "Todos":   BuscarIDNOM - NULL  - NULL
+     *
+     * The server filters by its own criteria (equalsIgnoreCase). For partial/contains
+     * matching, we additionally filter client-side on the correct field:
+     *   - "ID"      → only idPerfil (string contains)
+     *   - "Nombre"  → only nombreCompleto (string contains)
+     *   - "Todos"   → no client-side filter (show all)
+     *
+     * Role filter: non-admin users only see active profiles (estado == 1).
      *
      * @param tipo       "ID", "Nombre", or "Todos"
-     * @param texto      search text (case-insensitive partial match for name/code/desc)
+     * @param texto      search text (case-insensitive partial match)
      * @param esAdmin    whether the caller is an admin
-     * @param adminEmail admin's email for re-login (to set mailusr on LadoServer)
+     * @param adminEmail admin's email for session socket
      * @return list of matching profiles
      */
     public static List<PerfilGenetico> buscarPerfiles(String tipo, String texto, boolean esAdmin, String adminEmail) {
-        // Always fetch ALL profiles, then filter client-side for partial matching
-        List<String> lineas = enviarConLoginListaPerfil(adminEmail, "BuscarIDNOM - NULL - NULL");
+        String comando;
+        String textoT = texto.trim();
+
+        if (("ID".equalsIgnoreCase(tipo) || "codigo".equalsIgnoreCase(tipo)) && !textoT.isEmpty()) {
+            comando = "BuscarIDNOM - " + textoT + " - NULL";
+        } else if ("Nombre".equalsIgnoreCase(tipo) && !textoT.isEmpty()) {
+            comando = "BuscarIDNOM - NULL - " + textoT;
+        } else {
+            // "Todos" or empty text: fetch all profiles
+            comando = "BuscarIDNOM - NULL - NULL";
+        }
+
+        List<String> lineas = enviarConLoginListaPerfil(adminEmail, comando);
         List<PerfilGenetico> results = new ArrayList<>();
 
         if (lineas == null) {
@@ -136,17 +123,12 @@ public class PerfilService {
                 }
 
                 // Client-side partial matching (contains, case-insensitive)
-                if (tipo.equalsIgnoreCase("ID") && !texto.isEmpty()) {
-                    // Match by ID (exact) or string contains in ID string
-                    String textLower = texto.trim().toLowerCase();
-                    boolean matches = String.valueOf(idPerfil).contains(textLower);
-                    if (!matches) continue;
-                } else if (tipo.equalsIgnoreCase("Nombre") && !texto.isEmpty()) {
-                    String textLower = texto.trim().toLowerCase();
-                    boolean matches = nombreCompleto.toLowerCase().contains(textLower)
-                            || codigoSecuencia.toLowerCase().contains(textLower)
-                            || descripcion.toLowerCase().contains(textLower);
-                    if (!matches) continue;
+                if (("ID".equalsIgnoreCase(tipo) || "codigo".equalsIgnoreCase(tipo)) && !textoT.isEmpty()) {
+                    String textLower = textoT.toLowerCase();
+                    if (!String.valueOf(idPerfil).contains(textLower)) continue;
+                } else if ("Nombre".equalsIgnoreCase(tipo) && !textoT.isEmpty()) {
+                    String textLower = textoT.toLowerCase();
+                    if (!nombreCompleto.toLowerCase().contains(textLower)) continue;
                 }
                 // "Todos": no additional filter, include all
 
@@ -164,13 +146,8 @@ public class PerfilService {
      * @param idPerfil the ID of the profile
      * @return the email or null if not found
      */
-    public static String obtenerEmailPorPerfil(int idPerfil) {
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-        String respuesta = socket.enviarYRecibir("EmailPorPerfil - " + idPerfil);
-        socket.desconectar();
+    public static String obtenerEmailPorPerfil(int idPerfil, String callerEmail) {
+        String respuesta = SessionSocket.sendCommand(callerEmail, "EmailPorPerfil - " + idPerfil);
         return (respuesta == null || respuesta.isBlank()) ? null : respuesta.trim();
     }
 
@@ -188,7 +165,7 @@ public class PerfilService {
      * @return true if successful
      */
     public static boolean actualizarPerfil(int idPerfil, String nombreCompleto, String codigoSecuencia, String descripcion, String fechaMuestra, int estado, String adminEmail) {
-        String email = obtenerEmailPorPerfil(idPerfil);
+        String email = obtenerEmailPorPerfil(idPerfil, adminEmail);
         if (email == null || email.equals("—")) {
             return false;
         }
@@ -207,7 +184,7 @@ public class PerfilService {
      * @return true if successful
      */
     public static boolean deactivatePerfil(int idPerfil, String adminEmail) {
-        String email = obtenerEmailPorPerfil(idPerfil);
+        String email = obtenerEmailPorPerfil(idPerfil, adminEmail);
         if (email == null || email.equals("—")) {
             return false;
         }
@@ -226,7 +203,7 @@ public class PerfilService {
      * @return true if successful
      */
     public static boolean activatePerfil(int idPerfil, String adminEmail) {
-        String email = obtenerEmailPorPerfil(idPerfil);
+        String email = obtenerEmailPorPerfil(idPerfil, adminEmail);
         if (email == null || email.equals("—")) {
             return false;
         }

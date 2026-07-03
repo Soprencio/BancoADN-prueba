@@ -1,6 +1,5 @@
 package com.mycompany.bancoadn.cliente.httpapi.service;
 
-import com.mycompany.bancoadn.cliente.BancoADN_Grupo6_ClienteSocket;
 import com.mycompany.bancoadn.cliente.httpapi.dto.LogDto;
 
 import java.util.ArrayList;
@@ -61,42 +60,17 @@ public class LogService {
     }
 
     /**
-     * Open a fresh socket, re-login, send a list command, read until FINISH, and close.
-     * Same pattern as PerfilService.enviarConLoginListaPerfil.
+     * Send a list command using the persistent session socket.
      */
     private static List<String> enviarConLoginListaLog(String email, String comando) {
-        String password = AuthService.getPassword(email);
-        if (password == null) {
-            return null;
-        }
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
-        if (loginResp == null) {
-            socket.desconectar();
-            return null;
-        }
-        List<String> respuestas = socket.enviarYSolicitarLista(comando);
-        socket.desconectar();
-        return respuestas;
+        return SessionSocket.sendListCommand(email, comando);
     }
 
     /**
-     * Get lines from the server by sending a command (no re-login — legacy).
-     * @param command the command to send (e.g., "GetLogs - ALL")
-     * @return list of response lines, or null if failed
+     * Get lines from the server by sending a command (no session socket — legacy fallback).
      */
     private static List<String> obtenerLineasDeLog(String command) {
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-
-        // Send the command and get a list of strings.
-        List<String> lineas = socket.enviarYSolicitarLista(command);
-        socket.desconectar();
-        return lineas;
+        // No email available; can't use SessionSocket. Returns null to signal failure.
+        return null;
     }
 }

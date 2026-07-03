@@ -1,0 +1,29 @@
+idIncremental=28
+1 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+2 - 1 - 9 - 2026-06-24 - nombrecreo se creo una cuenta
+3 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+4 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+5 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+6 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+7 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+8 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+9 - 1 - 10 - 2026-06-24 - nombrecreo se creo una cuenta
+10 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+11 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+12 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+13 - 9 - 9 - 2026-06-24 - nombrecreo creo una solicitud de perfil
+14 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+15 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+16 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+17 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+18 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+19 - 2 - 10 - 2026-06-24 - nombrecreo inicio sesion
+20 - 9 - 9 - 2026-06-24 - nombrecreo creo una solicitud de perfil
+21 - 9 - 10 - 2026-06-24 - nombrecreo creo una solicitud de perfil
+22 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+23 - 2 - 9 - 2026-06-24 - nombrecreo inicio sesion
+24 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
+25 - 2 - 10 - 2026-06-24 - nombrecreo inicio sesion
+26 - 6 - 9 - 2026-06-24 - nombrecreo creo el perfilgenetico de:NombreCompletowawz
+27 - 7 - 9 - 2026-06-24 - nombrecreo modifico la solicitud: 11 y ahora esta aceptada
+28 - 7 - 10 - 2026-06-24 - nombrecreo modifico la solicitud: 11 y ahora esta aceptada
