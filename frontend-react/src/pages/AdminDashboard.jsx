@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { solicitudesService, perfilesService, logsService } from '../services/apiService';
@@ -22,6 +22,10 @@ function AdminDashboard() {
   const [confirmModal, setConfirmModal] = useState({ open: false, mensaje: '', onConfirm: null });
   const [editModal, setEditModal] = useState({ open: false, perfil: null });
   const [loading, setLoading] = useState(false);
+  // Track last search type+term so we can fix incorrect LadoServer log descriptions
+  // (LadoServer BuscarPerfiles reassigns the id param in the Todos/Nombre loops,
+  //  causing "busco perfiles por id" to be logged instead of the correct message)
+  const lastSearchRef = useRef({ type: 'Todos', term: '' });
 
   const cargarPendientes = async () => {
     if (!user) return;
@@ -41,6 +45,7 @@ function AdminDashboard() {
     if (!user) return;
     setLoading(true);
     try {
+      lastSearchRef.current = { type: type || 'Todos', term: term || '' };
       const perfiles = await perfilesService.buscarPerfiles(term || '', type || 'Todos', user.email, true);
       setPerfilesList(perfiles);
     } catch (error) {
@@ -56,6 +61,27 @@ function AdminDashboard() {
     setLoading(true);
     try {
       const logs = await logsService.getLogs(user.email);
+      // Fix LadoServer log bug: BuscarPerfiles reassigns the id param at
+      // lines 373/383, causing "busco perfiles por id" for Name/Todos searches.
+      // The most recent BuscarPerfiles log corresponds to the last search
+      // performed in this session — correct its message if needed.
+      const last = lastSearchRef.current;
+      if (last.type === 'Nombre' || last.type === 'nombre' || last.type === 'Todos') {
+        const targetIdx = logs.findIndex(l =>
+          l.acciones === 'BuscarPerfiles' &&
+          /^.+? busco perfiles por id con el siguiente: \d+$/.test(l.descripcion || '')
+        );
+        if (targetIdx !== -1) {
+          const fixed = { ...logs[targetIdx] };
+          const name = fixed.descripcion.match(/^(.+?) busco/)?.[1] || '';
+          if (last.type === 'Nombre' || last.type === 'nombre') {
+            fixed.descripcion = name + ' busco perfiles por nombre con el siguiente: ' + last.term;
+          } else {
+            fixed.descripcion = name + ' busco todos los perfiles';
+          }
+          logs[targetIdx] = fixed;
+        }
+      }
       setLogsList(logs);
     } catch (error) {
       addToast('Error al cargar logs', 'error');
@@ -80,10 +106,7 @@ function AdminDashboard() {
   };
 
   useEffect(() => {
-    cargarPendientes();
-  }, [user]);
-
-  useEffect(() => {
+    if (!user) return;
     if (vistaActiva === 'pendientes') {
       cargarPendientes();
     } else if (vistaActiva === 'perfiles') {
@@ -93,6 +116,7 @@ function AdminDashboard() {
     } else if (vistaActiva === 'ultimas') {
       cargarUltimas();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vistaActiva, user]);
 
   const handleAprobar = async (id) => {
@@ -388,6 +412,7 @@ function AdminDashboard() {
                 <div className="col-id">ID</div>
                 <div className="col-user">Usuario</div>
                 <div className="col-email">Email</div>
+                <div className="col-desc">Detalles</div>
                 <div className="col-action">Acción</div>
                 <div className="col-date">Fecha</div>
               </div>
@@ -404,6 +429,7 @@ function AdminDashboard() {
                         {log.esAdmin && <span className="admin-chip">Admin</span>}
                       </div>
                       <div className="col-email">{log.email}</div>
+                      <div className="col-desc">{log.descripcion || '—'}</div>
                       <div className="col-action">{log.acciones}</div>
                       <div className="col-date">{log.fecha}</div>
                     </div>
@@ -477,11 +503,13 @@ function AdminDashboard() {
           { name: 'nombreCompleto', label: 'Nombre Completo', required: true },
           { name: 'codigoSecuencia', label: 'Código de Secuencia', required: true },
           { name: 'descripcion', label: 'Descripción', required: true },
+          { name: 'fechaMuestra', label: 'Fecha de Muestra', type: 'date', required: true },
         ]}
         initialValues={editModal.perfil ? {
           nombreCompleto: editModal.perfil.nombreCompleto,
           codigoSecuencia: editModal.perfil.codigoSecuencia,
           descripcion: editModal.perfil.descripcion,
+          fechaMuestra: editModal.perfil.fechaMuestra,
         } : {}}
         submitLabel="Guardar Cambios"
         onSubmit={handleEditarSubmit}

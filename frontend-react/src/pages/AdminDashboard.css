@@ -899,6 +899,16 @@
   font-size: 13px;
 }
 
+.col-desc {
+  flex: 1;
+  min-width: 0;
+  color: var(--on-surface-variant);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .col-action {
   width: 160px;
   flex-shrink: 0;
@@ -927,6 +937,13 @@
   }
   .col-action {
     width: 120px;
+  }
+}
+
+@media (max-width: 700px) {
+  .logs-table-header .col-desc,
+  .log-row .col-desc {
+    display: none;
   }
 }
 

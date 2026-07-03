@@ -76,6 +76,20 @@ const authService = {
   },
 
   /**
+   * Logout - close the persistent session socket
+   * @returns {Promise<void>}
+   */
+  logout: async () => {
+    try {
+      await fetch(`${API_BASE}/auth/logout`, {
+        method: 'POST',
+      });
+    } catch (e) {
+      // Ignore errors on logout
+    }
+  },
+
+  /**
    * Register new user
    * @param {string} email
    * @param {string} password

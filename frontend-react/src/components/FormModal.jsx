@@ -165,6 +165,7 @@ FormModal.propTypes = {
         'textarea',
         'select',
         'checkbox',
+        'date',
       ]),
       placeholder: PropTypes.string,
       required: PropTypes.bool,

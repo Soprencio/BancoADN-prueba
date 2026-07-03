@@ -23,8 +23,30 @@ const UserDashboard = () => {
   const [requestType, setRequestType] = useState('');
   const [formInitialValues, setFormInitialValues] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchType, setSearchType] = useState('nombre');
+  const [searchType, setSearchType] = useState('Todos');
   const [searchResults, setSearchResults] = useState([]);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+
+  const cargarPerfiles = async (term, type) => {
+    if (!user) return;
+    setLoadingSearch(true);
+    try {
+      let results = await perfilesService.buscarPerfiles(term || '', type || 'Todos', user.email, false);
+      // Filter to only active profiles
+      results = results.filter(p => p.estado === 1);
+      setSearchResults(results);
+    } catch (err) {
+      addToast('Error al buscar perfiles', 'error');
+    } finally {
+      setLoadingSearch(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showSearch && user) {
+      cargarPerfiles('', 'Todos');
+    }
+  }, [showSearch, user]);
 
   const loadPendingRequests = async () => {
     if (!user) return;
@@ -135,19 +157,6 @@ const UserDashboard = () => {
     }
   };
 
-  const handleBuscar = async () => {
-    try {
-      const results = await perfilesService.buscarPerfiles(
-        searchTerm,
-        searchType,
-        user.email
-      );
-      setSearchResults(results);
-    } catch (err) {
-      addToast('Error al buscar perfiles', 'error');
-    }
-  };
-
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -186,33 +195,65 @@ const UserDashboard = () => {
 
       <main className="main-content">
         {showSearch ? (
-          <div className="search-view">
-            <button onClick={() => setShowSearch(false)}>← Volver</button>
-            <h2>Buscar Perfiles</h2>
-            <div className="search-bar">
-              <select value={searchType} onChange={e => setSearchType(e.target.value)}>
-                <option value="nombre">Por Nombre</option>
-                <option value="codigo">Por Código</option>
-              </select>
-              <input
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                placeholder="Buscar..."
-              />
-              <button onClick={handleBuscar}>Buscar</button>
-            </div>
-            {searchResults.length === 0 ? (
-              <p>No se encontraron resultados.</p>
-            ) : (
-              searchResults.map(p => (
-                <div key={p.idPerfil} className="profile-card">
-                  <p><strong>{p.nombreCompleto}</strong></p>
-                  <p>Código: {p.codigoSecuencia}</p>
-                  <p>Fecha: {p.fechaMuestra}</p>
-                  <p>{p.descripcion}</p>
+          <div className="vista-perfiles">
+            <div className="page-header search-header">
+              <div>
+                <h2>Buscar Perfiles</h2>
+                <p className="page-subtitle">Explorá los perfiles genéticos activos registrados en el banco de datos.</p>
+              </div>
+              <div className="search-bar">
+                <div className="search-input-group">
+                  <span className="material-symbols-outlined search-icon">search</span>
+                  <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Buscar..." />
                 </div>
-              ))
+                <div className="search-divider" />
+                <select value={searchType} onChange={e => setSearchType(e.target.value)}>
+                  <option value="Todos">Todos</option>
+                  <option value="nombre">Nombre</option>
+                  <option value="codigo">Código</option>
+                </select>
+                <button className="btn-search-exec" onClick={() => cargarPerfiles(searchTerm, searchType)}>
+                  Buscar
+                </button>
+              </div>
+            </div>
+            {loadingSearch ? (
+              <p className="empty-state-text">Cargando perfiles...</p>
+            ) : searchResults.length === 0 ? (
+              <div className="empty-state-card">
+                <span className="material-symbols-outlined empty-icon">group_off</span>
+                <p>No se encontraron perfiles activos.</p>
+              </div>
+            ) : (
+              <div className="perfiles-grid">
+                {searchResults.map(p => (
+                  <div key={p.idPerfil} className="perfil-card">
+                    <div className="perfil-header">
+                      <div className="perfil-avatar">
+                        <span>{p.nombreCompleto?.charAt(0)?.toUpperCase() || '?'}</span>
+                      </div>
+                      <div className="perfil-name-block">
+                        <h3 className="perfil-name">{p.nombreCompleto}</h3>
+                        <p className="perfil-code">{p.codigoSecuencia}</p>
+                      </div>
+                    </div>
+                    <div className="perfil-meta">
+                      <div className="meta-item">
+                        <span className="meta-label">Fecha de Muestra</span>
+                        <span className="meta-value">{p.fechaMuestra || '—'}</span>
+                      </div>
+                      <div className="meta-item">
+                        <span className="meta-label">Descripción</span>
+                        <span className="meta-value truncate">{p.descripcion || '—'}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
+            <button className="btn btn-secondary" style={{ marginTop: '1rem' }} onClick={() => setShowSearch(false)}>
+              ← Volver
+            </button>
           </div>
         ) : (
           <section className="dashboard-body">
