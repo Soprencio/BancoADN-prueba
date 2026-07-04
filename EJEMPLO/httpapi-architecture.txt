@@ -1,0 +1,263 @@
+ARQUITECTURA HTTPAPI — BancoADN
+==================================
+
+Ubicación: BancoADN\BancoADN-Cliente\src\main\java\com\mycompany\bancoadn\cliente\httpapi\
+
+15 archivos Java en total, organizados en 4 paquetes:
+
+  endpoint/  (4)  →  HTTP handlers (Javalin)
+  service/   (6)  →  Lógica de negocio + comunicación socket
+  dto/       (4)  →  Data Transfer Objects (JSON)
+  raíz       (1)  →  ApiServer.java (entry point)
+
+
+═══════════════════════════════════════════════════════════
+ApiServer.java
+═══════════════════════════════════════════════════════════
+
+Entry point. Arranca Javalin en puerto 7000, configura
+CORS, registra los 4 grupos de endpoints y un health check
+en GET /.
+
+
+═══════════════════════════════════════════════════════════
+endpoint/  — 4 archivos  (manejan HTTP → llaman services)
+═══════════════════════════════════════════════════════════
+
+AuthEndpoints.java
+  POST /api/auth/login         → AuthService.login()
+                                devuelve {email,nombreCuenta,idRol}
+  POST /api/auth/logout        → SessionSocket.close()
+                                cierra socket persistente
+  POST /api/auth/crear-cuenta  → AuthService.crearCuenta()
+
+PerfilEndpoints.java
+  GET  /api/perfiles/me                     → PerfilService.getPerfilByEmail()
+  GET  /api/perfiles/buscar?tipo=&texto=    → PerfilService.buscarPerfiles()
+  POST /api/perfiles/{id}/modificar         → PerfilService.actualizarPerfil()
+  POST /api/perfiles/{id}/baja              → PerfilService.deactivatePerfil()
+  POST /api/perfiles/{id}/restaurar         → PerfilService.activatePerfil()
+
+SolicitudEndpoints.java
+  POST /api/solicitudes/registrar   → crear solicitud de registro
+  POST /api/solicitudes/modificar   → crear solicitud de modificación
+  POST /api/solicitudes/baja        → crear solicitud de baja
+  POST /api/solicitudes/restaurar   → crear solicitud de restauración
+  GET  /api/solicitudes/pendientes  → lista solicitudes pendientes del user
+  GET  /api/solicitudes/ultimas     → lista últimas solicitudes resueltas
+  POST /api/solicitudes/{id}/aprobar   → admin aprueba
+  POST /api/solicitudes/{id}/rechazar  → admin rechaza
+
+LogEndpoints.java
+  GET /api/logs  → LogService.getLogs()
+                   devuelve últimos 30 logs ordenados por id descendente
+
+
+═══════════════════════════════════════════════════════════
+service/  — 6 archivos  (comunicación socket con LadoServer)
+═══════════════════════════════════════════════════════════
+
+SessionSocket.java
+  Mantiene UN SOLO socket + login por sesión admin, reusado
+  por todos los services. Evita logs duplicados de
+  "Iniciar sesión" y "Conectarse al servidor".
+  Métodos:
+    openSession(email)       → crea socket + envía IniciarS
+    getSocket(email)         → devuelve socket activo o lo reabre
+    sendCommand(email, cmd)  → envía comando de una línea
+    sendListCommand(email,c) → envía comando que devuelve lista
+                               hasta recibir "FINISH"
+    close()                  → cierra sesión
+
+AuthService.java
+  login(email, password)
+    → guarda password en passwordStore
+    → llama SessionSocket.openSession()
+    → parsea respuesta: 1=user, 2=admin
+  reloginOnSocket(email, password, socket)
+    → re-loguea en un socket fresco (para comandos que
+       necesitan mailusr ThreadLocal)
+  crearCuenta(email, nombre, password)
+    → socket nuevo, envía "CrearC", descarta socket
+
+PerfilService.java
+  getPerfilByEmail(email)
+    → "BuscarDat - email", parsea nombre/codigo/desc/estado/fecha
+  buscarPerfiles(tipo, texto, esAdmin, email)
+    → "BuscarIDNOM" con filtro según tipo
+    → client-side partial match sobre el campo correcto
+    → filtra inactivos si no es admin
+  obtenerEmailPorPerfil(idPerfil, callerEmail)
+    → "EmailPorPerfil - id"
+  actualizarPerfil(id, nombre, codigo, desc, fecha, estado, admin)
+    → "ModificP - emailTitular - datos"
+  deactivatePerfil(id, admin)
+    → "DarDBaja - emailTitular"
+  activatePerfil(id, admin)
+    → "DarDRestaur - emailTitular"
+
+SolicitudService.java
+  solicitarRegistrar / modificar / baja / restaurar(...)
+    → envía "CrearPerfilSol" / "CrearSolPer"
+  getPendingRequests(email)
+    → "ListaSol", filtra estado=0 localmente
+  getRecentRequests(email)
+    → "UltSol", filtra estado!=0, luego
+    → Collections.reverse() para newest-first
+  obtenerEmailPorPerfil(email, idPerfil)
+    → "EmailPorPerfil"
+  approveRequest(id, admin)
+    → "ResSol - id - 1 - admin"
+  rejectRequest(id, admin)
+    → "ResSol - id - 2 - admin"
+
+LogService.java
+  getLogs(adminEmail)
+    → "GetLogs - ALL"
+    → parsea cada línea con LogDto.fromString()
+    → ordena por idLog descendente
+    → toma últimos 30
+
+CreateAccountResult.java
+  DTO simple: {boolean success, String message}
+
+
+═══════════════════════════════════════════════════════════
+dto/  — 4 archivos  (Data Transfer Objects, serializables a JSON)
+═══════════════════════════════════════════════════════════
+
+AuthDto.java
+  LoginRequest        → {email, password}
+  LoginResponse       → {email, nombreCuenta, idRol, idCuenta}
+  CreateAccountRequest  → {email, nombreCuenta, password}
+  CreateAccountResponse → {success, message}
+
+PerfilDto.java
+  {idPerfil, nombreCompleto, codigoSecuencia, descripcion,
+   fechaMuestra, estado, adminEmail}
+  fromModel(PerfilGenetico) → convierte del modelo interno a DTO
+  toModel()                 → convierte de vuelta
+
+SolicitudDto.java
+  RegistrarRequest / ModificarRequest / BajaRequest / RestaurarRequest
+    → requests con campos según tipo
+  RegistrarResponse / BajaResponse / RestaurarResponse
+    → {success, message}
+  SolicitudSummary
+    → {idSolicitud, tipo, estado, email, fecha,
+       nombreCompleto, codigoSecuencia, descripcion,
+       fechaMuestra, nombreCuenta}
+
+LogDto.java
+  {idRegistro, fecha, nombreCuenta, email, descripcion,
+   acciones, esAdmin}
+  fromString(linea) → parsea formato:
+    "id - _ - nombre - email - desc - fecha - accion - esAdmin(0|1)"
+
+
+═══════════════════════════════════════════════════════════
+RESUMEN ARQUITECTÓNICO: Endpoint / Dto / Service
+═══════════════════════════════════════════════════════════
+
+Cada carpeta representa una capa con una responsabilidad
+bien definida, siguiendo el patrón de diseño Controller-
+Service-Repository (adaptado a DTOs):
+
+┌─────────────────────────────────────────────────────────┐
+│                     ENDPOINT                             │
+│  (también llamado Controller o Handler)                 │
+│                                                         │
+│  Responsabilidad:                                        │
+│    • Recibe la request HTTP (GET/POST con headers,       │
+│      query params, body JSON)                           │
+│    • Valida campos obligatorios (email, id, etc.)       │
+│    • Llama al Service correspondiente                   │
+│    • Serializa la respuesta a JSON (ctx.json())         │
+│    • NO tiene lógica de negocio ni conexión socket      │
+│                                                         │
+│  Ejemplo:  PerfilEndpoints.java                         │
+│    Recibe POST /api/perfiles/{id}/baja                  │
+│    Valida header X-Admin-Email                          │
+│    Llama PerfilService.deactivatePerfil(id, email)      │
+│    Devuelve {"message":"Profile deactivated..."}        │
+└─────────────────────────────────────────────────────────┘
+          │ llama
+          ▼
+┌─────────────────────────────────────────────────────────┐
+│                      SERVICE                             │
+│                                                         │
+│  Responsabilidad:                                        │
+│    • Contiene TODA la lógica de negocio                 │
+│    • Se comunica con LadoServer mediante sockets        │
+│      (SessionSocket.sendCommand / sendListCommand)      │
+│    • Construye el mensaje del protocolo                 │
+│      (ej: "BuscarIDNOM - NULL - texto")                │
+│    • Parsea la respuesta del servidor (split por " - ") │
+│    • Convierte a objetos del modelo (PerfilGenetico,    │
+│      Solicitud, etc.) o directamente a DTOs             │
+│    • NO sabe nada de HTTP ni JSON                       │
+│                                                         │
+│  Ejemplo:  PerfilService.java                           │
+│    Recibe: (tipo, texto, esAdmin, email)                │
+│    Arma comando: "BuscarIDNOM - NULL - NULL"            │
+│    Envía por socket, recibe lista de strings            │
+│    Parsea cada línea a PerfilGenetico                   │
+│    Filtra por campo según tipo y por estado si es user  │
+│    Devuelve List<PerfilGenetico>                        │
+└─────────────────────────────────────────────────────────┘
+          │ usa
+          ▼
+┌─────────────────────────────────────────────────────────┐
+│                        DTO                               │
+│  (Data Transfer Object)                                 │
+│                                                         │
+│  Responsabilidad:                                        │
+│    • Define la estructura de datos que viaja entre      │
+│      el frontend y el backend (JSON ↔ Java)             │
+│    • Solo tiene campos, getters y setters               │
+│    • Métodos helper: fromModel(), fromString(),          │
+│      toModel() para convertir entre capas               │
+│    • NO tiene lógica de negocio                         │
+│    • NO tiene conexiones a nada                         │
+│                                                         │
+│  Ejemplo:  PerfilDto.java                               │
+│    {idPerfil, nombreCompleto, codigoSecuencia, ...}     │
+│    fromModel(PerfilGenetico) → convierte modelo a DTO   │
+│    (para serializar a JSON)                             │
+└─────────────────────────────────────────────────────────┘
+
+
+Resumen en una frase:
+
+  ENDPOINT  = "qué ruta HTTP y qué parámetros"
+  SERVICE   = "cómo se ejecuta la acción (socket + lógica)"
+  DTO       = "qué forma tienen los datos que viajan"
+
+
+Flujo completo de una request típica:
+
+  1. Frontend (React) hace fetch a
+     POST /api/perfiles/{id}/baja
+     con header X-Admin-Email
+
+  2. ENDPOINT (PerfilEndpoints.darBajaPerfil)
+     - Lee path param {id}
+     - Lee header X-Admin-Email
+     - Valida que existan
+     - Llama PerfilService.deactivatePerfil(id, email)
+
+  3. SERVICE (PerfilService.deactivatePerfil)
+     - Obtiene email del titular via
+       SessionSocket.sendCommand("EmailPorPerfil - id")
+     - Envía "DarDBaja - emailTitular"
+     - Recibe respuesta del servidor
+     - Devuelve true/false
+
+  4. ENDPOINT
+     - Según el resultado devuelve:
+       {"message":"Profile deactivated successfully"}
+       con status 200
+     - O {"message":"Failed to deactivate profile"}
+       con status 400
+
+  5. Frontend recibe el JSON y muestra toast

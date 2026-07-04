@@ -19,6 +19,7 @@ function AdminDashboard() {
   const [ultimasList, setUltimasList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState('Todos');
+  const [searchError, setSearchError] = useState('');
   const [confirmModal, setConfirmModal] = useState({ open: false, mensaje: '', onConfirm: null });
   const [editModal, setEditModal] = useState({ open: false, perfil: null });
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,11 @@ function AdminDashboard() {
 
   const cargarPerfiles = async (term, type) => {
     if (!user) return;
+    if (type === 'codigo' && term && term.trim() && isNaN(Number(term.trim()))) {
+      setSearchError('El código debe ser un valor numérico');
+      return;
+    }
+    setSearchError('');
     setLoading(true);
     try {
       lastSearchRef.current = { type: type || 'Todos', term: term || '' };
@@ -118,6 +124,12 @@ function AdminDashboard() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vistaActiva, user]);
+
+  useEffect(() => {
+    if (!searchError) return;
+    const t = setTimeout(() => setSearchError(''), 3000);
+    return () => clearTimeout(t);
+  }, [searchError]);
 
   const handleAprobar = async (id) => {
     if (!user) return;
@@ -325,10 +337,10 @@ function AdminDashboard() {
               <div className="search-bar">
                 <div className="search-input-group">
                   <span className="material-symbols-outlined search-icon">search</span>
-                  <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Buscar..." />
+                  <input value={searchTerm} onChange={e => { setSearchTerm(e.target.value); setSearchError(''); }} placeholder="Buscar..." />
                 </div>
                 <div className="search-divider" />
-                <select value={searchType} onChange={e => setSearchType(e.target.value)}>
+                <select value={searchType} onChange={e => { setSearchType(e.target.value); setSearchError(''); }}>
                   <option value="Todos">Todos</option>
                   <option value="nombre">Nombre</option>
                   <option value="codigo">Código</option>
@@ -337,6 +349,12 @@ function AdminDashboard() {
                   Buscar
                 </button>
               </div>
+              {searchError && (
+                <div className="search-error-card" key={searchError}>
+                  <span>{searchError}</span>
+                  <button className="error-close-btn" onClick={() => setSearchError('')}>×</button>
+                </div>
+              )}
             </div>
             {loading ? (
               <p className="empty-state-text">Cargando perfiles...</p>

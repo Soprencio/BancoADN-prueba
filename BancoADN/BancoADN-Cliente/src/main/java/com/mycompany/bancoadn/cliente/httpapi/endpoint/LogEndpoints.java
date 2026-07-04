@@ -7,6 +7,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.Handler;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Endpoints for log operations.
@@ -32,7 +33,7 @@ public class LogEndpoints {
             logs = LogService.getLogs();
         }
         if (logs == null) {
-            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).result("Failed to retrieve logs");
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(Map.of("message", "Error al obtener los registros"));
             return;
         }
         ctx.json(logs);

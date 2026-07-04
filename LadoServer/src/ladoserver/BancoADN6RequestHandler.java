@@ -181,7 +181,7 @@ public class BancoADN6RequestHandler implements Runnable {
     String crearCuenta(String nombreArchivo, String[] Partes) throws Exception {
         String respuesta="";
         mutexModCuenta.acquire();
-        
+        Thread.sleep(10000);
         String[] valor=buscarPorCampo("CuentaPersonal.txt",2,Partes[1]);
             
         String linea="";
@@ -251,7 +251,8 @@ public class BancoADN6RequestHandler implements Runnable {
         mutexModRegistro.acquire();
         date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                 
-        agregarRegistro("Logs.txt", "9 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " creo una solicitud de perfil");
+//        agregarRegistro("Logs.txt", "9 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " creo una solicitud de perfil");
+        agregarRegistro("Logs.txt", "9 - " + obtenerIdCuenta(mailusr.get()) + " - " + date + " - " + obtenerNombre() + " creo una solicitud de registro con los datos: " + datosSolicitud);
         mutexModRegistro.release();
         
         return "Solicitud enviada con exito";

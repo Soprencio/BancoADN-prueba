@@ -26,9 +26,17 @@ const UserDashboard = () => {
   const [searchType, setSearchType] = useState('Todos');
   const [searchResults, setSearchResults] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
+  const [searchError, setSearchError] = useState('');
+  const [perfilCache, setPerfilCache] = useState(null);
+  const [perfilError, setPerfilError] = useState('');
 
   const cargarPerfiles = async (term, type) => {
     if (!user) return;
+    if (type === 'codigo' && term && term.trim() && isNaN(Number(term.trim()))) {
+      setSearchError('El código debe ser un valor numérico');
+      return;
+    }
+    setSearchError('');
     setLoadingSearch(true);
     try {
       let results = await perfilesService.buscarPerfiles(term || '', type || 'Todos', user.email, false);
@@ -59,11 +67,27 @@ const UserDashboard = () => {
     }
   };
 
+  // No se llama loadPendingRequests al montar para evitar que
+  // usuarios comunes generen el log "busco la lista de solicitudes" en LadoServer.
+  // Solo se actualiza después de crear una solicitud (handleRequestSubmit,
+  // handleConfirmBaja, handleConfirmRestaurar).
   useEffect(() => {
     if (user) {
-      loadPendingRequests();
+      setPendingRequests([]);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!searchError) return;
+    const t = setTimeout(() => setSearchError(''), 3000);
+    return () => clearTimeout(t);
+  }, [searchError]);
+
+  useEffect(() => {
+    if (!perfilError) return;
+    const t = setTimeout(() => setPerfilError(''), 3000);
+    return () => clearTimeout(t);
+  }, [perfilError]);
 
   const hasPending = (tipo) => {
     return pendingRequests.some(p => p.tipo === tipo);
@@ -74,6 +98,7 @@ const UserDashboard = () => {
     try {
       const p = await perfilesService.getMyProfile(user.email);
       setPerfil(p);
+      setPerfilCache(p);
       setShowPerfil(true);
     } catch (err) {
       addToast('Error al cargar perfil', 'error');
@@ -82,32 +107,70 @@ const UserDashboard = () => {
     }
   };
 
-  const handleOpenRegistrar = () => {
+  const validatePerfilAction = async (actionType) => {
+    let profile = perfilCache;
+    if (profile === null) {
+      try {
+        profile = await perfilesService.getMyProfile(user.email);
+        setPerfilCache(profile);
+      } catch {
+        setPerfilError('Error al validar el estado del perfil.');
+        return false;
+      }
+    }
+    if (actionType === 'REGISTRAR') {
+      if (profile !== null) {
+        setPerfilError('Ya tenés un perfil registrado. Usá "Solicitar Modificación" para modificarlo.');
+        return false;
+      }
+      return true;
+    }
+    if (profile === null) {
+      setPerfilError('No tenés un perfil registrado. Usá "Solicitar Registro" primero.');
+      return false;
+    }
+    if (actionType === 'BAJA' && profile.estado === 0) {
+      setPerfilError('Tu perfil ya se encuentra dado de baja.');
+      return false;
+    }
+    if (actionType === 'RESTAURAR' && profile.estado === 1) {
+      setPerfilError('Tu perfil ya se encuentra activo.');
+      return false;
+    }
+    if (actionType === 'MODIFICAR' && profile.estado === 0) {
+      setPerfilError('No se puede modificar un perfil inactivo. Solicitá una restauración primero.');
+      return false;
+    }
+    return true;
+  };
+
+  const handleOpenRegistrar = async () => {
+    if (!await validatePerfilAction('REGISTRAR')) return;
     setRequestType('REGISTRAR');
     setFormInitialValues({});
     setShowRequestModal(true);
   };
 
   const handleOpenModificar = async () => {
+    if (!await validatePerfilAction('MODIFICAR')) return;
     setRequestType('MODIFICAR');
-    try {
-      const p = await perfilesService.getMyProfile(user.email);
-      if (p) {
-        setFormInitialValues({
-          nombreCompleto: p.nombreCompleto,
-          codigoSecuencia: p.codigoSecuencia,
-          descripcion: p.descripcion,
-          fechaMuestra: p.fechaMuestra,
-        });
-      } else {
-        setFormInitialValues({});
-      }
-    } catch (err) {
-      addToast('Error al cargar perfil para modificar', 'error');
-      setFormInitialValues({});
-    } finally {
-      setShowRequestModal(true);
-    }
+    setFormInitialValues({});
+    setShowRequestModal(true);
+  };
+
+  const addLocalPending = (tipo, values = {}) => {
+    const newReq = {
+      idSolicitud: Date.now(),
+      tipo,
+      estado: 0,
+      email: user.email,
+      fecha: new Date().toISOString().split('T')[0],
+      nombreCompleto: values.nombreCompleto || '',
+      codigoSecuencia: values.codigoSecuencia || '',
+      descripcion: values.descripcion || '',
+      fechaMuestra: values.fechaMuestra || '',
+    };
+    setPendingRequests(prev => [...prev, newReq]);
   };
 
   const handleRequestSubmit = async (values) => {
@@ -123,10 +186,20 @@ const UserDashboard = () => {
       await solicitudesService.createRequest(solicitud);
       addToast('Solicitud enviada', 'success');
       setShowRequestModal(false);
-      await loadPendingRequests();
+      addLocalPending(requestType, values);
     } catch (err) {
       addToast('Error al enviar solicitud', 'error');
     }
+  };
+
+  const handleBajaClick = async () => {
+    if (!await validatePerfilAction('BAJA')) return;
+    setShowConfirmBaja(true);
+  };
+
+  const handleRestaurarClick = async () => {
+    if (!await validatePerfilAction('RESTAURAR')) return;
+    setShowConfirmRestaurar(true);
   };
 
   const handleConfirmBaja = async () => {
@@ -137,7 +210,7 @@ const UserDashboard = () => {
       });
       addToast('Solicitud de baja enviada', 'success');
       setShowConfirmBaja(false);
-      await loadPendingRequests();
+      addLocalPending('BAJA');
     } catch (err) {
       addToast('Error al enviar solicitud de baja', 'error');
     }
@@ -151,7 +224,7 @@ const UserDashboard = () => {
       });
       addToast('Solicitud de restauración enviada', 'success');
       setShowConfirmRestaurar(false);
-      await loadPendingRequests();
+      addLocalPending('RESTAURAR');
     } catch (err) {
       addToast('Error al enviar solicitud de restauración', 'error');
     }
@@ -204,10 +277,10 @@ const UserDashboard = () => {
               <div className="search-bar">
                 <div className="search-input-group">
                   <span className="material-symbols-outlined search-icon">search</span>
-                  <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Buscar..." />
+                  <input value={searchTerm} onChange={e => { setSearchTerm(e.target.value); setSearchError(''); }} placeholder="Buscar..." />
                 </div>
                 <div className="search-divider" />
-                <select value={searchType} onChange={e => setSearchType(e.target.value)}>
+                <select value={searchType} onChange={e => { setSearchType(e.target.value); setSearchError(''); }}>
                   <option value="Todos">Todos</option>
                   <option value="nombre">Nombre</option>
                   <option value="codigo">Código</option>
@@ -216,6 +289,12 @@ const UserDashboard = () => {
                   Buscar
                 </button>
               </div>
+              {searchError && (
+                <div className="search-error-card" key={searchError}>
+                  <span>{searchError}</span>
+                  <button className="error-close-btn" onClick={() => setSearchError('')}>×</button>
+                </div>
+              )}
             </div>
             {loadingSearch ? (
               <p className="empty-state-text">Cargando perfiles...</p>
@@ -257,6 +336,12 @@ const UserDashboard = () => {
           </div>
         ) : (
           <section className="dashboard-body">
+            {perfilError && (
+              <div className="perfil-error-card" key={perfilError}>
+                <span>{perfilError}</span>
+                <button className="error-close-btn" onClick={() => setPerfilError('')}>×</button>
+              </div>
+            )}
             <div className="left-panel">
               <h3>Mis Solicitudes</h3>
               <div className="btn-group">
@@ -270,12 +355,12 @@ const UserDashboard = () => {
                   {hasPending('MODIFICAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
-                <button className="btn btn-danger" onClick={() => setShowConfirmBaja(true)}>
+                <button className="btn btn-danger" onClick={handleBajaClick}>
                   Solicitar Baja
                   {hasPending('BAJA') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
-                <button className="btn btn-success" onClick={() => setShowConfirmRestaurar(true)}>
+                <button className="btn btn-success" onClick={handleRestaurarClick}>
                   Solicitar Restauración
                   {hasPending('RESTAURAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>

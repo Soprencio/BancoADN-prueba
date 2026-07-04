@@ -2,9 +2,9 @@ package com.mycompany.bancoadn.cliente.httpapi.endpoint;
 
 import com.mycompany.bancoadn.cliente.httpapi.dto.AuthDto;
 import com.mycompany.bancoadn.cliente.httpapi.service.AuthService;
-import com.mycompany.bancoadn.cliente.httpapi.service.CreateAccountResult;
 import com.mycompany.bancoadn.cliente.httpapi.service.SessionSocket;
 import io.javalin.Javalin;
+import java.util.Map;
 
 public class AuthEndpoints {
 
@@ -13,7 +13,7 @@ public class AuthEndpoints {
             AuthDto.LoginRequest req = ctx.bodyAsClass(AuthDto.LoginRequest.class);
             var user = AuthService.login(req.getEmail(), req.getPassword());
             if (user == null) {
-                ctx.status(401).result("Invalid email or password");
+                ctx.status(401).json(Map.of("message", "Credenciales incorrectas"));
                 return;
             }
             // Build response DTO

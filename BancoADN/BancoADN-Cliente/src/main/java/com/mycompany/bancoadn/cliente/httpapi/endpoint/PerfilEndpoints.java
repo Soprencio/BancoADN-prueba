@@ -39,13 +39,13 @@ public class PerfilEndpoints {
     private static final Handler getPerfilByEmail = ctx -> {
         String email = ctx.header("X-User-Email");
         if (email == null || email.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-User-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email de usuario"));
             return;
         }
 
         var perfil = PerfilService.getPerfilByEmail(email);
         if (perfil == null) {
-            ctx.status(HttpStatus.NOT_FOUND).result("Profile not found");
+            ctx.status(HttpStatus.NOT_FOUND).json(Map.of("message", "Perfil no encontrado"));
             return;
         }
 
@@ -58,7 +58,7 @@ public class PerfilEndpoints {
         String texto = ctx.queryParam("texto");
 
         if (tipo == null || texto == null) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing 'tipo' or 'texto' query parameters");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar tipo y texto de búsqueda"));
             return;
         }
 
@@ -67,7 +67,7 @@ public class PerfilEndpoints {
         // Fallback to user email if admin header not present (for normal users browsing profiles)
         String callerEmail = esAdmin ? adminEmail : ctx.header("X-User-Email");
         if (callerEmail == null || callerEmail.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-Admin-Email or X-User-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email de usuario o administrador"));
             return;
         }
 
@@ -84,7 +84,7 @@ public class PerfilEndpoints {
         String idStr = ctx.pathParam("id");
         String adminEmail = ctx.header("X-Admin-Email");
         if (adminEmail == null || adminEmail.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-Admin-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email de administrador"));
             return;
         }
 
@@ -92,13 +92,13 @@ public class PerfilEndpoints {
         try {
             id = Integer.parseInt(idStr);
         } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid profile ID");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "ID de perfil inválido"));
             return;
         }
 
         PerfilDto dto = ctx.bodyAsClass(PerfilDto.class);
         if (dto == null) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Datos de la solicitud inválidos"));
             return;
         }
 

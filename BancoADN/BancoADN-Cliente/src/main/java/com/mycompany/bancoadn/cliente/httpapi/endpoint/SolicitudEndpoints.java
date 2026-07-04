@@ -7,6 +7,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.Handler;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Endpoints for solicitud (request) operations.
@@ -43,12 +44,12 @@ public class SolicitudEndpoints {
     private static final Handler registrarRequestHandler = ctx -> {
         SolicitudDto.RegistrarRequest req = ctx.bodyAsClass(SolicitudDto.RegistrarRequest.class);
         if (req == null) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Datos de la solicitud inválidos"));
             return;
         }
         String email = req.getEmail();
         if (email == null || email.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing email in request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email en la solicitud"));
             return;
         }
 
@@ -72,12 +73,12 @@ public class SolicitudEndpoints {
     private static final Handler modificarRequestHandler = ctx -> {
         SolicitudDto.ModificarRequest req = ctx.bodyAsClass(SolicitudDto.ModificarRequest.class);
         if (req == null) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Datos de la solicitud inválidos"));
             return;
         }
         String email = req.getEmail();
         if (email == null || email.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing email in request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email en la solicitud"));
             return;
         }
 
@@ -101,12 +102,12 @@ public class SolicitudEndpoints {
     private static final Handler bajaRequestHandler = ctx -> {
         SolicitudDto.BajaRequest req = ctx.bodyAsClass(SolicitudDto.BajaRequest.class);
         if (req == null) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Datos de la solicitud inválidos"));
             return;
         }
         String email = req.getEmail();
         if (email == null || email.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing email in request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email en la solicitud"));
             return;
         }
 
@@ -123,12 +124,12 @@ public class SolicitudEndpoints {
     private static final Handler restaurarRequestHandler = ctx -> {
         SolicitudDto.RestaurarRequest req = ctx.bodyAsClass(SolicitudDto.RestaurarRequest.class);
         if (req == null) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Datos de la solicitud inválidos"));
             return;
         }
         String email = req.getEmail();
         if (email == null || email.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing email in request body");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email en la solicitud"));
             return;
         }
 
@@ -145,7 +146,7 @@ public class SolicitudEndpoints {
     private static final Handler getPendingRequestsHandler = ctx -> {
         String email = ctx.header("X-User-Email");
         if (email == null || email.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-User-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email de usuario"));
             return;
         }
 
@@ -222,7 +223,7 @@ public class SolicitudEndpoints {
     private static final Handler getRecentRequestsHandler = ctx -> {
         String email = ctx.header("X-User-Email");
         if (email == null || email.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-User-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email de usuario"));
             return;
         }
 
@@ -266,7 +267,7 @@ public class SolicitudEndpoints {
     private static final Handler approveRequestHandler = ctx -> {
         String adminEmail = ctx.header("X-Admin-Email");
         if (adminEmail == null || adminEmail.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-Admin-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email de administrador"));
             return;
         }
 
@@ -274,7 +275,7 @@ public class SolicitudEndpoints {
         try {
             id = Integer.parseInt(ctx.pathParam("id"));
         } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid request ID");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "ID de solicitud inválido"));
             return;
         }
 
@@ -290,7 +291,7 @@ public class SolicitudEndpoints {
     private static final Handler rejectRequestHandler = ctx -> {
         String adminEmail = ctx.header("X-Admin-Email");
         if (adminEmail == null || adminEmail.isEmpty()) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Missing X-Admin-Email header");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "Debe especificar un email de administrador"));
             return;
         }
 
@@ -298,7 +299,7 @@ public class SolicitudEndpoints {
         try {
             id = Integer.parseInt(ctx.pathParam("id"));
         } catch (NumberFormatException e) {
-            ctx.status(HttpStatus.BAD_REQUEST).result("Invalid request ID");
+            ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("message", "ID de solicitud inválido"));
             return;
         }
 
