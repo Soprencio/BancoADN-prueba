@@ -1023,3 +1023,19 @@
   color: var(--on-surface-variant);
   line-height: 18px;
 }
+.admin-dashboard.loading {
+  cursor: wait;
+}
+.admin-dashboard.loading .btn:disabled,
+.admin-dashboard.loading .btn-icon:disabled,
+.admin-dashboard.loading .nav-link:disabled,
+.admin-dashboard.loading .btn-accept:disabled,
+.admin-dashboard.loading .btn-reject:disabled,
+.admin-dashboard.loading .btn-outline:disabled,
+.admin-dashboard.loading .btn-destructive:disabled,
+.admin-dashboard.loading .btn-primary-sm:disabled,
+.admin-dashboard.loading .btn-search-exec:disabled,
+.admin-dashboard.loading .btn-icon-refresh:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

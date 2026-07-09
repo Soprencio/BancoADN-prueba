@@ -1,0 +1,508 @@
+=============================================================================
+ CLASES A AGREGAR AL DIAGRAMA DE CLASES (httpapi + LadoServer)
+=============================================================================
+Basado en el diagrama actual que incluye: ClasesModelo (7), Pant_* (vistas),
+Ctrl_* (controladores MVC), y BancoADN_Grupo6_ClienteSocket.
+
+NO incluir: frontend React, vistas Swing (Pant_* ya existen).
+=============================================================================
+
+
+1. NUEVAS CLASES EN BancoADN-Cliente (package httpapi)
+=============================================================================
+
+-----------------------------------------------------------------------------
+1.1 ApiServer
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi
+Tipo: Clase normal
+Atributos:
+  - app: Javalin
+Métodos:
+  + start(port: int): void
+  + stop(): void
+
+Relaciones:
+  - Crea y arranca Javalin (servidor HTTP embebido)
+  - Llama a AuthEndpoints.register(app)
+  - Llama a PerfilEndpoints.register(app)
+  - Llama a SolicitudEndpoints.register(app)
+  - Llama a LogEndpoints.register(app)
+
+-----------------------------------------------------------------------------
+1.2 SessionSocket
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.service
+Tipo: Clase estática (todos los miembros static)
+Atributos:
+  - sessionSocket: BancoADN_Grupo6_ClienteSocket  (static, private)
+  - sessionEmail: String                           (static, private)
+Métodos:
+  + openSession(email: String): String                       (static, synchronized)
+  + getSocket(email: String): BancoADN_Grupo6_ClienteSocket  (static, synchronized)
+  + sendCommand(email: String, command: String): String       (static, synchronized)
+  + sendListCommand(email: String, command: String): List<String>  (static, synchronized)
+  + close(): void                                              (static, synchronized)
+  + isActive(): boolean                                        (static, synchronized)
+
+Relaciones:
+  - Usa -> BancoADN_Grupo6_ClienteSocket (abre/Reusa socket persistente)
+  - Usado por -> AuthService
+  - Usado por -> PerfilService
+  - Usado por -> SolicitudService
+  - Usado por -> LogService
+
+-----------------------------------------------------------------------------
+1.3 AuthService
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.service
+Tipo: Clase estática
+Atributos:
+  - passwordStore: ConcurrentHashMap<String, String>  (static, private)
+Métodos:
+  + reloginOnSocket(email: String, password: String, socket: BancoADN_Grupo6_ClienteSocket): boolean  (static)
+  + getPassword(email: String): String                          (static)
+  + login(email: String, password: String): CuentaPersonal      (static)
+  + crearCuenta(email: String, nombreCuenta: String, password: String): CreateAccountResult  (static)
+
+Relaciones:
+  - Usa -> SessionSocket.sendCommand() (para IniciarS, CrearC)
+  - Usa -> CuentaPersonal (ClasesModelo)
+  - Usa -> CreateAccountResult (httpapi.service)
+
+-----------------------------------------------------------------------------
+1.4 PerfilService
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.service
+Tipo: Clase estática
+Atributos: (ninguno)
+Métodos:
+  - enviarConLoginPerfil(email: String, comando: String): String              (static, private)
+  - enviarConLoginListaPerfil(email: String, comando: String): List<String>   (static, private)
+  + getPerfilByEmail(email: String): PerfilGenetico                    (static)
+  + buscarPerfiles(tipo: String, texto: String, esAdmin: boolean, adminEmail: String): List<PerfilGenetico>  (static)
+  + obtenerEmailPorPerfil(idPerfil: int, callerEmail: String): String  (static)
+  + actualizarPerfil(idPerfil: int, nombreCompleto: String, codigoSecuencia: String, descripcion: String, fechaMuestra: String, estado: int, adminEmail: String): boolean  (static)
+  + deactivatePerfil(idPerfil: int, adminEmail: String): boolean       (static)
+  + activatePerfil(idPerfil: int, adminEmail: String): boolean         (static)
+
+Relaciones:
+  - Usa -> SessionSocket.sendCommand() / sendListCommand() (para BuscarDat, BuscarIDNOM, ModificP, DarDBaja, DarDRestaur, EmailPorPerfil)
+  - Usa -> PerfilGenetico (ClasesModelo)
+
+-----------------------------------------------------------------------------
+1.5 SolicitudService
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.service
+Tipo: Clase estática
+Atributos: (ninguno)
+Métodos:
+  - enviarConLogin(email: String, comando: String): String              (static, private)
+  - enviarConLoginLista(email: String, comando: String): List<String>   (static, private)
+  + solicitarRegistrar(email: String, nombrePerfil: String, codigoSecuencia: String, descripcion: String, fechaMuestra: String): boolean  (static)
+  + solicitarModificar(email: String, nombrePerfil: String, codigoSecuencia: String, descripcion: String, fechaMuestra: String): boolean  (static)
+  + solicitarBaja(email: String): boolean                               (static)
+  + solicitarRestaurar(email: String): boolean                          (static)
+  + getPendingRequests(email: String): List<Solicitud>                  (static)
+  + getRecentRequests(email: String): List<Solicitud>                   (static)
+  + obtenerEmailPorPerfil(callerEmail: String, idPerfil: int): String   (static)
+  + approveRequest(idSolicitud: int, adminEmail: String): boolean       (static)
+  + rejectRequest(idSolicitud: int, adminEmail: String): boolean        (static)
+
+Relaciones:
+  - Usa -> SessionSocket.sendCommand() / sendListCommand() (para CrearPerfilSol, CrearSolPer, ListaSol, UltSol, EmailPorPerfil, ResSol)
+  - Usa -> Solicitud (ClasesModelo)
+
+-----------------------------------------------------------------------------
+1.6 LogService
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.service
+Tipo: Clase estática
+Atributos: (ninguno)
+Métodos:
+  + getLogs(): List<LogDto>                                              (static)
+  + getLogs(adminEmail: String): List<LogDto>                            (static)
+  - enviarConLoginListaLog(email: String, comando: String): List<String> (static, private)
+  - obtenerLineasDeLog(command: String): List<String>                    (static, private)
+
+Relaciones:
+  - Usa -> SessionSocket.sendListCommand() (para GetLogs)
+  - Usa -> LogDto (httpapi.dto)
+
+-----------------------------------------------------------------------------
+1.7 CreateAccountResult
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.service
+Tipo: Clase simple (POJO)
+Atributos:
+  + success: boolean   (public)
+  + message: String    (public)
+Métodos:
+  + CreateAccountResult(success: boolean, message: String)  (constructor)
+
+Relaciones:
+  - Usado por -> AuthService
+
+-----------------------------------------------------------------------------
+1.8 AuthEndpoints
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.endpoint
+Tipo: Clase estática (handlers como lambdas)
+Atributos: (ninguno)
+Métodos:
+  + register(app: Javalin): void                           (static)
+  Handlers (lambdas/Handler):
+    - POST /api/auth/login         -> AuthService.login()
+    - POST /api/auth/logout        -> SessionSocket.close()
+    - POST /api/auth/crear-cuenta  -> AuthService.crearCuenta()
+
+Relaciones:
+  - Usa -> AuthService
+  - Usa -> SessionSocket
+  - Usa -> AuthDto (LoginRequest, LoginResponse, CreateAccountRequest, CreateAccountResponse)
+
+-----------------------------------------------------------------------------
+1.9 PerfilEndpoints
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.endpoint
+Tipo: Clase estática
+Atributos: (ninguno)
+Métodos:
+  + register(app: Javalin): void                           (static)
+  Handlers (lambdas/Handler):
+    - GET /api/perfiles/me          -> PerfilService.getPerfilByEmail()
+    - GET /api/perfiles/buscar      -> PerfilService.buscarPerfiles()
+    - POST /api/perfiles/{id}/modificar  -> PerfilService.actualizarPerfil()
+    - POST /api/perfiles/{id}/baja       -> PerfilService.deactivatePerfil()
+    - POST /api/perfiles/{id}/restaurar  -> PerfilService.activatePerfil()
+
+Relaciones:
+  - Usa -> PerfilService
+  - Usa -> PerfilDto
+
+-----------------------------------------------------------------------------
+1.10 SolicitudEndpoints
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.endpoint
+Tipo: Clase estática
+Atributos: (ninguno)
+Métodos:
+  + register(app: Javalin): void                           (static)
+  Handlers (lambdas/Handler):
+    - POST /api/solicitudes/registrar      -> SolicitudService.solicitarRegistrar()
+    - POST /api/solicitudes/modificar      -> SolicitudService.solicitarModificar()
+    - POST /api/solicitudes/baja           -> SolicitudService.solicitarBaja()
+    - POST /api/solicitudes/restaurar      -> SolicitudService.solicitarRestaurar()
+    - GET /api/solicitudes/pendientes      -> SolicitudService.getPendingRequests()
+    - GET /api/solicitudes/ultimas         -> SolicitudService.getRecentRequests()
+    - POST /api/solicitudes/{id}/aprobar   -> SolicitudService.approveRequest()
+    - POST /api/solicitudes/{id}/rechazar  -> SolicitudService.rejectRequest()
+  - extractEmail(datos: String): String                    (static, private)
+  - extractNombreCompleto(datos: String): String           (static, private)
+  - extractCodigoSecuencia(datos: String): String          (static, private)
+  - extractDescripcion(datos: String): String              (static, private)
+  - extractFechaMuestra(datos: String): String             (static, private)
+
+Relaciones:
+  - Usa -> SolicitudService
+  - Usa -> SolicitudDto
+
+-----------------------------------------------------------------------------
+1.11 LogEndpoints
+-----------------------------------------------------------------------------
+Paquete: com.mycompany.bancoadn.cliente.httpapi.endpoint
+Tipo: Clase estática
+Atributos: (ninguno)
+Métodos:
+  + register(app: Javalin): void                           (static)
+  Handler:
+    - GET /api/logs                   -> LogService.getLogs()
+
+Relaciones:
+  - Usa -> LogService
+  - Usa -> LogDto
+
+-----------------------------------------------------------------------------
+1.12 DTOs (Data Transfer Objects)
+-----------------------------------------------------------------------------
+
+1.12.1 AuthDto
+Paquete: com.mycompany.bancoadn.cliente.httpapi.dto
+Clase contenedora (sin atributos propios).
+Clases internas:
+  + LoginRequest
+      - email: String
+      - password: String
+      + getEmail(), setEmail(), getPassword(), setPassword()
+
+  + LoginResponse
+      - email: String
+      - nombreCuenta: String
+      - idRol: int
+      - idCuenta: int
+      + constructor(email, nombreCuenta, idRol)
+      + getEmail(), getNombreCuenta(), getIdRol(), getIdCuenta(), setIdCuenta()
+
+  + CreateAccountRequest
+      - email: String
+      - nombreCuenta: String
+      - password: String
+      + getters/setters (6)
+
+  + CreateAccountResponse
+      - success: boolean
+      - message: String
+      + constructor(success, message)
+      + isSuccess(), getMessage()
+
+  + CreateAccountResult  (duplicado en dto, el usado es el de service)
+      - success: boolean
+      - message: String
+      + constructor(success, message)
+      + isSuccess(), getMessage()
+
+1.12.2 PerfilDto
+Paquete: com.mycompany.bancoadn.cliente.httpapi.dto
+Atributos:
+  - idPerfil: int
+  - nombreCompleto: String
+  - codigoSecuencia: String
+  - descripcion: String
+  - fechaMuestra: String
+  - estado: int
+  - adminEmail: String
+Métodos:
+  + PerfilDto()  (constructor default)
+  + PerfilDto(idPerfil, nombreCompleto, codigoSecuencia, descripcion, fechaMuestra, estado)
+  + fromModel(model: PerfilGenetico): PerfilDto  (static)
+  + toModel(): PerfilGenetico
+  + getters/setters (14)
+
+1.12.3 SolicitudDto
+Paquete: com.mycompany.bancoadn.cliente.httpapi.dto
+Clase contenedora (sin atributos propios).
+Clases internas:
+  + RegistrarRequest
+      - nombreCompleto: String
+      - codigoSecuencia: String
+      - descripcion: String
+      - fechaMuestra: String
+      - email: String
+      + getters/setters (10)
+
+  + RegistrarResponse
+      - success: boolean
+      - message: String
+      + constructor(success, message)
+      + isSuccess(), getMessage()
+
+  + ModificarRequest extends RegistrarRequest (sin miembros adicionales)
+
+  + BajaRequest
+      - email: String
+      + getEmail(), setEmail()
+
+  + RestaurarRequest
+      - email: String
+      + getEmail(), setEmail()
+
+  + BajaResponse extends RegistrarResponse
+      + constructor(success, message)
+
+  + RestaurarResponse extends RegistrarResponse
+      + constructor(success, message)
+
+  + SolicitudSummary
+      - idSolicitud: int
+      - tipo: String
+      - estado: int
+      - email: String
+      - fecha: String
+      - nombreCompleto: String
+      - codigoSecuencia: String
+      - descripcion: String
+      - fechaMuestra: String
+      - nombreCuenta: String
+      + SolicitudSummary()
+      + SolicitudSummary(idSolicitud, tipo, estado, email, fecha, nombreCompleto, codigoSecuencia, descripcion, fechaMuestra, nombreCuenta)
+      + getters/setters (20)
+      + getEstadoString(): String
+
+1.12.4 LogDto
+Paquete: com.mycompany.bancoadn.cliente.httpapi.dto
+Atributos:
+  - idRegistro: int
+  - fecha: String
+  - nombreCuenta: String
+  - email: String
+  - descripcion: String
+  - acciones: String
+  - esAdmin: boolean
+Métodos:
+  + LogDto()  (constructor default)
+  + LogDto(idRegistro, fecha, nombreCuenta, email, descripcion, acciones, esAdmin)
+  + fromString(logString: String): LogDto  (static - parsea formato "id - idCuenta - nombre - email - descripcion - fecha - accion - admin")
+  + getters/setters (14)
+
+
+2. CLASES EN LadoServer (servidor de sockets)
+=============================================================================
+
+-----------------------------------------------------------------------------
+2.1 BancoADN6Socket
+-----------------------------------------------------------------------------
+Paquete: ladoserver
+Tipo: Clase principal (entry point)
+Atributos: (ninguno)
+Métodos:
+  + main(args: String[]): void  (static - abre ServerSocket, acepta conexiones, por cada cliente crea un thread con BancoADN6RequestHandler)
+
+Relaciones:
+  - Crea -> BancoADN6RequestHandler (para cada cliente conectado)
+
+-----------------------------------------------------------------------------
+2.2 BancoADN6RequestHandler
+-----------------------------------------------------------------------------
+Paquete: ladoserver
+Implementa: Runnable
+Atributos:
+  - socket: Socket                           (private, final - por instancia)
+  - mutexModRegistro: Semaphore              (static, final)
+  - mutexModCuenta: Semaphore               (static, final)
+  - mutexModCuentaAsignada: Semaphore       (static, final)
+  - mutexModSolicitud: Semaphore            (static, final)
+  - mutexModPerfilGenetico: Semaphore       (static, final)
+  - mutexModTipoAccion: Semaphore           (static, final)
+  - mailusr: ThreadLocal<String>             (private, final)
+Métodos PÚBLICOS/DE INSTANCIA:
+  + BancoADN6RequestHandler(socket: Socket)  (constructor)
+  + run(): void                              (@Override - dispatch de comandos)
+  + iniciarSesion(mail: String, psw: String): int
+  + obtenerNombre(): String
+  + crearCuenta(nombreArchivo: String, Partes: String[]): String
+  + crearPerfil(id: int, Nombre: String, CodSec: String, Descripcion: String, Fecha: String): void
+  + crearPerfilSolicitud(nombreArchivo: String, mail: String, datosSolicitud: String): String
+  + CrearSolicitudP(nombreArchivo: String, mail: String, datosSolicitud: String, tipo: String): String
+  + DarBajaPerfil(mail: String): boolean
+  + RestaurarPerfil(mail: String): boolean
+  + BuscarPerfiles(id: Integer, nombre: String): List<String>
+  + ModificarPerfil(mail: String, Nombre: String, CodSec: String, Descripcion: String, Fecha: String): String
+  + verSolicitudes(): List<String>
+  + ObtenerUltimasSolicitudes(): List<String>
+  + ResolverSolicitud(idSol: int, estadoNuevo: int, Mail: String): int
+  + ObtenerLogsAdmin(): List<String>
+Métodos STATIC (helpers de archivos):
+  + leerRegistros(nombreArchivo: String): List<String>
+  + leerContador(nombreArchivo: String): int
+  + actualizarContador(nombreArchivo: String, nuevoContador: int): void
+  + agregarRegistro(nombreArchivo: String, datos: String): int
+  + editarRegistro(nombreArchivo: String, id: int, nuevoDatos: String): void
+  + buscarPorId(nombreArchivo: String, id: int): String[]
+  + buscarPorCampo(nombreArchivo: String, indice: int, valor: String): String[]
+  + buscarMultiplesPorCampo(nombreArchivo: String, indice: int, valor: String): List<String[]>
+  + buscarPorIndice(nombreArchivo: String, indice: int): List<String>
+  + agregarUsuarioAsignado(idSolicitud: int, idCuenta: int): void
+  + obtenerIdCuenta(mail: String): int
+  + obtenerIdPerfil(mail: String): int
+  + obtenerEmailPorPerfil(id: int): String
+  + editarRegistroCuentaAsignada(nombreArchivo: String, id: int, nuevoDatos: String): void  (método legacy comentado)
+  + tienePerfil(id: int): boolean
+
+Protocolo de comandos (dispatcheados en run()):
+  "CrearC"        -> crearCuenta()
+  "IniciarS"      -> iniciarSesion()
+  "CrearPerfilSol"-> crearPerfilSolicitud()
+  "CrearSolPer"   -> CrearSolicitudP()
+  "DarDBaja"      -> DarBajaPerfil()
+  "DarDRestaur"   -> RestaurarPerfil()
+  "BuscarIDNOM"   -> BuscarPerfiles()
+  "ModificP"      -> ModificarPerfil()
+  "ListaSol"      -> verSolicitudes()
+  "UltSol"        -> ObtenerUltimasSolicitudes()
+  "BuscarDat"     -> BuscarPerfiles(obtenerIdPerfil(...), null)
+  "EmailPorPerfil"-> obtenerEmailPorPerfil()
+  "ResSol"        -> ResolverSolicitud()
+  "GetLogs"       -> ObtenerLogsAdmin()
+
+Archivos planos que maneja (NO son clases, pero es util para el diagrama):
+  - CuentaPersonal.txt
+  - PerfilGenetico.txt
+  - Solicitud.txt
+  - CuentaAsignada.txt
+  - Logs.txt
+  - TipoAccion.txt
+
+
+3. QUE AGREGAR A LOS CONTROLADORES EXISTENTES (Ctrl_*)
+=============================================================================
+
+Los controladores Swing originales (Ctrl_MenuAdmin, Ctrl_MenuUsuario, etc.)
+NO cambian su estructura, ya que el httpapi corre en PARALELO como servidor
+HTTP que traduce requests REST a comandos de socket.
+
+Cada controlador ya tiene:
+- atributo: clienteSocket: BancoADN_Grupo6_ClienteSocket
+- metodos que envían comandos al servidor via clienteSocket.enviarYRecibir()
+
+Los nuevos servicios httpapi (AuthService, PerfilService, SolicitudService)
+NO son reemplazo de los controladores Swing, sino una capa NUEVA que tambien
+se comunica con el mismo servidor, pero via SessionSocket (socket persistente).
+
+Para el diagrama:
+  - Mantener los Ctrl_* como estan (con sus métodos Swing)
+  - AGREGAR las nuevas clases httpapi como un paquete separado
+  - NO hay necesidad de modificar los Ctrl_* existentes
+
+Lo ÚNICO que comparten es:
+  - Ambos usan BancoADN_Grupo6_ClienteSocket (los Ctrl directamente,
+    los httpapi service via SessionSocket)
+  - Ambos se comunican con el mismo LadoServer (BancoADN6RequestHandler)
+
+
+4. COMANDOS ENVIADOS POR CADA CAPA (mapeo protocolo)
+=============================================================================
+
+COMANDO                  QUIEN LO ENVIA (httpapi)     QUIEN LO PROCESA (LadoServer)
+-------                  ------------------------     -----------------------------
+IniciarS                 SessionSocket.openSession()  BancoADN6RequestHandler.iniciarSesion()
+CrearC                   AuthService.crearCuenta()    BancoADN6RequestHandler.crearCuenta()
+BuscarDat                PerfilService.getPerfilByEmail()  BancoADN6RequestHandler.BuscarPerfiles()
+BuscarIDNOM              PerfilService.buscarPerfiles()    BancoADN6RequestHandler.BuscarPerfiles()
+CrearPerfilSol           SolicitudService.solicitarRegistrar()  crearPerfilSolicitud()
+CrearSolPer              SolicitudService.solicitarModificar/Baja/Restaurar()  CrearSolicitudP()
+ListaSol                 SolicitudService.getPendingRequests()  verSolicitudes()
+UltSol                   SolicitudService.getRecentRequests()   ObtenerUltimasSolicitudes()
+ResSol                   SolicitudService.approve/rejectRequest()  ResolverSolicitud()
+ModificP                 PerfilService.actualizarPerfil()   ModificarPerfil()
+DarDBaja                 PerfilService.deactivatePerfil()   DarBajaPerfil()
+DarDRestaur              PerfilService.activatePerfil()     RestaurarPerfil()
+EmailPorPerfil           PerfilService.obtenerEmailPorPerfil() / SolicitudService.obtenerEmailPorPerfil()  obtenerEmailPorPerfil()
+GetLogs                  LogService.getLogs()           ObtenerLogsAdmin()
+
+
+5. RESUMEN DE CLASES A DIBUJAR EN EL DIAGRAMA (nuevas)
+=============================================================================
+
+Paquete httpapi (BancoADN-Cliente):
+  - ApiServer
+  - SessionSocket
+  - AuthService
+  - PerfilService
+  - SolicitudService
+  - LogService
+  - CreateAccountResult
+  - AuthEndpoints
+  - PerfilEndpoints
+  - SolicitudEndpoints
+  - LogEndpoints
+  - AuthDto (+ LoginRequest, LoginResponse, CreateAccountRequest, CreateAccountResponse)
+  - PerfilDto
+  - SolicitudDto (+ RegistrarRequest, RegistrarResponse, ModificarRequest, BajaRequest,
+                   RestaurarRequest, BajaResponse, RestaurarResponse, SolicitudSummary)
+  - LogDto
+
+Paquete ladoserver (LadoServer):
+  - BancoADN6Socket
+  - BancoADN6RequestHandler
+
+Total nuevas clases a dibujar: ~26 (entre clases principales e internas relevantes)

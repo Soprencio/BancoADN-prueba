@@ -137,6 +137,7 @@ function AdminDashboard() {
       open: true,
       mensaje: `¿Aprobás la solicitud #${id}?`,
       onConfirm: async () => {
+        setLoading(true);
         try {
           await solicitudesService.approveRequest(id, user.email);
           addToast('Solicitud aprobada', 'success');
@@ -146,6 +147,8 @@ function AdminDashboard() {
           addToast('Error al aprobar la solicitud', 'error');
           console.error(error);
           setConfirmModal({ open: false, mensaje: '', onConfirm: null });
+        } finally {
+          setLoading(false);
         }
       },
     });
@@ -157,6 +160,7 @@ function AdminDashboard() {
       open: true,
       mensaje: `¿Rechazás la solicitud #${id}?`,
       onConfirm: async () => {
+        setLoading(true);
         try {
           await solicitudesService.rejectRequest(id, user.email);
           addToast('Solicitud rechazada', 'success');
@@ -166,6 +170,8 @@ function AdminDashboard() {
           addToast('Error al rechazar la solicitud', 'error');
           console.error(error);
           setConfirmModal({ open: false, mensaje: '', onConfirm: null });
+        } finally {
+          setLoading(false);
         }
       },
     });
@@ -177,6 +183,7 @@ function AdminDashboard() {
       open: true,
       mensaje: `¿Dás de baja el perfil de ${perfil.nombreCompleto}?`,
       onConfirm: async () => {
+        setLoading(true);
         try {
           await perfilesService.deactivateProfile(perfil.idPerfil, user.email);
           addToast('Perfil dado de baja', 'success');
@@ -186,6 +193,8 @@ function AdminDashboard() {
           addToast('Error al dar de baja el perfil', 'error');
           console.error(error);
           setConfirmModal({ open: false, mensaje: '', onConfirm: null });
+        } finally {
+          setLoading(false);
         }
       },
     });
@@ -197,6 +206,7 @@ function AdminDashboard() {
       open: true,
       mensaje: `¿Restaurás el perfil de ${perfil.nombreCompleto}?`,
       onConfirm: async () => {
+        setLoading(true);
         try {
           await perfilesService.reactivateProfile(perfil.idPerfil, user.email);
           addToast('Perfil restaurado', 'success');
@@ -206,6 +216,8 @@ function AdminDashboard() {
           addToast('Error al restaurar el perfil', 'error');
           console.error(error);
           setConfirmModal({ open: false, mensaje: '', onConfirm: null });
+        } finally {
+          setLoading(false);
         }
       },
     });
@@ -213,6 +225,7 @@ function AdminDashboard() {
 
   const handleEditarSubmit = async (values) => {
     if (!user || !editModal.perfil) return;
+    setLoading(true);
     try {
       await perfilesService.updateProfile(editModal.perfil.idPerfil, values, user.email);
       addToast('Perfil modificado', 'success');
@@ -222,6 +235,8 @@ function AdminDashboard() {
       addToast('Error al modificar el perfil', 'error');
       console.error(error);
       setEditModal({ open: false, perfil: null });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -231,7 +246,7 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="admin-dashboard">
+    <div className={`admin-dashboard${loading ? ' loading' : ''}`}>
       <header className="topbar">
         <div className="topbar-left">
           <span className="material-symbols-outlined topbar-icon">account_circle</span>
@@ -247,28 +262,32 @@ function AdminDashboard() {
           <button
             className={vistaActiva === 'pendientes' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('pendientes')}
+            disabled={loading}
           >
             Solicitudes
           </button>
           <button
             className={vistaActiva === 'perfiles' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('perfiles')}
+            disabled={loading}
           >
             Perfiles
           </button>
           <button
             className={vistaActiva === 'logs' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('logs')}
+            disabled={loading}
           >
             Logs
           </button>
           <button
             className={vistaActiva === 'ultimas' ? 'nav-link nav-active' : 'nav-link'}
             onClick={() => setVistaActiva('ultimas')}
+            disabled={loading}
           >
             Últimas
           </button>
-          <button className="btn-icon btn-logout" onClick={handleLogout} title="Cerrar Sesión">
+          <button className="btn-icon btn-logout" onClick={handleLogout} title="Cerrar Sesión" disabled={loading}>
             <span className="material-symbols-outlined">logout</span>
           </button>
         </nav>
@@ -310,11 +329,11 @@ function AdminDashboard() {
                         {sol.descripcion || (tipoLower === 'baja' ? 'Solicitud de baja de perfil genético.' : tipoLower === 'restaurar' ? 'Solicitud de restauración de perfil genético.' : 'Solicitud de registro de perfil genético.')}
                       </p>
                       <div className="card-footer">
-                        <button className="btn-accept" onClick={() => handleAprobar(sol.idSolicitud)}>
+                        <button className="btn-accept" onClick={() => handleAprobar(sol.idSolicitud)} disabled={loading}>
                           <span className="material-symbols-outlined">check</span>
                           Aceptar
                         </button>
-                        <button className="btn-reject" onClick={() => handleRechazar(sol.idSolicitud)}>
+                        <button className="btn-reject" onClick={() => handleRechazar(sol.idSolicitud)} disabled={loading}>
                           <span className="material-symbols-outlined">close</span>
                           Rechazar
                         </button>
@@ -345,7 +364,7 @@ function AdminDashboard() {
                   <option value="nombre">Nombre</option>
                   <option value="codigo">Código</option>
                 </select>
-                <button className="btn-search-exec" onClick={() => cargarPerfiles(searchTerm, searchType)}>
+                <button className="btn-search-exec" onClick={() => cargarPerfiles(searchTerm, searchType)} disabled={loading}>
                   Buscar
                 </button>
               </div>
@@ -391,17 +410,17 @@ function AdminDashboard() {
                       </div>
                     </div>
                     <div className="card-footer">
-                      <button className="btn-outline" onClick={() => setEditModal({ open: true, perfil: p })}>
+                      <button className="btn-outline" onClick={() => setEditModal({ open: true, perfil: p })} disabled={loading}>
                         <span className="material-symbols-outlined">edit</span>
                         Modificar
                       </button>
                       {p.estado === 1 ? (
-                        <button className="btn-destructive" onClick={() => handleDarDeBaja(p)}>
+                        <button className="btn-destructive" onClick={() => handleDarDeBaja(p)} disabled={loading}>
                           <span className="material-symbols-outlined">block</span>
                           Dar de baja
                         </button>
                       ) : (
-                        <button className="btn-primary-sm" onClick={() => handleRestaurar(p)}>
+                        <button className="btn-primary-sm" onClick={() => handleRestaurar(p)} disabled={loading}>
                           <span className="material-symbols-outlined">settings_backup_restore</span>
                           Restaurar
                         </button>
@@ -421,7 +440,7 @@ function AdminDashboard() {
                 <h2>Logs del Sistema</h2>
                 <p className="page-subtitle">Historial de actividad del sistema y acciones administrativas.</p>
               </div>
-              <button className="btn-icon-refresh" onClick={cargarLogs} title="Actualizar">
+              <button className="btn-icon-refresh" onClick={cargarLogs} title="Actualizar" disabled={loading}>
                 <span className="material-symbols-outlined">refresh</span>
               </button>
             </div>

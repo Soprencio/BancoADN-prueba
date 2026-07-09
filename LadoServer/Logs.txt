@@ -1,4 +1,4 @@
-idIncremental=174
+idIncremental=186
 1 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
 2 - 1 - 9 - 2026-06-24 - nombrecreo se creo una cuenta
 3 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
@@ -173,3 +173,15 @@ idIncremental=174
 172 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
 173 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
 174 - 10 - 15 - 2026-07-04 - yonaikerson busco perfiles por id con el siguiente: 9
+175 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
+176 - 1 - 23 - 2026-07-08 - aaa se creo una cuenta
+177 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
+178 - 2 - 23 - 2026-07-08 - aaa inicio sesion
+179 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ mi bombo clat _ 666777 _ codigo buenardo _ 2026-06-29
+180 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
+181 - 2 - 23 - 2026-07-08 - aaa inicio sesion
+182 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ aaa _ 333 _ aaa _ 2026-07-02
+183 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ aaa _ 111 _ aaaa _ 2026-07-01
+184 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
+185 - 2 - 23 - 2026-07-08 - aaa inicio sesion
+186 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ aaa _ 888 _ 3 _ 2026-06-04

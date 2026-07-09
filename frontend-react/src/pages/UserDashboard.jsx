@@ -29,6 +29,7 @@ const UserDashboard = () => {
   const [searchError, setSearchError] = useState('');
   const [perfilCache, setPerfilCache] = useState(null);
   const [perfilError, setPerfilError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const cargarPerfiles = async (term, type) => {
     if (!user) return;
@@ -94,6 +95,7 @@ const UserDashboard = () => {
   };
 
   const handleVerPerfil = async () => {
+    setSubmitting(true);
     setLoadingProfile(true);
     try {
       const p = await perfilesService.getMyProfile(user.email);
@@ -104,6 +106,7 @@ const UserDashboard = () => {
       addToast('Error al cargar perfil', 'error');
     } finally {
       setLoadingProfile(false);
+      setSubmitting(false);
     }
   };
 
@@ -145,17 +148,27 @@ const UserDashboard = () => {
   };
 
   const handleOpenRegistrar = async () => {
-    if (!await validatePerfilAction('REGISTRAR')) return;
-    setRequestType('REGISTRAR');
-    setFormInitialValues({});
-    setShowRequestModal(true);
+    setSubmitting(true);
+    try {
+      if (!await validatePerfilAction('REGISTRAR')) return;
+      setRequestType('REGISTRAR');
+      setFormInitialValues({});
+      setShowRequestModal(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleOpenModificar = async () => {
-    if (!await validatePerfilAction('MODIFICAR')) return;
-    setRequestType('MODIFICAR');
-    setFormInitialValues({});
-    setShowRequestModal(true);
+    setSubmitting(true);
+    try {
+      if (!await validatePerfilAction('MODIFICAR')) return;
+      setRequestType('MODIFICAR');
+      setFormInitialValues({});
+      setShowRequestModal(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const addLocalPending = (tipo, values = {}) => {
@@ -182,6 +195,10 @@ const UserDashboard = () => {
       descripcion: values.descripcion || '',
       fechaMuestra: values.fechaMuestra || '',
     };
+    setSubmitting(true);
+    // === INICIO TEST CARGA (3s de latencia simulada) ===
+    // await new Promise(r => setTimeout(r, 3000));
+    // === FIN TEST CARGA ===
     try {
       await solicitudesService.createRequest(solicitud);
       addToast('Solicitud enviada', 'success');
@@ -189,20 +206,33 @@ const UserDashboard = () => {
       addLocalPending(requestType, values);
     } catch (err) {
       addToast('Error al enviar solicitud', 'error');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleBajaClick = async () => {
-    if (!await validatePerfilAction('BAJA')) return;
-    setShowConfirmBaja(true);
+    setSubmitting(true);
+    try {
+      if (!await validatePerfilAction('BAJA')) return;
+      setShowConfirmBaja(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleRestaurarClick = async () => {
-    if (!await validatePerfilAction('RESTAURAR')) return;
-    setShowConfirmRestaurar(true);
+    setSubmitting(true);
+    try {
+      if (!await validatePerfilAction('RESTAURAR')) return;
+      setShowConfirmRestaurar(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleConfirmBaja = async () => {
+    setSubmitting(true);
     try {
       await solicitudesService.createRequest({
         tipo: 'BAJA',
@@ -213,10 +243,13 @@ const UserDashboard = () => {
       addLocalPending('BAJA');
     } catch (err) {
       addToast('Error al enviar solicitud de baja', 'error');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleConfirmRestaurar = async () => {
+    setSubmitting(true);
     try {
       await solicitudesService.createRequest({
         tipo: 'RESTAURAR',
@@ -227,6 +260,8 @@ const UserDashboard = () => {
       addLocalPending('RESTAURAR');
     } catch (err) {
       addToast('Error al enviar solicitud de restauración', 'error');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -236,7 +271,7 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="user-dashboard">
+    <div className={`user-dashboard${submitting ? ' loading' : ''}`}>
       <header className="topbar">
         <div className="topbar-left">
           <div className="user-info">
@@ -256,11 +291,11 @@ const UserDashboard = () => {
           </h1>
         </div>
         <div className="topbar-right">
-          <button className="btn-icon" onClick={() => setShowSearch(true)} title="Buscar Perfil">
+          <button className="btn-icon" onClick={() => setShowSearch(true)} title="Buscar Perfil" disabled={submitting}>
             <span className="material-symbols-outlined">search</span>
             <span className="btn-label">Buscar</span>
           </button>
-          <button className="btn-icon btn-logout" onClick={handleLogout} title="Cerrar Sesión">
+          <button className="btn-icon btn-logout" onClick={handleLogout} title="Cerrar Sesión" disabled={submitting}>
             <span className="material-symbols-outlined">logout</span>
           </button>
         </div>
@@ -285,7 +320,7 @@ const UserDashboard = () => {
                   <option value="nombre">Nombre</option>
                   <option value="codigo">Código</option>
                 </select>
-                <button className="btn-search-exec" onClick={() => cargarPerfiles(searchTerm, searchType)}>
+                <button className="btn-search-exec" onClick={() => cargarPerfiles(searchTerm, searchType)} disabled={submitting || loadingSearch}>
                   Buscar
                 </button>
               </div>
@@ -330,7 +365,7 @@ const UserDashboard = () => {
                 ))}
               </div>
             )}
-            <button className="btn btn-secondary" style={{ marginTop: '1rem' }} onClick={() => setShowSearch(false)}>
+            <button className="btn btn-secondary" style={{ marginTop: '1rem' }} onClick={() => setShowSearch(false)} disabled={submitting}>
               ← Volver
             </button>
           </div>
@@ -345,22 +380,22 @@ const UserDashboard = () => {
             <div className="left-panel">
               <h3>Mis Solicitudes</h3>
               <div className="btn-group">
-                <button className="btn btn-primary" onClick={handleOpenRegistrar}>
+                <button className="btn btn-primary" onClick={handleOpenRegistrar} disabled={submitting}>
                   Solicitar Registro
                   {hasPending('REGISTRAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
-                <button className="btn btn-primary" onClick={handleOpenModificar}>
+                <button className="btn btn-primary" onClick={handleOpenModificar} disabled={submitting}>
                   Solicitar Modificación
                   {hasPending('MODIFICAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
-                <button className="btn btn-danger" onClick={handleBajaClick}>
+                <button className="btn btn-danger" onClick={handleBajaClick} disabled={submitting}>
                   Solicitar Baja
                   {hasPending('BAJA') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
 
-                <button className="btn btn-success" onClick={handleRestaurarClick}>
+                <button className="btn btn-success" onClick={handleRestaurarClick} disabled={submitting}>
                   Solicitar Restauración
                   {hasPending('RESTAURAR') && <span className="badge-pill"><span className="material-symbols-outlined">hourglass_empty</span>Pendiente</span>}
                 </button>
@@ -369,7 +404,7 @@ const UserDashboard = () => {
 
             <div className="right-panel">
               <h3>Mi Perfil Genético</h3>
-              <button className="btn btn-primary" onClick={handleVerPerfil}>
+              <button className="btn btn-primary" onClick={handleVerPerfil} disabled={submitting}>
                 Consultar mis datos
               </button>
 

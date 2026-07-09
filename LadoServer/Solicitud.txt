@@ -1,4 +1,4 @@
-idIncremental=26
+idIncremental=30
 1 - registrar - 2 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
 2 - modificar - 2 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - 2 - 2026-05-20
 3 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
@@ -25,3 +25,7 @@ idIncremental=26
 24 - baja - 0 -   - 9 - 2026-07-04
 25 - registrar - 2 - manolo@gmail.com _ juancho _ 999 _ se _ 2026-06-30 - NULL - 2026-07-04
 26 - restaurar - 0 -   - 9 - 2026-07-04
+27 - registrar - 0 - mibombo@gmail.com _ mi bombo clat _ 666777 _ codigo buenardo _ 2026-06-29 - NULL - 2026-07-08
+28 - registrar - 0 - mibombo@gmail.com _ aaa _ 333 _ aaa _ 2026-07-02 - NULL - 2026-07-08
+29 - registrar - 0 - mibombo@gmail.com _ aaa _ 111 _ aaaa _ 2026-07-01 - NULL - 2026-07-08
+30 - registrar - 0 - mibombo@gmail.com _ aaa _ 888 _ 3 _ 2026-06-04 - NULL - 2026-07-08

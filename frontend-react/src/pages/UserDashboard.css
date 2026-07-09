@@ -277,3 +277,11 @@
   from { opacity: 1; }
   to { opacity: 0; }
 }
+.user-dashboard.loading {
+  cursor: wait;
+}
+.user-dashboard.loading .btn:disabled,
+.user-dashboard.loading .btn-icon:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

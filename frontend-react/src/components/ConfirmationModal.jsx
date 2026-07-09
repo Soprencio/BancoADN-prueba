@@ -1,29 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './ConfirmationModal.css';
 
 const ConfirmationModal = ({ isOpen, onClose, title, message, confirmLabel, cancelLabel, onConfirm, confirmVariant = 'primary' }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   if (!isOpen) return null;
 
+  const handleConfirm = async () => {
+    setSubmitting(true);
+    try {
+      await onConfirm();
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <div className="modal-backdrop">
+    <div className={`modal-backdrop${submitting ? ' loading' : ''}`}>
       <div className="modal-content">
         <h2>{title}</h2>
         <p>{message}</p>
         <div className="modal-actions">
           <button
             type="button"
-            className={`btn btn-${cancelLabel ? 'secondary' : 'secondary'}`}
+            className="btn btn-secondary"
             onClick={onClose}
+            disabled={submitting}
           >
             {cancelLabel || 'Cancelar'}
           </button>
           <button
             type="button"
             className={`btn btn-${confirmVariant}`}
-            onClick={onConfirm}
+            onClick={handleConfirm}
+            disabled={submitting}
           >
-            {confirmLabel || 'Confirmar'}
+            {submitting ? 'Enviando...' : (confirmLabel || 'Confirmar')}
           </button>
         </div>
       </div>
@@ -39,7 +52,7 @@ ConfirmationModal.propTypes = {
   confirmLabel: PropTypes.string,
   cancelLabel: PropTypes.string,
   onConfirm: PropTypes.func,
-  confirmVariant: PropTypes.oneOf(['primary', 'danger', 'secondary']),
+  confirmVariant: PropTypes.oneOf(['primary', 'danger', 'secondary', 'success']),
 };
 
 ConfirmationModal.defaultProps = {

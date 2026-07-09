@@ -1,0 +1,12 @@
+idIncremental=11
+1 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
+2 - modificar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - 2 - 2026-05-20
+3 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
+4 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-06-10
+5 - restaurar - 1 -   - 4 - 2026-06-10
+6 - restaurar - 1 -   - 4 - 2026-06-10
+7 - restaurar - 1 -   - 4 - 2026-06-10
+8 - registrar - 1 - VICENTECRACK@gmail.com _ pepito _ JKSNHGJKSHUSJHGJK _ JSFHSLFHSFHJLDH _ 2026-04-23 - NULL - 2026-06-16
+9 - baja - 1 -   - 3 - 2026-06-16
+10 - modificar - 0 - MAMUELPONCHE@gmail.com _ PERON _ HOLA _ porque si _ 2026-04-23 - 1 - 2026-07-05
+11 - registrar - 0 - gonzalo1234@gmail.com _ dddddd _ 1234 _ 1234 _ 2026-04-23 - NULL - 2026-07-05

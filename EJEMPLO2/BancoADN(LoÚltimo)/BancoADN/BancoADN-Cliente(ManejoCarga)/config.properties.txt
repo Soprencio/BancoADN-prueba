@@ -1,0 +1,4 @@
+# Configuración de conexión al servidor BancoADN
+# Modificar estos valores para apuntar a un servidor distinto sin recompilar
+servidor.host=localhost
+servidor.puerto=4990
