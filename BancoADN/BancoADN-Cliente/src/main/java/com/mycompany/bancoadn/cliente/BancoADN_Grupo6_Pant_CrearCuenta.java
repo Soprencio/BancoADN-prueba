@@ -4,6 +4,8 @@
  */
 package com.mycompany.bancoadn.cliente;
 
+
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaCrearCuenta;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 
-public class BancoADN_Grupo6_Pant_CrearCuenta extends javax.swing.JFrame {
+public class BancoADN_Grupo6_Pant_CrearCuenta extends javax.swing.JFrame implements IVistaCrearCuenta {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BancoADN_Grupo6_Pant_CrearCuenta.class.getName());
 
@@ -234,6 +236,13 @@ public class BancoADN_Grupo6_Pant_CrearCuenta extends javax.swing.JFrame {
         });
     }
 
+
+    @Override
+    public void navegarALogin() {
+        this.dispose();
+        BancoADN_Grupo6_Pant_IniciarSesion login = new BancoADN_Grupo6_Pant_IniciarSesion();
+        login.setVisible(true);
+    }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new BancoADN_Grupo6_Pant_CrearCuenta().setVisible(true));
     }

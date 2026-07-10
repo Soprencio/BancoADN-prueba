@@ -1,5 +1,6 @@
 package com.mycompany.bancoadn.cliente;
 
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaUltimasSolicitudes;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 
-public class BancoADN_Grupo6_Pant_UltimasSolicitudes extends JFrame {
+public class BancoADN_Grupo6_Pant_UltimasSolicitudes extends JFrame implements IVistaUltimasSolicitudes {
 
     // ── Colores (misma paleta que MenuAdmin) ──────────────
     private final Color azulClaro    = new Color(169, 195, 207);
@@ -191,6 +192,16 @@ public class BancoADN_Grupo6_Pant_UltimasSolicitudes extends JFrame {
     }
 
     // ── Colores públicos para el controlador ─────────────
+
+    // === IVistaUltimasSolicitudes bridge adapter ===
+    @Override
+    public void agregarTarjetaSolicitud(int id, String mail, String fecha,
+                                         String fechaResolucion, String tipo,
+                                         String estadoTexto, String lineaExtra,
+                                         String datosSolicitud) {
+        agregarTarjetaSolicitud(id, mail, fecha, fechaResolucion, tipo,
+            estadoTexto, Color.GRAY, lineaExtra);
+    }
     public Color getColorAceptada()  { return verdeOk;  }
     public Color getColorRechazada() { return rojoRech; }
 

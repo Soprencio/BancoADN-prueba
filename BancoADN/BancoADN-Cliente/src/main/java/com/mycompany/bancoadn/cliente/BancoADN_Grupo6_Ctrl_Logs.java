@@ -1,19 +1,20 @@
 package com.mycompany.bancoadn.cliente;
 
 import java.util.List;
+import com.mycompany.bancoadn.cliente.ClasesModelo.Registro;
+import com.mycompany.bancoadn.cliente.ClasesModelo.TipoAccion;
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaLogs;
 
 public class BancoADN_Grupo6_Ctrl_Logs {
 
-    private final BancoADN_Grupo6_Pant_Logs vista;
+    private final IVistaLogs vista;
     private final BancoADN_Grupo6_ClienteSocket clienteSocket;
-    private final String idCuenta; // "ALL" para admin, o el ID numérico para usuario
+    private final String idCuenta;
 
-    public BancoADN_Grupo6_Ctrl_Logs(BancoADN_Grupo6_Pant_Logs vista, BancoADN_Grupo6_ClienteSocket clienteSocket, String idCuenta) {
+    public BancoADN_Grupo6_Ctrl_Logs(IVistaLogs vista, BancoADN_Grupo6_ClienteSocket clienteSocket, String idCuenta) {
         this.vista = vista;
         this.clienteSocket = clienteSocket;
         this.idCuenta = idCuenta;
-
-        vista.agregarListenerCerrar(e -> vista.dispose());
         cargarLogs();
     }
 
@@ -38,7 +39,6 @@ public class BancoADN_Grupo6_Ctrl_Logs {
         }
 
         int count = 0;
-        // iterate reverse to get newest first
         for (int i = lineas.size() - 1; i >= 0 && count < 30; i--) {
             String linea = lineas.get(i);
             String[] p = linea.split(" - ", -1);
@@ -47,14 +47,23 @@ public class BancoADN_Grupo6_Ctrl_Logs {
                 continue;
             }
             try {
-                int idLog = Integer.parseInt(p[0].trim());
+                int idReg = Integer.parseInt(p[0].trim());
                 String nombreCuenta = p[2].trim();
                 String email = p[3].trim();
                 String descripcion = p[4].trim();
                 String fecha = p[5].trim();
                 String acciones = p[6].trim();
-                boolean isAdminLog = p[7].trim().equals("1");
-                vista.agregarTarjetaLog(idLog, nombreCuenta, email, descripcion, fecha, acciones, isAdminLog);
+                boolean esAdmin = p[7].trim().equals("1");
+
+                // Usar clases modelo Registro y TipoAccion
+                Registro registro = new Registro(idReg, 0, 0, fecha, descripcion);
+                TipoAccion tipoAccion = new TipoAccion(0, acciones);
+
+                vista.agregarTarjetaLog(
+                    registro.getIdRegistro(), nombreCuenta, email,
+                    registro.getDetalles(), registro.getFechaRegistro(),
+                    tipoAccion.getNombreAccion(), esAdmin
+                );
                 count++;
             } catch (NumberFormatException e) {
                 System.err.println("Error al parsear datos de Log: " + p[0]);

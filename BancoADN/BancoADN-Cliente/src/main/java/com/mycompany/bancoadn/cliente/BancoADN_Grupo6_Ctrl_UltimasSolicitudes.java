@@ -3,28 +3,19 @@ package com.mycompany.bancoadn.cliente;
 import java.util.List;
 import java.util.ArrayList;
 import com.mycompany.bancoadn.cliente.ClasesModelo.Solicitud;
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaUltimasSolicitudes;
 
 public class BancoADN_Grupo6_Ctrl_UltimasSolicitudes {
 
-    private final BancoADN_Grupo6_Pant_UltimasSolicitudes vista;
-    private final BancoADN_Grupo6_ClienteSocket           clienteSocket;
+    private final IVistaUltimasSolicitudes vista;
+    private final BancoADN_Grupo6_ClienteSocket clienteSocket;
 
-    public BancoADN_Grupo6_Ctrl_UltimasSolicitudes(BancoADN_Grupo6_Pant_UltimasSolicitudes vista, BancoADN_Grupo6_ClienteSocket clienteSocket) {
+    public BancoADN_Grupo6_Ctrl_UltimasSolicitudes(IVistaUltimasSolicitudes vista, BancoADN_Grupo6_ClienteSocket clienteSocket) {
         this.vista         = vista;
         this.clienteSocket = clienteSocket;
-
-        vista.agregarListenerCerrar(e -> vista.dispose());
         cargarUltimasSolicitudes();
     }
 
-    // ════════════════════════════════════════════════════════
-    // ── SNAPSHOT DE ÚLTIMAS SOLICITUDES ────────────────────
-    // ════════════════════════════════════════════════════════
-
-    /**
-     * Consulta el servidor y devuelve una lista de objetos Solicitud frescos.
-     * Solo devuelve solicitudes ya resueltas (estado 1 o 2).
-     */
     private List<Solicitud> obtenerSnapshotUltimasSolicitudes() {
         if (!clienteSocket.estaConectado()) {
             vista.mostrarError("Error de conexión con el servidor.");
@@ -38,16 +29,16 @@ public class BancoADN_Grupo6_Ctrl_UltimasSolicitudes {
 
         for (String linea : lineas) {
             String[] p = linea.split(" - ", -1);
-            if (p.length < 6) continue; // Formato original 6 campos: id(0), tipo(1), estado(2), datos(3), idPerfil(4), fecha(5)
+            if (p.length < 6) continue;
 
             try {
                 Solicitud sol = new Solicitud(
-                    Integer.parseInt(p[0].trim()), // idSolicitud
-                    p[1].trim(),                   // tipo
-                    Integer.parseInt(p[2].trim()), // estado
-                    p[3].trim(),                   // datosSolicitud
-                    p[4].equals("NULL") ? -1 : Integer.parseInt(p[4].trim()), // idPerfil
-                    p[5].trim()                    // fechaCreacion
+                    Integer.parseInt(p[0].trim()),
+                    p[1].trim(),
+                    Integer.parseInt(p[2].trim()),
+                    p[3].trim(),
+                    p[4].equals("NULL") ? -1 : Integer.parseInt(p[4].trim()),
+                    p[5].trim()
                 );
                 
                 if (!sol.isPendiente()) {
@@ -70,8 +61,6 @@ public class BancoADN_Grupo6_Ctrl_UltimasSolicitudes {
         }
 
         for (Solicitud sol : solicitudes) {
-            // Como usamos el formato original de 6 campos, la fecha de resolución no está disponible
-            // Se mostrará un guion o la misma fecha de creación si se prefiere.
             String fechaResolucion = "—"; 
 
             String[] tokens = sol.getDatosSolicitud().split(" _ ", -1);
@@ -88,9 +77,6 @@ public class BancoADN_Grupo6_Ctrl_UltimasSolicitudes {
             }
 
             String estadoTexto = sol.isAprobada() ? "✓ Aceptada" : "✗ Rechazada";
-            java.awt.Color estadoColor = sol.isAprobada()
-                ? vista.getColorAceptada()
-                : vista.getColorRechazada();
 
             vista.agregarTarjetaSolicitud(
                 sol.getIdSolicitud(),
@@ -99,8 +85,8 @@ public class BancoADN_Grupo6_Ctrl_UltimasSolicitudes {
                 fechaResolucion,
                 sol.getTipo(),
                 estadoTexto,
-                estadoColor,
-                lineaExtra
+                lineaExtra,
+                sol.getDatosSolicitud()
             );
         }
     }

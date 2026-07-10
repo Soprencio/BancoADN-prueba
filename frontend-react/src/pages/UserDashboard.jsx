@@ -197,7 +197,7 @@ const UserDashboard = () => {
     };
     setSubmitting(true);
     // === INICIO TEST CARGA (3s de latencia simulada) ===
-    // await new Promise(r => setTimeout(r, 3000));
+    await new Promise(r => setTimeout(r, 3000));
     // === FIN TEST CARGA ===
     try {
       await solicitudesService.createRequest(solicitud);

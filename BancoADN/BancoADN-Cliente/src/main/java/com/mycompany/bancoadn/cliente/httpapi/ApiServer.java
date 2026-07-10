@@ -1,11 +1,7 @@
 package com.mycompany.bancoadn.cliente.httpapi;
 
 import io.javalin.Javalin;
-import io.javalin.http.Context;
-import com.mycompany.bancoadn.cliente.httpapi.endpoint.AuthEndpoints;
-import com.mycompany.bancoadn.cliente.httpapi.endpoint.SolicitudEndpoints;
-import com.mycompany.bancoadn.cliente.httpapi.endpoint.PerfilEndpoints;
-import com.mycompany.bancoadn.cliente.httpapi.endpoint.LogEndpoints;
+import com.mycompany.bancoadn.cliente.httpapi.BridgeEndpoints;
 
 /**
  * HTTP API server using Javalin.
@@ -38,11 +34,8 @@ public class ApiServer {
             }
         });
 
-        // Register API endpoints
-        AuthEndpoints.register(app);
-        SolicitudEndpoints.register(app);
-        PerfilEndpoints.register(app);
-        LogEndpoints.register(app);
+        // Register bridge endpoints (controllers via HTTP bridges)
+        BridgeEndpoints.register(app);
 
         // Root endpoint for health check
         app.get("/", ctx -> {

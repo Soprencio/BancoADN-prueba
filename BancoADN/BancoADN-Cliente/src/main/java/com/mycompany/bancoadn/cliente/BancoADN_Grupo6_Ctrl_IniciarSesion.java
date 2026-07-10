@@ -4,52 +4,42 @@
  */
 package com.mycompany.bancoadn.cliente;
 
-import com.mycompany.bancoadn.cliente.ClasesModelo.CuentaPersonal; //referencias clase de la subcarpeta ClasesModelo a utilizar
+import com.mycompany.bancoadn.cliente.ClasesModelo.CuentaPersonal;
+import com.mycompany.bancoadn.cliente.ClasesModelo.Rol;
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaIniciarSesion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Controlador de la pantalla Iniciar Sesión.
- *
- * Protocolo con el servidor:
- *   Solicitud → "IniciarS - email - contraseña"
- *   Respuesta → "0", "1", o "-1"
- *     1 = USUARIO NORMAL
- *     2 = ADMINISTRADOR
- *    -1 = NO ENCONTRADO
- *
- * Con la capa de modelo, la respuesta del servidor se convierte
- * en un objeto CuentaPersonal antes de pasarlo a las siguientes pantallas.
- */
 public class BancoADN_Grupo6_Ctrl_IniciarSesion implements ActionListener {
 
-    private BancoADN_Grupo6_Pant_IniciarSesion vista;
+    private IVistaIniciarSesion vista;
     private BancoADN_Grupo6_ClienteSocket clienteSocket;
 
-    public BancoADN_Grupo6_Ctrl_IniciarSesion(BancoADN_Grupo6_Pant_IniciarSesion vista, BancoADN_Grupo6_ClienteSocket clienteSocket) {
+    public BancoADN_Grupo6_Ctrl_IniciarSesion(IVistaIniciarSesion vista, BancoADN_Grupo6_ClienteSocket clienteSocket) {
         this.vista = vista;
         this.clienteSocket = clienteSocket;
-
-        this.vista.agregarListenerBotonIniciarSesion(this);
-        this.vista.agregarListenerRegistro(e -> abrirRegistro());
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String email      = vista.getEmail().trim();
-        String contraseña = vista.getContraseña();
-
+    public void ejecutarLogin(String email, String contraseña) {
+        if (email == null || contraseña == null) {
+            vista.mostrarError("Por favor completa todos los campos.");
+            return;
+        }
+        email = email.trim();
         if (email.isEmpty() || contraseña.isEmpty()) {
             vista.mostrarError("Por favor completa todos los campos.");
             return;
         }
-
         if (!validarEmail(email)) {
             vista.mostrarError("El formato del email es inválido.\nEjemplo: usuario@mail.com");
             return;
         }
-
         iniciarSesion(email, contraseña);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        ejecutarLogin(vista.getEmail(), vista.getContraseña());
     }
 
     /*
@@ -89,54 +79,34 @@ public class BancoADN_Grupo6_Ctrl_IniciarSesion implements ActionListener {
         int codigo = Integer.parseInt(respuesta.trim());
 
         switch (codigo) {
-            case 1: // USUARIO NORMAL
-                CuentaPersonal usuarioLogueado = new CuentaPersonal(
-                    -1,                   // idCuenta: no disponible en login
-                    email.split("@")[0],  // nombreCuenta: derivado del email
-                    "",                   // contraseña: no se guarda por seguridad
-                    email,                // email
-                    1                     // idRol: 1 = USUARIO
-                );
-
+            case 1: {
+                String nombre = email.split("@")[0];
+                CuentaPersonal usuarioLogueado = new CuentaPersonal(-1, nombre, "", email, 1);
+                Rol rol = new Rol(1, "USUARIO");
                 vista.limpiarCampos();
                 vista.dispose();
-                BancoADN_Grupo6_MenuUsuario menu = new BancoADN_Grupo6_MenuUsuario();
-                menu.setEmailUsuario(usuarioLogueado.getEmail());
-                menu.setNombreUsuario(usuarioLogueado.getNombreCuenta());
-                BancoADN_Grupo6_Ctrl_MenuUsuario ctrlMenuUsuario = new BancoADN_Grupo6_Ctrl_MenuUsuario(menu, clienteSocket, usuarioLogueado);
-                menu.setVisible(true);
+                vista.navegarAMenuUsuario(email, nombre, rol.getIdRol());
                 break;
-                
-            case 2: // ADMINISTRADOR
-                CuentaPersonal adminLogueado = new CuentaPersonal(
-                    -1,                   // idCuenta: no disponible en login
-                    email.split("@")[0],  // nombreCuenta: derivado del email
-                    "",                   // contraseña: no se guarda por seguridad
-                    email,                // email
-                    2                     // idRol: 2 = ADMIN
-                );
-
+            }
+            case 2: {
+                String nombre = email.split("@")[0];
+                CuentaPersonal adminLogueado = new CuentaPersonal(-1, nombre, "", email, 2);
+                Rol rol = new Rol(2, "ADMIN");
                 vista.limpiarCampos();
                 vista.dispose();
-                BancoADN_Grupo6_MenuAdmin menuAdmin = new BancoADN_Grupo6_MenuAdmin();
-                menuAdmin.setEmailAdmin(adminLogueado.getEmail());
-                menuAdmin.setNombreAdmin(adminLogueado.getNombreCuenta());
-                BancoADN_Grupo6_Ctrl_MenuAdmin ctrlMenuAdmin = new BancoADN_Grupo6_Ctrl_MenuAdmin(menuAdmin, clienteSocket, adminLogueado);
-                menuAdmin.setVisible(true);
+                vista.navegarAMenuAdmin(email, nombre, rol.getIdRol());
                 break;
-
-            case -1: // NO ENCONTRADO O CONTRASEÑA MAL
+            }
+            case -1:
                 vista.mostrarError("Email o contraseña incorrectos.");
                 vista.limpiarCampos();
                 break;
         }
     }
 
-    private void abrirRegistro() {
+    public void abrirRegistro() {
         vista.dispose();
-        BancoADN_Grupo6_Pant_CrearCuenta vistaRegistro = new BancoADN_Grupo6_Pant_CrearCuenta();
-        BancoADN_Grupo6_Ctrl_CrearCuenta ctrlRegistro  = new BancoADN_Grupo6_Ctrl_CrearCuenta(vistaRegistro, clienteSocket);
-        vistaRegistro.setVisible(true);
+        vista.navegarARegistro();
     }
 
     private boolean validarEmail(String email) {

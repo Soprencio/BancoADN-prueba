@@ -1,187 +1,113 @@
-idIncremental=186
+idIncremental=112
 1 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
 2 - 1 - 9 - 2026-06-24 - nombrecreo se creo una cuenta
-3 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
-4 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
-5 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-6 - 1 - 19 - 2026-07-03 - linares se creo una cuenta
-7 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-8 - 1 - 20 - 2026-07-03 - ff se creo una cuenta
-9 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-10 - 2 - 20 - 2026-07-03 - ff inicio sesion
-11 - 11 - 20 - 2026-07-03 - ff busco la lista de solicitudes
-12 - 11 - 20 - 2026-07-03 - ff busco la lista de solicitudes
-13 - 10 - 20 - 2026-07-03 - ff busco todos los perfiles
-14 - 10 - 20 - 2026-07-03 - ff busco todos los perfiles
-15 - 10 - 20 - 2026-07-03 - ff busco perfiles por nombre con el siguiente: a
-16 - 10 - 20 - 2026-07-03 - ff busco perfiles por id con el siguiente: 1
-17 - 10 - 20 - 2026-07-03 - ff busco perfiles por id con el siguiente: 2
-18 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-19 - 2 - 16 - 2026-07-03 - bbb inicio sesion
-20 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
-21 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
-22 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
-23 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
-24 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
-25 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
-26 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
-27 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
-28 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-29 - 2 - 20 - 2026-07-03 - ff inicio sesion
-30 - 11 - 20 - 2026-07-03 - ff busco la lista de solicitudes
-31 - 9 - 20 - 2026-07-03 - ff creo una solicitud de perfil
-32 - 11 - 20 - 2026-07-03 - ff busco la lista de solicitudes
-33 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-34 - 2 - 16 - 2026-07-03 - bbb inicio sesion
-35 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
-36 - 6 - 16 - 2026-07-03 - bbb creo el perfilgenetico de:fff
-37 - 7 - 16 - 2026-07-03 - bbb intento de modificar la solicitud: 17 pero fallo
-38 - 11 - 16 - 2026-07-03 - bbb busco la lista de solicitudes
-39 - 10 - 16 - 2026-07-03 - bbb busco todos los perfiles
-40 - 13 - 16 - 2026-07-03 - bbb busco la lista de logs
-41 - 12 - 16 - 2026-07-03 - bbb busco la lista de las ultimas solicitudes
-42 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-43 - 2 - 20 - 2026-07-03 - ff inicio sesion
-44 - 11 - 20 - 2026-07-03 - ff busco la lista de solicitudes
-45 - 10 - 20 - 2026-07-03 - ff busco perfiles por id con el siguiente: 11
-46 - 14 - Cliente - 2026-07-03 - Se conecto un cliente al servidor
-47 - 1 - 21 - 2026-07-03 - loquesea se creo una cuenta
-48 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-49 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-50 - 11 - 15 - 2026-07-04 - yonaikerson busco la lista de solicitudes
-51 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-52 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-53 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-54 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-55 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-56 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-57 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-58 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-59 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-60 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-61 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-62 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-63 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-64 - 5 - 16 - 2026-07-04 - bbb modifico perfil de:mail2@gmail.comcon los siguientes datos:4 _ aaa _ a _ aaa _ 0 _ 2026-07-02 _ 7
-65 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-66 - 5 - 16 - 2026-07-04 - bbb modifico perfil de:mail2@gmail.comcon los siguientes datos:4 _ a _ a _ a _ 0 _ 2026-07-02 _ 7
-67 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-68 - 5 - 16 - 2026-07-04 - bbb modifico perfil de:mail2@gmail.comcon los siguientes datos:4 _ wasa _ 123 _ n a _ 0 _ 2026-07-02 _ 7
-69 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-70 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-71 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-72 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-73 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-74 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-75 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-76 - 10 - 16 - 2026-07-04 - bbb busco perfiles por nombre con el siguiente: a
-77 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-78 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-79 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-80 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-81 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-82 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-83 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-84 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-85 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-86 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-87 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-88 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-89 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-90 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-91 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-92 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-93 - 12 - 16 - 2026-07-04 - bbb busco la lista de las ultimas solicitudes
-94 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-95 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-96 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-97 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-98 - 2 - 20 - 2026-07-04 - ff inicio sesion
-99 - 10 - 20 - 2026-07-04 - ff busco perfiles por id con el siguiente: 11
-100 - 8 - 20 - 2026-07-04 - ff creo una solicitud de modificar con los datos: ff@gmail.com _ aaa _ aaa _ aaa _ 2026-07-03
-101 - 11 - 20 - 2026-07-04 - ff busco la lista de solicitudes
-102 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-103 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-104 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-105 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-106 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-107 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-108 - 10 - 15 - 2026-07-04 - yonaikerson busco perfiles por id con el siguiente: 9
-109 - 8 - 15 - 2026-07-04 - yonaikerson creo una solicitud de restaurar con los datos:  
-110 - 8 - 15 - 2026-07-04 - yonaikerson creo una solicitud de baja con los datos:  
-111 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-112 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-113 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-114 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-115 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-116 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-117 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-118 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-119 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-120 - 10 - 16 - 2026-07-04 - bbb busco todos los perfiles
-121 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-122 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-123 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-124 - 8 - 15 - 2026-07-04 - yonaikerson creo una solicitud de modificar con los datos: yon@gmail.com _ aaa _ aaa _ aaa _ 2026-07-03
-125 - 9 - 15 - 2026-07-04 - yonaikerson creo una solicitud de perfil
-126 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-127 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-128 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-129 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-130 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-131 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-132 - 8 - 15 - 2026-07-04 - yonaikerson creo una solicitud de restaurar con los datos:  
-133 - 8 - 15 - 2026-07-04 - yonaikerson creo una solicitud de baja con los datos:  
-134 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-135 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-136 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-137 - 7 - 16 - 2026-07-04 - bbb intento de modificar la solicitud: 22 pero fallo
-138 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-139 - 7 - 16 - 2026-07-04 - bbb intento de modificar la solicitud: 21 pero fallo
-140 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-141 - 7 - 16 - 2026-07-04 - bbb intento de modificar la solicitud: 18 pero fallo
-142 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-143 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-144 - 1 - 22 - 2026-07-04 - manolo se creo una cuenta
-145 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-146 - 2 - 22 - 2026-07-04 - manolo inicio sesion
-147 - 9 - 22 - 2026-07-04 - manolo creo una solicitud de registro con los datos: manolo@gmail.com _ juancho _ 999 _ se _ 2026-06-30
-148 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-149 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-150 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-151 - 7 - 16 - 2026-07-04 - bbb intento de modificar la solicitud: 25 pero fallo
-152 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-153 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-154 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-155 - 2 - 22 - 2026-07-04 - manolo inicio sesion
-156 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-157 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-158 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-159 - 13 - 16 - 2026-07-04 - bbb busco la lista de logs
-160 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-161 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-162 - 10 - 15 - 2026-07-04 - yonaikerson busco perfiles por id con el siguiente: 9
-163 - 10 - 15 - 2026-07-04 - yonaikerson busco perfiles por id con el siguiente: 9
-164 - 8 - 15 - 2026-07-04 - yonaikerson creo una solicitud de restaurar con los datos:  
-165 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-166 - 2 - 16 - 2026-07-04 - bbb inicio sesion
-167 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-168 - 4 - 16 - 2026-07-04 - bbb restauro el perfil de:yon@gmail.com
-169 - 7 - 16 - 2026-07-04 - bbb intento de modificar la solicitud: 19 pero fallo
-170 - 11 - 16 - 2026-07-04 - bbb busco la lista de solicitudes
-171 - 12 - 16 - 2026-07-04 - bbb busco la lista de las ultimas solicitudes
-172 - 14 - Cliente - 2026-07-04 - Se conecto un cliente al servidor
-173 - 2 - 15 - 2026-07-04 - yonaikerson inicio sesion
-174 - 10 - 15 - 2026-07-04 - yonaikerson busco perfiles por id con el siguiente: 9
-175 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
-176 - 1 - 23 - 2026-07-08 - aaa se creo una cuenta
-177 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
-178 - 2 - 23 - 2026-07-08 - aaa inicio sesion
-179 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ mi bombo clat _ 666777 _ codigo buenardo _ 2026-06-29
-180 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
-181 - 2 - 23 - 2026-07-08 - aaa inicio sesion
-182 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ aaa _ 333 _ aaa _ 2026-07-02
-183 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ aaa _ 111 _ aaaa _ 2026-07-01
-184 - 14 - Cliente - 2026-07-08 - Se conecto un cliente al servidor
-185 - 2 - 23 - 2026-07-08 - aaa inicio sesion
-186 - 9 - 23 - 2026-07-08 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ aaa _ 888 _ 3 _ 2026-06-04
+3 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+4 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+5 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+6 - 12 - 16 - 2026-07-10 - bbb busco la lista de las ultimas solicitudes
+7 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+8 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+9 - 7 - 16 - 2026-07-10 - bbb intento de modificar la solicitud: 20 pero fallo
+10 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+11 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+12 - 12 - 16 - 2026-07-10 - bbb busco la lista de las ultimas solicitudes
+13 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+14 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+15 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+16 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+17 - 12 - 16 - 2026-07-10 - bbb busco la lista de las ultimas solicitudes
+18 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+19 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+20 - 7 - 16 - 2026-07-10 - bbb intento de modificar la solicitud: 23 pero fallo
+21 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+22 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+23 - 12 - 16 - 2026-07-10 - bbb busco la lista de las ultimas solicitudes
+24 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+25 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+26 - 3 - 16 - 2026-07-10 - bbb dio de baja el perfil de:yon@gmail.com
+27 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+28 - 3 - 16 - 2026-07-10 - bbb dio de baja el perfil de:mewmew@gmail.com
+29 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+30 - 3 - 16 - 2026-07-10 - bbb dio de baja el perfil de:ff@gmail.com
+31 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+32 - 3 - 16 - 2026-07-10 - bbb dio de baja el perfil de:pep@gmail.com
+33 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+34 - 3 - 16 - 2026-07-10 - bbb dio de baja el perfil de:Nuevo@gmail.com
+35 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+36 - 3 - 16 - 2026-07-10 - bbb dio de baja el perfil de:4@gmail.com
+37 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+38 - 12 - 16 - 2026-07-10 - bbb busco la lista de las ultimas solicitudes
+39 - 13 - 16 - 2026-07-10 - bbb busco la lista de logs
+40 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+41 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+42 - 3 - 16 - 2026-07-10 - bbb dio de baja el perfil de:yon@gmail.com
+43 - 7 - 16 - 2026-07-10 - bbb intento de modificar la solicitud: 24 pero fallo
+44 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+45 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+46 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+47 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+48 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+49 - 4 - 16 - 2026-07-10 - bbb restauro el perfil de:yon@gmail.com
+50 - 7 - 16 - 2026-07-10 - bbb intento de modificar la solicitud: 26 pero fallo
+51 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+52 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+53 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+54 - 13 - 16 - 2026-07-10 - bbb busco la lista de logs
+55 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+56 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+57 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+58 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+59 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+60 - 2 - 23 - 2026-07-10 - aaa inicio sesion
+61 - 9 - 23 - 2026-07-10 - aaa creo una solicitud de registro con los datos: mibombo@gmail.com _ mibombo 2 _ 777 _ guasaaaa _ 2026-05-01
+62 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+63 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+64 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+65 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+66 - 6 - 16 - 2026-07-10 - bbb creo el perfilgenetico de:mibombo 2
+67 - 7 - 16 - 2026-07-10 - bbb intento de modificar la solicitud: 32 pero fallo
+68 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+69 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+70 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+71 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+72 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+73 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+74 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+75 - 5 - 16 - 2026-07-10 - bbb modifico perfil de:mibombo@gmail.comcon los siguientes datos:12 _ mibombitttto _ 9090 _ guacamole _ 1 _ 2026-04-29 _ 23
+76 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+77 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+78 - 2 - 23 - 2026-07-10 - aaa inicio sesion
+79 - 10 - 23 - 2026-07-10 - aaa busco perfiles por id con el siguiente: 12
+80 - 8 - 23 - 2026-07-10 - aaa creo una solicitud de modificar con los datos: mibombo@gmail.com _ quiero queque _ 656 _ si porfa _ 2026-07-03
+81 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+82 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+83 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+84 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+85 - 5 - 16 - 2026-07-10 - bbb modifico perfil de:mibombo@gmail.comcon los siguientes datos:12 _ quiero queque _ 656 _ si porfa _ 1 _ 2026-07-03 _ 23
+86 - 7 - 16 - 2026-07-10 - bbb intento de modificar la solicitud: 33 pero fallo
+87 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+88 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+89 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+90 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+91 - 2 - 23 - 2026-07-10 - aaa inicio sesion
+92 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+93 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+94 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+95 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+96 - 2 - 23 - 2026-07-10 - aaa inicio sesion
+97 - 10 - 23 - 2026-07-10 - aaa busco todos los perfiles
+98 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+99 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+100 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+101 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+102 - 4 - 16 - 2026-07-10 - bbb restauro el perfil de:mail2@gmail.com
+103 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+104 - 4 - 16 - 2026-07-10 - bbb restauro el perfil de:Nuevo@gmail.com
+105 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+106 - 12 - 16 - 2026-07-10 - bbb busco la lista de las ultimas solicitudes
+107 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+108 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+109 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+110 - 2 - 23 - 2026-07-10 - aaa inicio sesion
+111 - 10 - 23 - 2026-07-10 - aaa busco perfiles por id con el siguiente: 12
+112 - 10 - 23 - 2026-07-10 - aaa busco todos los perfiles

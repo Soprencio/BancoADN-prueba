@@ -4,63 +4,49 @@
  */
 package com.mycompany.bancoadn.cliente;
  
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaCrearCuenta;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
  
-/**
- *Controlador de la pantalla Crear Cuenta.
- *
- *Protocolo con el servidor
- *
- *Solicitud → "CrearC - email - nombreCuenta - contraseña"
- *
- *ORDEN: email primero, luego nombre, luego contraseña
- *Ejemplo real: "CrearC - pepe@gmail.com - Pepe - 1234"
- *
- *Respuesta servidor:
- *"Creado completado con exito"  → cuenta creada OK
- *"Ya existe una cuenta con ese email" → email ya registrado */
 public class BancoADN_Grupo6_Ctrl_CrearCuenta implements ActionListener {
  
-    private BancoADN_Grupo6_Pant_CrearCuenta vista;
+    private IVistaCrearCuenta vista;
     private BancoADN_Grupo6_ClienteSocket clienteSocket;
  
-    public BancoADN_Grupo6_Ctrl_CrearCuenta(BancoADN_Grupo6_Pant_CrearCuenta vista, BancoADN_Grupo6_ClienteSocket clienteSocket) {
+    public BancoADN_Grupo6_Ctrl_CrearCuenta(IVistaCrearCuenta vista, BancoADN_Grupo6_ClienteSocket clienteSocket) {
         this.vista = vista;
         this.clienteSocket = clienteSocket;
- 
-        this.vista.agregarListenerBotonIngresar(this);
-        this.vista.agregarListenerVolver(e -> volverAlLogin());
     }
  
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String nombreCuenta = vista.getNombreCuenta().trim();
-        String email        = vista.getEmail().trim();
-        String contraseña   = vista.getContraseña();
+    public void ejecutarCrearCuenta(String nombreCuenta, String email, String contraseña) {
+        if (nombreCuenta == null) nombreCuenta = "";
+        if (email == null) email = "";
+        if (contraseña == null) contraseña = "";
+        nombreCuenta = nombreCuenta.trim();
+        email = email.trim();
  
-        // --- VALIDACIONES LOCALES ---
         if (nombreCuenta.isEmpty() || email.isEmpty() || contraseña.isEmpty()) {
             vista.mostrarError("Por favor completa todos los campos.");
             return;
         }
- 
         if (!validarEmail(email)) {
             vista.mostrarError("El formato del email es inválido.\nEjemplo válido: usuario@mail.com");
             return;
         }
- 
         if (contraseña.length() < 4) {
             vista.mostrarError("La contraseña debe tener al menos 4 caracteres.");
             return;
         }
- 
         if (nombreCuenta.length() < 3) {
             vista.mostrarError("El nombre debe tener al menos 3 caracteres.");
             return;
         }
- 
         crearCuenta(nombreCuenta, email, contraseña);
+    }
+ 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        ejecutarCrearCuenta(vista.getNombreCuenta(), vista.getEmail(), vista.getContraseña());
     }
  
     /**
@@ -104,11 +90,9 @@ public class BancoADN_Grupo6_Ctrl_CrearCuenta implements ActionListener {
         }
     }
  
-    private void volverAlLogin() {
+    public void volverAlLogin() {
         vista.dispose();
-        BancoADN_Grupo6_Pant_IniciarSesion vistaLogin = new BancoADN_Grupo6_Pant_IniciarSesion();
-        BancoADN_Grupo6_Ctrl_IniciarSesion ctrlLogin = new BancoADN_Grupo6_Ctrl_IniciarSesion(vistaLogin, clienteSocket);
-        vistaLogin.setVisible(true);
+        vista.navegarALogin();
     }
  
     private boolean validarEmail(String email) {

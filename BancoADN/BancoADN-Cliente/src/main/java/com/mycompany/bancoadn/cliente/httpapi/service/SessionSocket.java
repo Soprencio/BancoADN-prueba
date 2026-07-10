@@ -16,48 +16,27 @@ public class SessionSocket {
     private static String sessionEmail = null;
 
     /**
-     * Open a session socket, send IniciarS, and return the login response.
-     * The socket stays open for reuse in subsequent sendCommand/sendListCommand calls.
-     * AuthService.login() uses this to authenticate and create the persistent socket
-     * in one step, avoiding a duplicate IniciarS.
-     *
-     * @param email the email to authenticate with (password must be in AuthService.passwordStore)
-     * @return the login response ("1"=user, "2"=admin), or null on failure
+     * Get the persistent session socket if still connected.
+     * The socket must have been previously set via setSocket() after a successful login.
+     * @param email the expected session email (for validation)
+     * @return the connected socket, or null if no active session
      */
-    public static synchronized String openSession(String email) {
-        String password = AuthService.getPassword(email);
-        if (password == null) {
-            return null;
+    public static synchronized BancoADN_Grupo6_ClienteSocket getSocket(String email) {
+        if (sessionSocket != null && sessionSocket.estaConectado() && email.equals(sessionEmail)) {
+            return sessionSocket;
         }
-
-        BancoADN_Grupo6_ClienteSocket socket = new BancoADN_Grupo6_ClienteSocket();
-        if (!socket.estaConectado()) {
-            return null;
-        }
-
-        String loginResp = socket.enviarYRecibir("IniciarS - " + email + " - " + password);
-        if (loginResp == null) {
-            socket.desconectar();
-            return null;
-        }
-
-        sessionSocket = socket;
-        sessionEmail = email;
-        return loginResp.trim();
+        return null;
     }
 
     /**
-     * Get (or create) the persistent session socket.
-     * Only opens a new socket if none is currently connected.
-     * @param email the email to authenticate with (only used if reopening)
-     * @return the connected socket, or null if connection/login fails
+     * Store an authenticated socket for reuse across bridge requests.
      */
-    public static synchronized BancoADN_Grupo6_ClienteSocket getSocket(String email) {
-        if (sessionSocket != null && sessionSocket.estaConectado()) {
-            return sessionSocket;
+    public static synchronized void setSocket(BancoADN_Grupo6_ClienteSocket socket, String email) {
+        if (sessionSocket != null && sessionSocket != socket) {
+            sessionSocket.desconectar();
         }
-        String loginResp = openSession(email);
-        return (loginResp != null) ? sessionSocket : null;
+        sessionSocket = socket;
+        sessionEmail = email;
     }
 
     /**

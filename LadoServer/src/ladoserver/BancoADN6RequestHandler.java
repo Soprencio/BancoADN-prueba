@@ -580,9 +580,10 @@ public class BancoADN6RequestHandler implements Runnable {
         }
         mutexModCuentaAsignada.release();
         
-        // Últimas 10 resueltas (más recientes)
+        // Últimas 10 resueltas (más recientes primero)
         int aux = Math.max(idsResueltas.size() - 10, 0);
         idsResueltas = idsResueltas.subList(aux, idsResueltas.size());
+        Collections.reverse(idsResueltas);
         
         // Buscar cada solicitud en Solicitud.txt
         mutexModSolicitud.acquire();

@@ -1,45 +1,27 @@
 package com.mycompany.bancoadn.cliente;
 
-import javax.swing.JOptionPane;
 import java.util.List;
 import java.util.ArrayList;
 import com.mycompany.bancoadn.cliente.ClasesModelo.CuentaPersonal;
 import com.mycompany.bancoadn.cliente.ClasesModelo.Solicitud;
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaMenuAdmin;
 
 
 public class BancoADN_Grupo6_Ctrl_MenuAdmin {
 
-    private final BancoADN_Grupo6_MenuAdmin     vista;
+    private final IVistaMenuAdmin vista;
     private final BancoADN_Grupo6_ClienteSocket clienteSocket;
-    private final CuentaPersonal adminLogueado; // Credencial de sesión
+    private final CuentaPersonal adminLogueado;
 
-    public BancoADN_Grupo6_Ctrl_MenuAdmin(BancoADN_Grupo6_MenuAdmin vista, 
+    public BancoADN_Grupo6_Ctrl_MenuAdmin(IVistaMenuAdmin vista, 
                                            BancoADN_Grupo6_ClienteSocket clienteSocket, 
                                            CuentaPersonal adminLogueado) {
         this.vista         = vista;
         this.clienteSocket = clienteSocket;
         this.adminLogueado = adminLogueado;
-
-        initListeners();
-        consultarSolicitudesPendientes();
     }
 
-    private void initListeners() {
-        vista.agregarListenerCerrarSesion(e -> manejarCerrarSesion());
-        vista.agregarListenerUltimasSolicitudes(e  -> abrirUltimasSolicitudes());
-        vista.agregarListenerLogs(e                -> abrirLogs());
-        vista.agregarListenerAdministrarPerfiles(e -> abrirAdministrarPerfiles());
-    }
-
-    // ════════════════════════════════════════════════════════
-    // ── LÓGICA DE CONTROL (Alineada con Diagramas) ─────────
-    // ════════════════════════════════════════════════════════
-
-    /**
-     * Carga y muestra las solicitudes pendientes usando el snapshot.
-     * Corresponde a "consultarSolicitudesPendientes" en el Diagrama de Clases.
-     */
-    private void consultarSolicitudesPendientes() {
+    public void consultarSolicitudesPendientes() {
         vista.limpiarSolicitudes();
         List<Solicitud> solicitudes = obtenerSnapshotSolicitudes();
 
@@ -63,25 +45,19 @@ public class BancoADN_Grupo6_Ctrl_MenuAdmin {
                 lineaExtra  = emailTitular;
             }
 
-            final int idCapturado = sol.getIdSolicitud();
             vista.agregarTarjetaSolicitud(
                 sol.getIdSolicitud(),
                 mailMostrar,
                 sol.getFechaCreacion(),
                 sol.getTipo(),
                 lineaExtra,
-                e -> resolverSolicitud(idCapturado, 1),
-                e -> resolverSolicitud(idCapturado, 2)
+                sol.getIdSolicitud(),
+                sol.getDatosSolicitud()
             );
         }
     }
 
-    /**
-     * Punto de entrada para la resolución. 
-     * Implementa el OPT(estado==0) del diagrama de secuencia mediante verificación previa.
-     */
-    private void resolverSolicitud(int idSolicitud, int estadoNuevo) {
-        // 1. Verificación de estado (Snaphost preventivo para concurrencia)
+    public void resolverSolicitud(int idSolicitud, int estadoNuevo) {
         if (!verificarEstadoSolicitud(idSolicitud)) {
             vista.mostrarError("La solicitud #" + idSolicitud + " ya ha sido procesada por otro administrador.");
             consultarSolicitudesPendientes();
@@ -94,17 +70,11 @@ public class BancoADN_Grupo6_Ctrl_MenuAdmin {
 
         if (!vista.confirmar(pregunta)) return;
 
-        // 2. Envío de resolución al servidor
         String mensaje = "ResSol - " + idSolicitud + " - " + estadoNuevo + " - " + adminLogueado.getEmail();
         String respuesta = clienteSocket.enviarYRecibir(mensaje);
-
-        // 3. Procesar resultado
         procesarResolucion(idSolicitud, respuesta, estadoNuevo);
     }
 
-    /**
-     * Verifica si una solicitud sigue pendiente antes de actuar.
-     */
     private boolean verificarEstadoSolicitud(int idSolicitud) {
         List<Solicitud> pendientes = obtenerSnapshotSolicitudes();
         for (Solicitud s : pendientes) {
@@ -115,9 +85,6 @@ public class BancoADN_Grupo6_Ctrl_MenuAdmin {
         return false;
     }
 
-    /**
-     * Maneja la respuesta del servidor y actualiza la UI.
-     */
     private void procesarResolucion(int idSolicitud, String respuesta, int estadoNuevo) {
         if (respuesta == null) {
             vista.mostrarError("Sin respuesta del servidor.");
@@ -134,32 +101,6 @@ public class BancoADN_Grupo6_Ctrl_MenuAdmin {
         consultarSolicitudesPendientes();
     }
 
-    // ════════════════════════════════════════════════════════
-    // ── NAVEGACIÓN ─────────────────────────────────────────
-    // ════════════════════════════════════════════════════════
-
-    private void abrirLogs() {
-        BancoADN_Grupo6_Pant_Logs pantallaLogs = new BancoADN_Grupo6_Pant_Logs(true);
-        new BancoADN_Grupo6_Ctrl_Logs(pantallaLogs, clienteSocket, "ALL");
-        pantallaLogs.setVisible(true);
-    }
-
-    private void abrirUltimasSolicitudes() {
-        BancoADN_Grupo6_Pant_UltimasSolicitudes pantallaUlt = new BancoADN_Grupo6_Pant_UltimasSolicitudes();
-        new BancoADN_Grupo6_Ctrl_UltimasSolicitudes(pantallaUlt, clienteSocket);
-        pantallaUlt.setVisible(true);
-    }
-
-    private void abrirAdministrarPerfiles() {
-        BancoADN_Grupo6_Pant_AdminPerfiles pantallaPerf = new BancoADN_Grupo6_Pant_AdminPerfiles();
-        new BancoADN_Grupo6_Ctrl_AdminPerfiles(pantallaPerf, clienteSocket, adminLogueado);
-        pantallaPerf.setVisible(true);
-    }
-
-    // ════════════════════════════════════════════════════════
-    // ── SNAPSHOTS Y SOPORTE ────────────────────────────────
-    // ════════════════════════════════════════════════════════
-
     private List<Solicitud> obtenerSnapshotSolicitudes() {
         if (!clienteSocket.estaConectado()) {
             vista.mostrarError("Error de conexión con el servidor.");
@@ -173,16 +114,16 @@ public class BancoADN_Grupo6_Ctrl_MenuAdmin {
 
         for (String linea : lineas) {
             String[] p = linea.split(" - ", -1);
-            if (p.length < 6) continue; // Formato original 6 campos: ID(0)-Tipo(1)-Estado(2)-Datos(3)-IdPerfil(4)-Fecha(5)
+            if (p.length < 6) continue;
 
             try {
                 Solicitud sol = new Solicitud(
-                    Integer.parseInt(p[0].trim()), // idSolicitud
-                    p[1].trim(),                   // tipo
-                    Integer.parseInt(p[2].trim()), // estado
-                    p[3].trim(),                   // datosSolicitud
-                    p[4].equals("NULL") ? -1 : Integer.parseInt(p[4].trim()), // idPerfil
-                    p[5].trim()                    // fechaCreacion
+                    Integer.parseInt(p[0].trim()),
+                    p[1].trim(),
+                    Integer.parseInt(p[2].trim()),
+                    p[3].trim(),
+                    p[4].equals("NULL") ? -1 : Integer.parseInt(p[4].trim()),
+                    p[5].trim()
                 );
 
                 if (sol.isPendiente()) {
@@ -202,14 +143,12 @@ public class BancoADN_Grupo6_Ctrl_MenuAdmin {
         return respuesta.trim();
     }
 
-    private void manejarCerrarSesion() {
-        int opc = JOptionPane.showConfirmDialog(vista,
-            "¿Deseas cerrar sesión?", "Salir", JOptionPane.YES_NO_OPTION);
-        if (opc == JOptionPane.YES_OPTION) {
-            vista.dispose();
-            BancoADN_Grupo6_Pant_IniciarSesion loginVista = new BancoADN_Grupo6_Pant_IniciarSesion();
-            new BancoADN_Grupo6_Ctrl_IniciarSesion(loginVista, clienteSocket);
-            loginVista.setVisible(true);
-        }
+    public void manejarCerrarSesion() {
+        if (!vista.confirmar("¿Deseas cerrar sesión?")) return;
+        vista.dispose();
+        vista.navegarALogin();
     }
+
+    public CuentaPersonal getAdminLogueado() { return adminLogueado; }
+    public BancoADN_Grupo6_ClienteSocket getClienteSocket() { return clienteSocket; }
 }

@@ -1,4 +1,4 @@
-idIncremental=30
+idIncremental=33
 1 - registrar - 2 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
 2 - modificar - 2 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - 2 - 2026-05-20
 3 - registrar - 1 - Nuevo@gmail.com _ NombreCompleto _ CadSec _ Descripcion _ 2026-04-24 - NULL - 2026-05-20
@@ -18,14 +18,17 @@ idIncremental=30
 17 - registrar - 1 - ff@gmail.com _ fff _ 123123 _ hola _ 2026-06-12 - NULL - 2026-07-03
 18 - modificar - 2 - ff@gmail.com _ aaa _ aaa _ aaa _ 2026-07-03 - 11 - 2026-07-04
 19 - restaurar - 1 -   - 9 - 2026-07-04
-20 - baja - 0 -   - 9 - 2026-07-04
+20 - baja - 2 -   - 9 - 2026-07-04
 21 - modificar - 2 - yon@gmail.com _ aaa _ aaa _ aaa _ 2026-07-03 - 9 - 2026-07-04
 22 - registrar - 2 - yon@gmail.com _ 123 _ 123 _ 123 _ 2026-07-02 - NULL - 2026-07-04
-23 - restaurar - 0 -   - 9 - 2026-07-04
-24 - baja - 0 -   - 9 - 2026-07-04
+23 - restaurar - 2 -   - 9 - 2026-07-04
+24 - baja - 1 -   - 9 - 2026-07-04
 25 - registrar - 2 - manolo@gmail.com _ juancho _ 999 _ se _ 2026-06-30 - NULL - 2026-07-04
-26 - restaurar - 0 -   - 9 - 2026-07-04
+26 - restaurar - 1 -   - 9 - 2026-07-04
 27 - registrar - 0 - mibombo@gmail.com _ mi bombo clat _ 666777 _ codigo buenardo _ 2026-06-29 - NULL - 2026-07-08
 28 - registrar - 0 - mibombo@gmail.com _ aaa _ 333 _ aaa _ 2026-07-02 - NULL - 2026-07-08
-29 - registrar - 0 - mibombo@gmail.com _ aaa _ 111 _ aaaa _ 2026-07-01 - NULL - 2026-07-08
+29 - registrar - 2 - mibombo@gmail.com _ aaa _ 111 _ aaaa _ 2026-07-01 - NULL - 2026-07-08
 30 - registrar - 0 - mibombo@gmail.com _ aaa _ 888 _ 3 _ 2026-06-04 - NULL - 2026-07-08
+31 - registrar - 0 - mibombo@gmail.com _ aa _ 11 _ aaa _ 2026-07-01 - NULL - 2026-07-08
+32 - registrar - 1 - mibombo@gmail.com _ mibombo 2 _ 777 _ guasaaaa _ 2026-05-01 - NULL - 2026-07-10
+33 - modificar - 1 - mibombo@gmail.com _ quiero queque _ 656 _ si porfa _ 2026-07-03 - 12 - 2026-07-10

@@ -1,5 +1,6 @@
 package com.mycompany.bancoadn.cliente;
  
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaBuscarPerfil;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -17,7 +18,7 @@ import java.util.Map;
  * 
  * @author Admin
  */
-public class BancoADN_Grupo6_Pant_BuscarPerfil extends JFrame {
+public class BancoADN_Grupo6_Pant_BuscarPerfil extends JFrame implements IVistaBuscarPerfil {
  
     private final Color celesteEncabezado = new Color(169, 195, 207);
     private final Color grisFondoCuerpo = new Color(235, 235, 235);
@@ -240,6 +241,13 @@ public class BancoADN_Grupo6_Pant_BuscarPerfil extends JFrame {
         JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
  
+
+    @Override
+    public void navegarAMenu() {
+        this.dispose();
+        BancoADN_Grupo6_MenuUsuario menu = new BancoADN_Grupo6_MenuUsuario();
+        menu.setVisible(true);
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new BancoADN_Grupo6_Pant_BuscarPerfil().setVisible(true));
     }

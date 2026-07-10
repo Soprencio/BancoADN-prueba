@@ -1,5 +1,6 @@
 package com.mycompany.bancoadn.cliente;
 
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaAdminPerfiles;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 
-public class BancoADN_Grupo6_Pant_AdminPerfiles extends JFrame {
+public class BancoADN_Grupo6_Pant_AdminPerfiles extends JFrame implements IVistaAdminPerfiles {
 
     // ── Paleta ────────────────────────────────────────────
     private final Color azulClaro    = new Color(169, 195, 207);
@@ -261,6 +262,16 @@ public class BancoADN_Grupo6_Pant_AdminPerfiles extends JFrame {
     }
 
     // ── Helpers ───────────────────────────────────────────
+
+    // === IVistaAdminPerfiles bridge adapter ===
+    @Override
+    public void agregarTarjetaPerfil(int id, String nombre, String codigo,
+                                      String descripcion, String fecha,
+                                      String email, boolean activo,
+                                      int idPerfilParaAccion) {
+        agregarTarjetaPerfil(id, nombre, codigo, descripcion, fecha, email,
+            activo, null, null);
+    }
     private JButton crearBotonAzul(String texto) {
         JButton btn = new JButton(texto);
         btn.setBackground(azulBoton);

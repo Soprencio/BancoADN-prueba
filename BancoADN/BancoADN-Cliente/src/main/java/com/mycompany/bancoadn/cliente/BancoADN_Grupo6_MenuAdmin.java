@@ -1,5 +1,6 @@
 package com.mycompany.bancoadn.cliente;
 
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaMenuAdmin;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 
-public class BancoADN_Grupo6_MenuAdmin extends JFrame {
+public class BancoADN_Grupo6_MenuAdmin extends JFrame implements IVistaMenuAdmin {
 
     private final Color azulClaro    = new Color(169, 195, 207);
     private final Color azulBoton    = new Color(74, 144, 226);
@@ -286,6 +287,29 @@ public class BancoADN_Grupo6_MenuAdmin extends JFrame {
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
+
+    // === IVistaMenuAdmin interface methods ===
+
+    /**
+     * Bridge adapter: accepts the simplified interface parameters.
+     * The actual approval/rejection action listeners must be wired externally
+     * by the controller after this method populates the card.
+     */
+    @Override
+    public void agregarTarjetaSolicitud(int idSolicitud, String mail, String fecha,
+                                         String tipo, String lineaExtra,
+                                         int idSolicitudParaAccion,
+                                         String datosSolicitud) {
+        agregarTarjetaSolicitud(idSolicitud, mail, fecha, tipo, lineaExtra,
+            null, null);
+    }
+
+    @Override
+    public void navegarALogin() {
+        this.dispose();
+        BancoADN_Grupo6_Pant_IniciarSesion login = new BancoADN_Grupo6_Pant_IniciarSesion();
+        login.setVisible(true);
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new BancoADN_Grupo6_MenuAdmin().setVisible(true));
     }

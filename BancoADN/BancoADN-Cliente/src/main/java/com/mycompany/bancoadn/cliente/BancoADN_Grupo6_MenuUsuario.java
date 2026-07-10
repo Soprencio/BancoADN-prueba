@@ -4,13 +4,14 @@
  */
 package com.mycompany.bancoadn.cliente;
  
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaMenuUsuario;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
  
-public class BancoADN_Grupo6_MenuUsuario extends JFrame {
+public class BancoADN_Grupo6_MenuUsuario extends JFrame implements IVistaMenuUsuario {
     private final Color azulClaro       = new Color(169, 195, 207);
     private final Color azulBoton       = new Color(74, 144, 226);
     private final Color naranjaTexto    = new Color(211, 84, 0);
@@ -255,6 +256,43 @@ public class BancoADN_Grupo6_MenuUsuario extends JFrame {
         return btn;
     }
  
+
+    // === IVistaMenuUsuario interface methods ===
+
+    @Override
+    public boolean confirmar(String msg) {
+        return javax.swing.JOptionPane.showConfirmDialog(this, msg, "Confirmar",
+            javax.swing.JOptionPane.YES_NO_OPTION) == javax.swing.JOptionPane.YES_OPTION;
+    }
+
+    @Override
+    public void navegarABuscar() {
+        this.dispose();
+        BancoADN_Grupo6_Pant_BuscarPerfil buscar = new BancoADN_Grupo6_Pant_BuscarPerfil();
+        buscar.setVisible(true);
+    }
+
+    @Override
+    public void navegarASolicitarPerfil() {
+        this.dispose();
+        BancoADN_Grupo6_Pant_SolicitarPerfil solicitar = new BancoADN_Grupo6_Pant_SolicitarPerfil();
+        solicitar.setVisible(true);
+    }
+
+    @Override
+    public void navegarASolicitarModificacion() {
+        this.dispose();
+        BancoADN_Grupo6_Pant_SolicitarModPerfil mod = new BancoADN_Grupo6_Pant_SolicitarModPerfil();
+        mod.setVisible(true);
+    }
+
+    @Override
+    public void navegarALogin(String email, String nombre) {
+        this.dispose();
+        BancoADN_Grupo6_Pant_IniciarSesion login = new BancoADN_Grupo6_Pant_IniciarSesion();
+        login.setEmail(email);
+        login.setVisible(true);
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new BancoADN_Grupo6_MenuUsuario().setVisible(true));
     }

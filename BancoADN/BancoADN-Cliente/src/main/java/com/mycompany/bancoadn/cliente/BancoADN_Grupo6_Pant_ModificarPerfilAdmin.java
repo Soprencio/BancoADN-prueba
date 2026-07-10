@@ -1,5 +1,6 @@
 package com.mycompany.bancoadn.cliente;
 
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaModificarPerfilAdmin;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 
-public class BancoADN_Grupo6_Pant_ModificarPerfilAdmin extends javax.swing.JFrame {
+public class BancoADN_Grupo6_Pant_ModificarPerfilAdmin extends javax.swing.JFrame implements IVistaModificarPerfilAdmin {
 
     private static final java.util.logging.Logger logger =
         java.util.logging.Logger.getLogger(BancoADN_Grupo6_Pant_ModificarPerfilAdmin.class.getName());

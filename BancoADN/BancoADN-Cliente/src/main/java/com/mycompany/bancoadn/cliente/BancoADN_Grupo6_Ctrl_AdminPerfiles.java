@@ -4,42 +4,27 @@ import java.util.List;
 import java.util.ArrayList;
 import com.mycompany.bancoadn.cliente.ClasesModelo.CuentaPersonal;
 import com.mycompany.bancoadn.cliente.ClasesModelo.PerfilGenetico;
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaAdminPerfiles;
 
 public class BancoADN_Grupo6_Ctrl_AdminPerfiles {
 
-    private final BancoADN_Grupo6_Pant_AdminPerfiles vista;
-    private final BancoADN_Grupo6_ClienteSocket      clienteSocket;
-    private final CuentaPersonal adminLogueado; // Credencial de sesión
+    private final IVistaAdminPerfiles vista;
+    private final BancoADN_Grupo6_ClienteSocket clienteSocket;
+    private final CuentaPersonal adminLogueado;
 
-    public BancoADN_Grupo6_Ctrl_AdminPerfiles(BancoADN_Grupo6_Pant_AdminPerfiles vista,
+    public BancoADN_Grupo6_Ctrl_AdminPerfiles(IVistaAdminPerfiles vista,
                               BancoADN_Grupo6_ClienteSocket clienteSocket,
                               CuentaPersonal adminLogueado) {
         this.vista         = vista;
         this.clienteSocket = clienteSocket;
         this.adminLogueado    = adminLogueado;
-
-        initListeners();
-        buscarPerfilesPorCriterio("Todos", "");   // Carga inicial
     }
 
-    private void initListeners() {
-        vista.agregarListenerVolver(e -> vista.dispose());
-        vista.agregarListenerBuscar(e -> {
-            String filtro = vista.getTipoFiltro();
-            String texto  = vista.getTextoBusqueda();
-            buscarPerfilesPorCriterio(filtro, texto);
-        });
-    }
-
-    // ════════════════════════════════════════════════════════
-    // ── LÓGICA DE CONTROL (Alineada con Diagramas) ─────────
-    // ════════════════════════════════════════════════════════
-
-    /**
-     * Buscar perfiles. Corresponde a "buscarPerfilesPorCriterio" en el Diagrama de Clases.
-     */
-    private void buscarPerfilesPorCriterio(String filtro, String texto) {
+    public void ejecutarBusqueda(String filtro, String texto) {
         vista.limpiarPerfiles();
+
+        if (filtro == null) filtro = "Todos";
+        if (texto == null) texto = "";
 
         if (filtro.equals("ID") && !texto.isEmpty()) {
             try {
@@ -68,22 +53,12 @@ public class BancoADN_Grupo6_Ctrl_AdminPerfiles {
                 perfil.getFechaMuestra(), 
                 emailTitular, 
                 perfil.isActivo(),
-                e -> abrirModificarPerfil(emailTitular, perfil),
-                e -> {
-                    if (perfil.isActivo()) {
-                        solicitarBajaPerfil(emailTitular);
-                    } else {
-                        solicitarRestaurarPerfil(emailTitular);
-                    }
-                }
+                perfil.getIdPerfil()
             );
         }
     }
 
-    /**
-     * Solicitar baja. Corresponde a "solicitarBajaPerfil" en el Diagrama de Clases.
-     */
-    private void solicitarBajaPerfil(String emailTitular) {
+    public void solicitarBajaPerfil(String emailTitular) {
         if (!vista.confirmar("¿Confirmás dar de baja el perfil de " + emailTitular + "?")) return;
 
         String respuesta = clienteSocket.enviarYRecibir("DarDBaja - " + emailTitular);
@@ -92,13 +67,9 @@ public class BancoADN_Grupo6_Ctrl_AdminPerfiles {
         } else {
             vista.mostrarError("No se pudo dar de baja el perfil.");
         }
-        buscarPerfilesPorCriterio(vista.getTipoFiltro(), vista.getTextoBusqueda());
     }
 
-    /**
-     * Solicitar restauración. Corresponde a "solicitarRestaurarPerfil" en el Diagrama de Clases.
-     */
-    private void solicitarRestaurarPerfil(String emailTitular) {
+    public void solicitarRestaurarPerfil(String emailTitular) {
         if (!vista.confirmar("¿Confirmás restaurar el perfil de " + emailTitular + "?")) return;
 
         String respuesta = clienteSocket.enviarYRecibir("DarDRestaur - " + emailTitular);
@@ -107,12 +78,19 @@ public class BancoADN_Grupo6_Ctrl_AdminPerfiles {
         } else {
             vista.mostrarError("No se pudo restaurar el perfil.");
         }
-        buscarPerfilesPorCriterio(vista.getTipoFiltro(), vista.getTextoBusqueda());
     }
 
-    // ════════════════════════════════════════════════════════
-    // ── SNAPSHOTS Y SOPORTE ────────────────────────────────
-    // ════════════════════════════════════════════════════════
+    public void abrirModificarPerfil(String emailTitular, int idPerfil) {
+        List<PerfilGenetico> perfiles = obtenerSnapshotPerfiles("ID", String.valueOf(idPerfil));
+        if (perfiles.isEmpty()) {
+            vista.mostrarError("No se encontró el perfil.");
+            return;
+        }
+        PerfilGenetico perfil = perfiles.get(0);
+        vista.mostrarMensaje("MODIFICAR:" + idPerfil + "|" + emailTitular + "|"
+            + perfil.getNombreCompleto() + "|" + perfil.getCodigoSecuencia() + "|"
+            + perfil.getDescripcion() + "|" + perfil.getFechaMuestra());
+    }
 
     private List<PerfilGenetico> obtenerSnapshotPerfiles(String filtro, String texto) {
         if (!clienteSocket.estaConectado()) {
@@ -126,7 +104,6 @@ public class BancoADN_Grupo6_Ctrl_AdminPerfiles {
         } else if (filtro.equals("Nombre") && !texto.isEmpty()) {
             comando = "BuscarIDNOM - NULL - " + texto;
         } else {
-            // "Todos" → Enviar NULL en ambos para que el servidor devuelva todo
             comando = "BuscarIDNOM - NULL - NULL";
         }
 
@@ -143,13 +120,13 @@ public class BancoADN_Grupo6_Ctrl_AdminPerfiles {
 
             try {
                 PerfilGenetico perfil = new PerfilGenetico(
-                    Integer.parseInt(p[0].trim()), // idPerfil
-                    p[1].trim(),                   // nombreCompleto
-                    p[2].trim(),                   // codigoSecuencia
-                    p[3].trim(),                   // descripcion
-                    Integer.parseInt(p[4].trim()), // estado: 1=ACTIVO, 0=INACTIVO
-                    p[5].trim(),                   // fechaMuestra
-                    -1                             // idCuenta
+                    Integer.parseInt(p[0].trim()),
+                    p[1].trim(),
+                    p[2].trim(),
+                    p[3].trim(),
+                    Integer.parseInt(p[4].trim()),
+                    p[5].trim(),
+                    -1
                 );
                 lista.add(perfil);
             } catch (NumberFormatException e) {
@@ -162,17 +139,5 @@ public class BancoADN_Grupo6_Ctrl_AdminPerfiles {
     private String obtenerEmailTitular(int idPerfil) {
         String respuesta = clienteSocket.enviarYRecibir("EmailPorPerfil - " + idPerfil);
         return (respuesta == null || respuesta.isBlank()) ? "—" : respuesta.trim();
-    }
-
-    // ── Abrir ventana modificar directo ───────────────────
-    private void abrirModificarPerfil(String emailTitular, PerfilGenetico perfil) {
-        BancoADN_Grupo6_Pant_ModificarPerfilAdmin vistaModif = new BancoADN_Grupo6_Pant_ModificarPerfilAdmin();
-        vistaModif.setNombrePerfil(perfil.getNombreCompleto());
-        vistaModif.setCodigoSecuencia(perfil.getCodigoSecuencia());
-        vistaModif.setDescripcion(perfil.getDescripcion());
-        vistaModif.setFechaMuestra(perfil.getFechaMuestra());
-
-        new BancoADN_Grupo6_Ctrl_ModificarPerfilAdmin(vistaModif, clienteSocket, emailTitular, adminLogueado, vista);
-        vistaModif.setVisible(true);
     }
 }

@@ -6,9 +6,7 @@ package com.mycompany.bancoadn.cliente;
 
 import com.mycompany.bancoadn.cliente.ClasesModelo.CuentaPersonal;
 import com.mycompany.bancoadn.cliente.ClasesModelo.PerfilGenetico;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaMenuUsuario;
 
 /**
  * Controlador del menú de usuario.
@@ -27,27 +25,16 @@ import javax.swing.JOptionPane;
  */
 public class BancoADN_Grupo6_Ctrl_MenuUsuario {
 
-    private BancoADN_Grupo6_MenuUsuario vista;
+    private IVistaMenuUsuario vista;
     private BancoADN_Grupo6_ClienteSocket clienteSocket;
     private CuentaPersonal cuentaActual; // Credencial de sesión
 
-    public BancoADN_Grupo6_Ctrl_MenuUsuario(BancoADN_Grupo6_MenuUsuario vista,
+    public BancoADN_Grupo6_Ctrl_MenuUsuario(IVistaMenuUsuario vista,
                                              BancoADN_Grupo6_ClienteSocket clienteSocket,
                                              CuentaPersonal cuentaActual) {
         this.vista = vista;
         this.clienteSocket = clienteSocket;
         this.cuentaActual = cuentaActual;
-        initListeners();
-    }
-
-    private void initListeners() {
-        vista.agregarListenerBuscar(e -> manejarBuscar());
-        vista.agregarListenerSolicitarPerfil(e -> manejarSolicitarPerfil());
-        vista.agregarListenerSolicitarModificacion(e -> manejarSolicitarModificacion());
-        vista.agregarListenerSolicitarDesactivar(e -> manejarSolicitarDesactivar());
-        vista.agregarListenerSolicitarReactivar(e -> manejarSolicitarReactivar());
-        vista.agregarListenerCerrarSesion(e -> manejarCerrarSesion());
-        vista.agregarListenerVerPerfil(e -> manejarVerPerfil());
     }
 
     // ════════════════════════════════════════════════════════
@@ -107,14 +94,9 @@ public class BancoADN_Grupo6_Ctrl_MenuUsuario {
     // ── MANEJO DE BOTONES ──────────────────────────────────
     // ════════════════════════════════════════════════════════
 
-    // ── BUSCAR OTROS PERFILES ──────────────────────────────
-    private void manejarBuscar() {
-        BancoADN_Grupo6_Pant_BuscarPerfil vistaBuscarPerfil = new BancoADN_Grupo6_Pant_BuscarPerfil();
-        BancoADN_Grupo6_Ctrl_BuscarPerfil ctrlBuscarPerfil  = new BancoADN_Grupo6_Ctrl_BuscarPerfil(
-            vistaBuscarPerfil, clienteSocket, cuentaActual // pasa la credencial de sesión
-        );
-        vistaBuscarPerfil.setVisible(true);
+    public void manejarBuscar() {
         vista.dispose();
+        vista.navegarABuscar();
     }
 
     // ── VER PERFIL ACTUAL ──────────────────────────────────
@@ -122,7 +104,7 @@ public class BancoADN_Grupo6_Ctrl_MenuUsuario {
      * Obtiene un snapshot del perfil y lo muestra en el panel derecho.
      * El snapshot muere al finalizar este método.
      */
-    private void manejarVerPerfil() {
+    public void manejarVerPerfil() {
         PerfilGenetico perfil = obtenerSnapshotPerfil();
 
         if (perfil == null) {
@@ -141,83 +123,70 @@ public class BancoADN_Grupo6_Ctrl_MenuUsuario {
         );
     }
 
-    // ── SOLICITAR REGISTRAR PERFIL ─────────────────────────
-    /**
-     * REGLA DE NEGOCIO: Solo si el usuario NO tiene perfil (snapshot == null)
-     */
-    private void manejarSolicitarPerfil() {
+    public String validarSolicitarPerfil() {
         PerfilGenetico perfil = obtenerSnapshotPerfil();
-
         if (perfil != null) {
-            vista.mostrarError("Ya tienes un perfil vinculado a tu cuenta.\n"
-                    + "No puedes solicitar un nuevo perfil.");
-            return;
+            return "Ya tienes un perfil vinculado a tu cuenta. No puedes solicitar un nuevo perfil.";
         }
-
-        BancoADN_Grupo6_Pant_SolicitarPerfil vistaSolicitarPerfil = new BancoADN_Grupo6_Pant_SolicitarPerfil();
-        BancoADN_Grupo6_Ctrl_SolicitarPerfil ctrlSolicitarPerfil  = new BancoADN_Grupo6_Ctrl_SolicitarPerfil(
-            vistaSolicitarPerfil, clienteSocket, cuentaActual
-        );
-        vistaSolicitarPerfil.setVisible(true);
-        vista.dispose();
+        return null;
     }
 
-    // ── SOLICITAR MODIFICACIÓN ─────────────────────────────
-    /**
-     * REGLA DE NEGOCIO: Solo si perfil existe Y está ACTIVO
-     * El Ctrl_SolicitarModPerfil hará su propia re-consulta para datos frescos.
-     */
-    private void manejarSolicitarModificacion() {
-        PerfilGenetico perfil = obtenerSnapshotPerfil();
-
-        if (perfil == null) {
-            vista.mostrarError("No tienes un perfil registrado.\n"
-                    + "Primero debes solicitar un perfil para poder modificarlo.");
+    public void manejarSolicitarPerfil() {
+        String error = validarSolicitarPerfil();
+        if (error != null) {
+            vista.mostrarError(error);
             return;
         }
-
-        if (!perfil.isActivo()) {
-            vista.mostrarError("Tu perfil está desactivado.\n"
-                    + "Debes restaurarlo antes de poder modificarlo.");
-            return;
-        }
-
-        // Solo pasamos la credencial de sesión, NO el perfil
-        // Ctrl_SolicitarModPerfil hará su propia re-consulta para datos frescos
-        BancoADN_Grupo6_Pant_SolicitarModPerfil vistaMod = new BancoADN_Grupo6_Pant_SolicitarModPerfil();
-        BancoADN_Grupo6_Ctrl_SolicitarModPerfil ctrlMod  = new BancoADN_Grupo6_Ctrl_SolicitarModPerfil(
-            vistaMod, clienteSocket, cuentaActual
-        );
-        vistaMod.setVisible(true);
         vista.dispose();
+        vista.navegarASolicitarPerfil();
+    }
+
+    public String validarSolicitarModificacion() {
+        PerfilGenetico perfil = obtenerSnapshotPerfil();
+        if (perfil == null) {
+            return "No tienes un perfil registrado. Primero debes solicitar un perfil para poder modificarlo.";
+        }
+        if (!perfil.isActivo()) {
+            return "Tu perfil está desactivado. Debes restaurarlo antes de poder modificarlo.";
+        }
+        return null;
+    }
+
+    public void manejarSolicitarModificacion() {
+        String error = validarSolicitarModificacion();
+        if (error != null) {
+            vista.mostrarError(error);
+            return;
+        }
+        vista.dispose();
+        vista.navegarASolicitarModificacion();
     }
 
     // ── SOLICITAR DESACTIVAR ───────────────────────────────
     /**
      * REGLA DE NEGOCIO: Solo si perfil existe Y está ACTIVO
      */
-    private void manejarSolicitarDesactivar() {
+    public String validarSolicitarDesactivar() {
         PerfilGenetico perfil = obtenerSnapshotPerfil();
-
         if (perfil == null) {
-            vista.mostrarError("No tienes un perfil registrado.\nNo hay nada que desactivar.");
-            return;
+            return "No tienes un perfil registrado.\nNo hay nada que desactivar.";
         }
-
         if (!perfil.isActivo()) {
-            vista.mostrarError("Tu perfil ya está desactivado.\n"
-                    + "Si deseas reactivarlo, usa el botón 'Solicitar Reactivar Perfil'.");
+            return "Tu perfil ya está desactivado.\nSi deseas reactivarlo, usa 'Solicitar Reactivar Perfil'.";
+        }
+        return null;
+    }
+
+    public void manejarSolicitarDesactivar() {
+        String error = validarSolicitarDesactivar();
+        if (error != null) {
+            vista.mostrarError(error);
             return;
         }
-
-        int confirm = JOptionPane.showConfirmDialog(vista,
-            "¿Estás seguro de que deseas solicitar la desactivación de tu perfil?",
-            "Confirmar Solicitud",
-            JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            solicitarDesactivarPerfil();
+        if (!vista.confirmar("¿Estás seguro de que deseas solicitar la desactivación de tu perfil?")) {
+            return;
         }
+        solicitarDesactivarPerfil();
     }
 
     private void solicitarDesactivarPerfil() {
@@ -226,33 +195,27 @@ public class BancoADN_Grupo6_Ctrl_MenuUsuario {
         procesarRespuestaSolicitud(respuesta, "desactivación");
     }
 
-    // ── SOLICITAR REACTIVAR ────────────────────────────────
-    /**
-     * REGLA DE NEGOCIO: Solo si perfil existe Y está INACTIVO
-     */
-    private void manejarSolicitarReactivar() {
+    public String validarSolicitarReactivar() {
         PerfilGenetico perfil = obtenerSnapshotPerfil();
-
         if (perfil == null) {
-            vista.mostrarError("No tienes un perfil registrado.\n"
-                    + "Usa el botón 'Solicitar Perfil' para crear uno.");
-            return;
+            return "No tienes un perfil registrado.\nUsa 'Solicitar Perfil' para crear uno.";
         }
-
         if (perfil.isActivo()) {
-            vista.mostrarError("Tu perfil ya está activo.\n"
-                    + "Si deseas desactivarlo, usa el botón 'Solicitar Desactivar Perfil'.");
+            return "Tu perfil ya está activo.\nSi deseas desactivarlo, usa 'Solicitar Desactivar Perfil'.";
+        }
+        return null;
+    }
+
+    public void manejarSolicitarReactivar() {
+        String error = validarSolicitarReactivar();
+        if (error != null) {
+            vista.mostrarError(error);
             return;
         }
-
-        int confirm = JOptionPane.showConfirmDialog(vista,
-            "¿Estás seguro de que deseas solicitar la reactivación de tu perfil?",
-            "Confirmar Solicitud",
-            JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            solicitarReactivarPerfil();
+        if (!vista.confirmar("¿Estás seguro de que deseas solicitar la reactivación de tu perfil?")) {
+            return;
         }
+        solicitarReactivarPerfil();
     }
 
     private void solicitarReactivarPerfil() {
@@ -282,17 +245,12 @@ public class BancoADN_Grupo6_Ctrl_MenuUsuario {
     }
 
     // ── CERRAR SESIÓN ──────────────────────────────────────
-    private void manejarCerrarSesion() {
-        int opc = JOptionPane.showConfirmDialog(vista,
-            "¿Deseas cerrar sesión?",
-            "Salir",
-            JOptionPane.YES_NO_OPTION);
-
-        if (opc == JOptionPane.YES_OPTION) {
-            vista.dispose();
-            BancoADN_Grupo6_Pant_IniciarSesion loginVista = new BancoADN_Grupo6_Pant_IniciarSesion();
-            BancoADN_Grupo6_Ctrl_IniciarSesion ctrlLogin  = new BancoADN_Grupo6_Ctrl_IniciarSesion(loginVista, clienteSocket);
-            loginVista.setVisible(true);
-        }
+    public void manejarCerrarSesion() {
+        if (!vista.confirmar("¿Deseas cerrar sesión?")) return;
+        vista.dispose();
+        vista.navegarALogin(cuentaActual.getEmail(), cuentaActual.getNombreCuenta());
     }
+
+    public CuentaPersonal getCuentaActual() { return cuentaActual; }
+    public BancoADN_Grupo6_ClienteSocket getClienteSocket() { return clienteSocket; }
 }

@@ -1,5 +1,6 @@
 package com.mycompany.bancoadn.cliente;
  
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaIniciarSesion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
  
-public class BancoADN_Grupo6_Pant_IniciarSesion extends javax.swing.JFrame {
+public class BancoADN_Grupo6_Pant_IniciarSesion extends javax.swing.JFrame implements IVistaIniciarSesion {
  
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BancoADN_Grupo6_Pant_IniciarSesion.class.getName());
  
@@ -229,6 +230,29 @@ public class BancoADN_Grupo6_Pant_IniciarSesion extends javax.swing.JFrame {
         });
     }
  
+    @Override
+    public void navegarARegistro() {
+        BancoADN_Grupo6_Pant_CrearCuenta p = new BancoADN_Grupo6_Pant_CrearCuenta();
+        // The caller must attach the controller
+        p.setVisible(true);
+    }
+
+    @Override
+    public void navegarAMenuUsuario(String email, String nombre, int idRol) {
+        BancoADN_Grupo6_MenuUsuario menu = new BancoADN_Grupo6_MenuUsuario();
+        menu.setEmailUsuario(email);
+        menu.setNombreUsuario(nombre);
+        menu.setVisible(true);
+    }
+
+    @Override
+    public void navegarAMenuAdmin(String email, String nombre, int idRol) {
+        BancoADN_Grupo6_MenuAdmin menu = new BancoADN_Grupo6_MenuAdmin();
+        menu.setEmailAdmin(email);
+        menu.setNombreAdmin(nombre);
+        menu.setVisible(true);
+    }
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new BancoADN_Grupo6_Pant_IniciarSesion().setVisible(true));
     }

@@ -4,6 +4,7 @@
  */
 package com.mycompany.bancoadn.cliente;
  
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaSolicitarModPerfil;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,7 +33,7 @@ import java.awt.event.ActionListener;
  * 
  * @author Admin
  */
-public class BancoADN_Grupo6_Pant_SolicitarModPerfil extends javax.swing.JFrame {
+public class BancoADN_Grupo6_Pant_SolicitarModPerfil extends javax.swing.JFrame implements IVistaSolicitarModPerfil {
  
     private static final java.util.logging.Logger logger = 
         java.util.logging.Logger.getLogger(BancoADN_Grupo6_Pant_SolicitarModPerfil.class.getName());
@@ -240,6 +241,13 @@ public class BancoADN_Grupo6_Pant_SolicitarModPerfil extends javax.swing.JFrame 
         btnVolver.addActionListener(listener);
     }
  
+
+    @Override
+    public void navegarAMenu() {
+        this.dispose();
+        BancoADN_Grupo6_MenuUsuario menu = new BancoADN_Grupo6_MenuUsuario();
+        menu.setVisible(true);
+    }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new BancoADN_Grupo6_Pant_SolicitarModPerfil().setVisible(true));
     }

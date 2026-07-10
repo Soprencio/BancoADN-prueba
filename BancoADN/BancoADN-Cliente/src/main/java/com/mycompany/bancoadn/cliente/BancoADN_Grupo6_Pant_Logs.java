@@ -1,5 +1,6 @@
 package com.mycompany.bancoadn.cliente;
 
+import com.mycompany.bancoadn.cliente.httpapi.bridge.interfaces.IVistaLogs;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 
-public class BancoADN_Grupo6_Pant_Logs extends JFrame {
+public class BancoADN_Grupo6_Pant_Logs extends JFrame implements IVistaLogs {
 
     private final Color azulClaro    = new Color(169, 195, 207);
     private final Color grisFondo    = new Color(235, 235, 235);
