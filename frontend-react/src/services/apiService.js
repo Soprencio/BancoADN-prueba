@@ -105,7 +105,6 @@ const authService = {
       });
       const data = await handleResponse(response);
       // Expecting: { idCuenta, nombreCuenta, email, idRol } or at least message
-      // If we get user data, use it; otherwise construct from request
       const user = data.idCuenta
         ? {
             idCuenta: data.idCuenta,
@@ -114,10 +113,10 @@ const authService = {
             idRol: data.idRol,
           }
         : {
-            idCuenta: -1, // placeholder if not returned
+            idCuenta: -1,
             nombreCuenta,
             email,
-            idRol: 1, // default role
+            idRol: 1,
           };
       return { success: true, user };
     } catch (error) {
@@ -139,7 +138,6 @@ const cuentasService = {
       });
       return await handleResponse(response);
     } catch (error) {
-      // If endpoint doesn't exist, return empty array for compatibility
       console.warn('Cuentas endpoint not available:', error.message);
       return [];
     }
@@ -201,7 +199,6 @@ const perfilesService = {
       const cuenta = cuentas.find((c) => c.email === email);
       if (!cuenta) return null;
 
-      // Then get perfil by idCuenta (assuming endpoint exists)
       const perfilResponse = await fetch(`${API_BASE}/perfiles/${cuenta.idCuenta}`);
       if (!perfilResponse.ok) {
         if (perfilResponse.status === 404) return null;
@@ -417,7 +414,7 @@ const solicitudesService = {
       const data = await handleResponse(response);
       // Return solicitud object with server-generated id and estado=0 (pending)
       return {
-        idSolicitud: data.idSolicitud || Date.now(), // fallback if not returned
+        idSolicitud: data.idSolicitud || Date.now(),
         tipo,
         estado: 0,
         fechaSolicitud: new Date().toISOString().split('T')[0],
@@ -446,12 +443,10 @@ const solicitudesService = {
         headers: getHeaders(true, adminEmail),
       });
       const data = await handleResponse(response);
-      // Return updated solicitud object (approximate)
       return {
         idSolicitud: id,
-        estado: 1, // approved
+        estado: 1,
         idCuentaAdmin: data.idCuentaAdmin || null,
-        // other fields would need to be fetched; returning minimal for now
         ...(data.solicitud || {}),
       };
     } catch (error) {
@@ -474,7 +469,7 @@ const solicitudesService = {
       const data = await handleResponse(response);
       return {
         idSolicitud: id,
-        estado: 2, // rejected
+        estado: 2,
         idCuentaAdmin: data.idCuentaAdmin || null,
         ...(data.solicitud || {}),
       };

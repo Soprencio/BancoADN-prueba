@@ -109,7 +109,7 @@ public class BridgeEndpoints {
         });
 
         // ════════════════════════════════════════════════════════
-        //  CUENTAS (stub – never truly implemented in old backend)
+        //  CUENTAS
         // ════════════════════════════════════════════════════════
 
         app.get("/api/cuentas", ctx -> {
@@ -177,7 +177,6 @@ public class BridgeEndpoints {
 
             CuentaPersonal cuenta = new CuentaPersonal(-1, callerEmail.split("@")[0], "", callerEmail, isAdmin ? 2 : 1);
 
-            // Normalize tipo: frontend sends lowercase ("nombre", "codigo", "todos")
             String tipoNorm;
             if (tipo.equalsIgnoreCase("nombre")) {
                 tipoNorm = "Nombre";

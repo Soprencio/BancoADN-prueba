@@ -115,7 +115,6 @@ const authService = {
     };
     accounts.push(newAccount);
     const { password: _, ...userWithoutPass } = newAccount;
-    // Optionally set cuentaAsignada on registration? Not needed.
     return { success: true, user: userWithoutPass };
   },
 };

@@ -4,22 +4,16 @@ import com.mycompany.bancoadn.cliente.BancoADN_Grupo6_ClienteSocket;
 
 import java.util.List;
 
-/**
- * Manages a persistent socket connection for an authenticated session.
- * Opens one socket, sends IniciarS once, and reuses it for all subsequent
- * commands. This avoids duplicate "Iniciar sesión" and "Conectarse al servidor"
- * logs that occur when opening a fresh socket + login per command.
- */
+/** Gestiona una conexion socket persistente para la sesion autenticada */
 public class SessionSocket {
 
     private static BancoADN_Grupo6_ClienteSocket sessionSocket = null;
     private static String sessionEmail = null;
 
     /**
-     * Get the persistent session socket if still connected.
-     * The socket must have been previously set via setSocket() after a successful login.
-     * @param email the expected session email (for validation)
-     * @return the connected socket, or null if no active session
+     * Obtiene el socket persistente de la sesion si sigue conectado.
+     * @param email email de la sesion esperada (para validacion)
+     * @return el socket conectado, o null si no hay sesion activa
      */
     public static synchronized BancoADN_Grupo6_ClienteSocket getSocket(String email) {
         if (sessionSocket != null && sessionSocket.estaConectado() && email.equals(sessionEmail)) {
@@ -29,7 +23,7 @@ public class SessionSocket {
     }
 
     /**
-     * Store an authenticated socket for reuse across bridge requests.
+     * Guarda un socket autenticado para reutilizarlo entre requests del bridge.
      */
     public static synchronized void setSocket(BancoADN_Grupo6_ClienteSocket socket, String email) {
         if (sessionSocket != null && sessionSocket != socket) {
@@ -40,10 +34,10 @@ public class SessionSocket {
     }
 
     /**
-     * Send a single-command on the session socket and return the single-line response.
-     * @param email email for (re)authentication if socket needs reopening
-     * @param command the command to send
-     * @return the response line, or null on failure
+     * Envia un comando individual en el socket de sesion y devuelve la respuesta.
+     * @param email email para (re)autenticacion si el socket necesita reconexion
+     * @param command el comando a enviar
+     * @return la linea de respuesta, o null si falla
      */
     public static synchronized String sendCommand(String email, String command) {
         BancoADN_Grupo6_ClienteSocket socket = getSocket(email);
@@ -54,10 +48,10 @@ public class SessionSocket {
     }
 
     /**
-     * Send a list-command on the session socket and return all lines until FINISH.
-     * @param email email for (re)authentication if socket needs reopening
-     * @param command the command to send
-     * @return the list of response lines, or null on failure
+     * Envia un comando de lista en el socket de sesion y devuelve todas las lineas hasta FINISH.
+     * @param email email para (re)autenticacion si el socket necesita reconexion
+     * @param command el comando a enviar
+     * @return la lista de lineas de respuesta, o null si falla
      */
     public static synchronized List<String> sendListCommand(String email, String command) {
         BancoADN_Grupo6_ClienteSocket socket = getSocket(email);
@@ -68,7 +62,7 @@ public class SessionSocket {
     }
 
     /**
-     * Close the persistent session socket.
+     * Cierra el socket persistente de la sesion.
      */
     public static synchronized void close() {
         if (sessionSocket != null) {
@@ -79,7 +73,7 @@ public class SessionSocket {
     }
 
     /**
-     * Check whether a session socket is currently open.
+     * Verifica si el socket de sesion esta actualmente abierto.
      */
     public static synchronized boolean isActive() {
         return sessionSocket != null && sessionSocket.estaConectado();

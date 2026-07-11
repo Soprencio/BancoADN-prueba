@@ -23,9 +23,6 @@ function AdminDashboard() {
   const [confirmModal, setConfirmModal] = useState({ open: false, mensaje: '', onConfirm: null });
   const [editModal, setEditModal] = useState({ open: false, perfil: null });
   const [loading, setLoading] = useState(false);
-  // Track last search type+term so we can fix incorrect LadoServer log descriptions
-  // (LadoServer BuscarPerfiles reassigns the id param in the Todos/Nombre loops,
-  //  causing "busco perfiles por id" to be logged instead of the correct message)
   const lastSearchRef = useRef({ type: 'Todos', term: '' });
 
   const cargarPendientes = async () => {
@@ -67,10 +64,6 @@ function AdminDashboard() {
     setLoading(true);
     try {
       const logs = await logsService.getLogs(user.email);
-      // Fix LadoServer log bug: BuscarPerfiles reassigns the id param at
-      // lines 373/383, causing "busco perfiles por id" for Name/Todos searches.
-      // The most recent BuscarPerfiles log corresponds to the last search
-      // performed in this session — correct its message if needed.
       const last = lastSearchRef.current;
       if (last.type === 'Nombre' || last.type === 'nombre' || last.type === 'Todos') {
         const targetIdx = logs.findIndex(l =>

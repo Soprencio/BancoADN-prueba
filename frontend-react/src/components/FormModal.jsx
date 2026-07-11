@@ -60,7 +60,6 @@ const FormModal = ({
       await onSubmit(values);
       onClose();
     } catch (err) {
-      // Could set error state; but we rely on toast from caller
       console.error(err);
     } finally {
       setSubmitting(false);

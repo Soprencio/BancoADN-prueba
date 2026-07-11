@@ -3,22 +3,19 @@ package com.mycompany.bancoadn.cliente.httpapi;
 import io.javalin.Javalin;
 import com.mycompany.bancoadn.cliente.httpapi.BridgeEndpoints;
 
-/**
- * HTTP API server using Javalin.
- * Exposes the existing socket-based functionality as REST endpoints.
- */
+/** Servidor HTTP API usando Javalin */
 public class ApiServer {
 
     private Javalin app;
 
     /**
-     * Starts the HTTP server on the specified port.
+     * Start del server HTTP con el puerto pertinente
      * @param port the port to listen on
      */
     public void start(int port) {
         app = Javalin.create().start(port);
 
-        // Enable CORS for any React frontend origin (development)
+        // Permite CORS (Encuentra el puerto del frontend, generalmentw 5173 pero puede variar)
         app.before(ctx -> {
             String origin = ctx.header("Origin");
             if (origin != null && !origin.isEmpty()) {
@@ -34,10 +31,9 @@ public class ApiServer {
             }
         });
 
-        // Register bridge endpoints (controllers via HTTP bridges)
+        // Registra bridge endpoints
         BridgeEndpoints.register(app);
 
-        // Root endpoint for health check
         app.get("/", ctx -> {
             ctx.result("BancoADN HTTP API is running");
         });
@@ -46,7 +42,7 @@ public class ApiServer {
     }
 
     /**
-     * Stops the HTTP server.
+     * Stop del server HTTP.
      */
     public void stop() {
         if (app != null) {

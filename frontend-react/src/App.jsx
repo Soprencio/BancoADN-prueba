@@ -15,7 +15,6 @@ const PrivateRole = ({ role, children }) => {
   if (loading) return <div>Cargando...</div>;
   if (!user) return <Navigate to="/login" replace />;
   if (user.idRol !== role) {
-    // Optionally redirect to a not found page
     return <Navigate to="/" replace />;
   }
   return children;
