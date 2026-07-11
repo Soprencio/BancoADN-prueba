@@ -1,4 +1,4 @@
-idIncremental=112
+idIncremental=120
 1 - 14 - Cliente - 2026-06-24 - Se conecto un cliente al servidor
 2 - 1 - 9 - 2026-06-24 - nombrecreo se creo una cuenta
 3 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
@@ -111,3 +111,11 @@ idIncremental=112
 110 - 2 - 23 - 2026-07-10 - aaa inicio sesion
 111 - 10 - 23 - 2026-07-10 - aaa busco perfiles por id con el siguiente: 12
 112 - 10 - 23 - 2026-07-10 - aaa busco todos los perfiles
+113 - 14 - Cliente - 2026-07-10 - Se conecto un cliente al servidor
+114 - 2 - 16 - 2026-07-10 - bbb inicio sesion
+115 - 11 - 16 - 2026-07-10 - bbb busco la lista de solicitudes
+116 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+117 - 13 - 16 - 2026-07-10 - bbb busco la lista de logs
+118 - 10 - 16 - 2026-07-10 - bbb busco todos los perfiles
+119 - 13 - 16 - 2026-07-10 - bbb busco la lista de logs
+120 - 12 - 16 - 2026-07-10 - bbb busco la lista de las ultimas solicitudes

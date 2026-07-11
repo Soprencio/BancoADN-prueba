@@ -1,0 +1,1152 @@
+===============================================================================
+  DIAGRAMA DE CLASES - ARQUITECTURA BANCOADN (Post-migración)
+  Proyecto: BancoADN-Cliente
+  Paquete base: com.mycompany.bancoadn.cliente
+===============================================================================
+
+Organizado en 11 grupos. Cada grupo muestra el patrón:
+
+  IVista* (interfaz)
+       ↑ implementa        ↑ implementa
+       |                    |
+  Vista*Bridge         Pant_*/Menu*  (Swing legacy)
+       ↓ usa               ↓ usa
+  BridgeResult         (Swing widgets)
+       ↑ lee
+  BridgeEndpoints (HTTP)
+       ↓ instancia
+  Ctrl_* → usa IVista*
+
+===============================================================================
+GRUPO 1: INICIAR SESION
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaIniciarSesion                                        │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getEmail() : String                                                 │
+│ + getContrasena() : String                                            │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + limpiarCampos()                                                     │
+│ + dispose()                                                           │
+│ + navegarARegistro()                                                  │
+│ + navegarAMenuUsuario(email : String, nombre : String, idRol : int)   │
+│ + navegarAMenuAdmin(email : String, nombre : String, idRol : int)     │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaIniciarSesionBridge implements IVistaIniciarSesion       │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - email : String       = ""                                           │
+│ - contrasena : String  = ""                                           │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setInputEmail(v : String)                                           │
+│ + setInputContrasena(v : String)                                      │
+│ + getEmail() : String                                                 │
+│ + getContrasena() : String                                            │
+│ + mostrarError(msg : String)       → result.setSuccess(false); msg    │
+│ + mostrarMensaje(msg : String)     → result.setSuccess(true); msg     │
+│ + limpiarCampos()                  → no-op                            │
+│ + dispose()                        → result.put("disposed", true)     │
+│ + navegarARegistro()               → result.setNavigate("registro")   │
+│ + navegarAMenuUsuario(e,n,r)       → result: navigate=menuUsuario     │
+│ + navegarAMenuAdmin(e,n,r)         → result: navigate=menuAdmin       │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_IniciarSesion extends JFrame implements IVistaIniciarSesion│
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - logger : Logger                                                     │
+│ + txtEmail : JTextField                                               │
+│ + txtContrasena : JPasswordField                                      │
+│ + btnIniciarSesion : JButton                                          │
+│ + lblRegistro : JLabel                                                │
+│ + btnOjo : JButton                                                    │
+│ - jLabel1 : JLabel                                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_IniciarSesion()                                                │
+│ - initComponents()                                                    │
+│ - configurarDiseno()                                                  │
+│ + getEmail() : String                                                 │
+│ + getContrasena() : String                                            │
+│ + setEmail(email : String)                                            │
+│ + setContrasena(contrasena : String)                                  │
+│ + limpiarCampos()                                                     │
+│ + mostrarError(mensaje : String)                                      │
+│ + mostrarMensaje(mensaje : String)                                    │
+│ + agregarListenerBotonIniciarSesion(listener : ActionListener)        │
+│ + agregarListenerRegistro(listener : ActionListener)                  │
+│ + navegarARegistro()                                                  │
+│ + navegarAMenuUsuario(email, nombre, idRol)                           │
+│ + navegarAMenuAdmin(email, nombre, idRol)                             │
+│ + main(args : String[])                                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_IniciarSesion implements ActionListener              │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaIniciarSesion                                         │
+│ - clienteSocket : ClienteSocket                                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_IniciarSesion(vista, clienteSocket)                            │
+│ + ejecutarLogin(email : String, contrasena : String)                  │
+│ + actionPerformed(e : ActionEvent)                                    │
+│ - iniciarSesion(email : String, contrasena : String)                  │
+│ - procesarRespuesta(respuesta : String, email : String)               │
+│ + abrirRegistro()                                                     │
+│ - validarEmail(email : String) : boolean                              │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 2: CREAR CUENTA
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaCrearCuenta                                          │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getNombreCuenta() : String                                          │
+│ + getEmail() : String                                                 │
+│ + getContrasena() : String                                            │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + limpiarCampos()                                                     │
+│ + dispose()                                                           │
+│ + navegarALogin()                                                     │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaCrearCuentaBridge implements IVistaCrearCuenta           │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - nombre : String       = ""                                          │
+│ - email : String        = ""                                          │
+│ - contrasena : String   = ""                                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setInputNombre(v : String)                                          │
+│ + setInputEmail(v : String)                                           │
+│ + setInputContrasena(v : String)                                      │
+│ + getNombreCuenta() : String                                          │
+│ + getEmail() : String                                                 │
+│ + getContrasena() : String                                            │
+│ + mostrarError(msg : String)    → result.setError(msg)                │
+│ + mostrarMensaje(msg : String)  → result.setSuccess(true); msg        │
+│ + limpiarCampos()               → no-op                               │
+│ + dispose()                     → result.put("disposed", true)        │
+│ + navegarALogin()               → result.setNavigate("login")         │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_CrearCuenta extends JFrame implements IVistaCrearCuenta   │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - logger : Logger                                                     │
+│ + txtEmail : JTextField                                               │
+│ + txtContrasena : JPasswordField                                      │
+│ + txtNombre : JTextField                                              │
+│ + btnIngresar : JButton                                               │
+│ + btnOjo : JButton                                                    │
+│ + lblVolver : JLabel                                                  │
+│ - jLabel1 : JLabel                                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_CrearCuenta()                                                  │
+│ - initComponents()                                                    │
+│ - configurarDiseno()                                                  │
+│ + getEmail() : String                                                 │
+│ + getContrasena() : String                                            │
+│ + getNombreCuenta() : String                                          │
+│ + setEmail(v : String)                                                │
+│ + setContrasena(v : String)                                           │
+│ + setNombreCuenta(v : String)                                         │
+│ + limpiarCampos()                                                     │
+│ + mostrarError(mensaje : String)                                      │
+│ + mostrarMensaje(mensaje : String)                                    │
+│ + agregarListenerBotonIngresar(listener : ActionListener)             │
+│ + agregarListenerVolver(listener : ActionListener)                    │
+│ + navegarALogin()                                                     │
+│ + main(args : String[])                                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_CrearCuenta implements ActionListener                │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaCrearCuenta                                           │
+│ - clienteSocket : ClienteSocket                                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_CrearCuenta(vista, clienteSocket)                              │
+│ + ejecutarCrearCuenta(nombreCuenta, email, contrasena)                │
+│ + actionPerformed(e : ActionEvent)                                    │
+│ - crearCuenta(nombreCuenta, email, contrasena)                        │
+│ - procesarRespuesta(respuesta : String)                               │
+│ + volverAlLogin()                                                     │
+│ - validarEmail(email : String) : boolean                              │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 3: MENU USUARIO
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaMenuUsuario                                          │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + mostrarPerfil(nombre, codigo, descripcion, estado, fecha : String)  │
+│ + limpiarPerfil()                                                     │
+│ + confirmar(msg : String) : boolean                                   │
+│ + dispose()                                                           │
+│ + navegarABuscar()                                                    │
+│ + navegarASolicitarPerfil()                                           │
+│ + navegarASolicitarModificacion()                                     │
+│ + navegarALogin(email : String, nombre : String)                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaMenuUsuarioBridge implements IVistaMenuUsuario           │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - confirmResult : boolean   = true                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setConfirmResult(v : boolean)                                       │
+│ + mostrarError(msg : String)       → result.setError(msg)             │
+│ + mostrarMensaje(msg : String)     → result: message, type=info       │
+│ + mostrarPerfil(n,c,d,e,f)         → result: perfil=Map{nombreCompleto│
+│                                       codigoSecuencia, descripcion,   │
+│                                       estado:(1|0), fechaMuestra}     │
+│ + limpiarPerfil()                  → result.put("perfil", null)       │
+│ + confirmar(msg : String) : boolean → result: confirmMsg, return true │
+│ + dispose()                        → result.put("disposed", true)     │
+│ + navegarABuscar()                 → result.setNavigate("buscar")     │
+│ + navegarASolicitarPerfil()        → navigate="solicitarPerfil"       │
+│ + navegarASolicitarModificacion()  → navigate="solicitarModificacion" │
+│ + navegarALogin(e,n)               → result.setNavigate("login")      │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: MenuUsuario extends JFrame implements IVistaMenuUsuario        │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - azulClaro, azulBoton, naranjaTexto : Color                          │
+│ - grisFondo, grisPanelInterno, grisOscuro : Color                     │
+│ + btnBuscar, btnSolicitarPerfil : JButton                             │
+│ + btnSolicitarModificacion, btnSolicitarDesactivar : JButton          │
+│ + btnSolicitarReactivar, btnCerrarSesion : JButton                    │
+│ + btnVerPerfil : JButton                                              │
+│ + lblHola : JLabel                                                    │
+│ - emailUsuario : String                                               │
+│ - lblCodigoSecuencia, lblDescripcion : JLabel                         │
+│ - lblFecha, lblNombrePerfil, lblEstado : JLabel                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + MenuUsuario()                                                       │
+│ - crearEncabezado() : JPanel                                          │
+│ - crearPanelIzquierdo() : JPanel                                      │
+│ - crearPanelDerecho() : JPanel                                        │
+│ + mostrarPerfil(nombreCompleto, codigo, descripcion, estado, fecha)   │
+│ + limpiarPerfil()                                                     │
+│ + setNombreUsuario(nombre : String)                                   │
+│ + setEmailUsuario(email : String)                                     │
+│ + getEmailUsuario() : String                                          │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + agregarListenerBuscar(l : ActionListener)                           │
+│ + agregarListenerSolicitarPerfil(l : ActionListener)                  │
+│ + agregarListenerSolicitarModificacion(l : ActionListener)            │
+│ + agregarListenerSolicitarDesactivar(l : ActionListener)              │
+│ + agregarListenerSolicitarReactivar(l : ActionListener)               │
+│ + agregarListenerCerrarSesion(l : ActionListener)                     │
+│ + agregarListenerVerPerfil(l : ActionListener)                        │
+│ - crearBotonAzul(texto : String) : JButton                            │
+│ + confirmar(msg : String) : boolean                                   │
+│ + navegarABuscar()                                                    │
+│ + navegarASolicitarPerfil()                                           │
+│ + navegarASolicitarModificacion()                                     │
+│ + navegarALogin(email : String, nombre : String)                      │
+│ + main(args : String[])                                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_MenuUsuario                                         │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaMenuUsuario                                           │
+│ - clienteSocket : ClienteSocket                                       │
+│ - cuentaActual : CuentaPersonal                                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_MenuUsuario(vista, clienteSocket, cuentaActual)                │
+│ - obtenerSnapshotPerfil() : PerfilGenetico                            │
+│ + manejarBuscar()                                                     │
+│ + manejarVerPerfil()                                                  │
+│ + validarSolicitarPerfil() : String                                   │
+│ + manejarSolicitarPerfil()                                            │
+│ + validarSolicitarModificacion() : String                             │
+│ + manejarSolicitarModificacion()                                      │
+│ + validarSolicitarDesactivar() : String                               │
+│ + manejarSolicitarDesactivar()                                        │
+│ - solicitarDesactivarPerfil()                                         │
+│ + validarSolicitarReactivar() : String                                │
+│ + manejarSolicitarReactivar()                                         │
+│ - solicitarReactivarPerfil()                                          │
+│ - procesarRespuestaSolicitud(respuesta : String, tipoAccion : String) │
+│ + manejarCerrarSesion()                                               │
+│ + getCuentaActual() : CuentaPersonal                                  │
+│ + getClienteSocket() : ClienteSocket                                  │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 4: MENU ADMIN (SOLICITUDES PENDIENTES)
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaMenuAdmin                                            │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + confirmar(msg : String) : boolean                                   │
+│ + limpiarSolicitudes()                                                │
+│ + mostrarSinSolicitudes()                                             │
+│ + agregarTarjetaSolicitud(idSolicitud : int, mail : String,           │
+│       fecha : String, tipo : String, lineaExtra : String,             │
+│       idSolicitudParaAccion : int, datosSolicitud : String)           │
+│ + dispose()                                                           │
+│ + navegarALogin()                                                     │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaMenuAdminBridge implements IVistaMenuAdmin               │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - confirmResult : boolean   = true                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setConfirmResult(v : boolean)                                       │
+│ + mostrarError(msg : String)       → result.setError(msg)             │
+│ + mostrarMensaje(msg : String)     → result: message, type=info       │
+│ + confirmar(msg : String) : boolean → result: confirmMsg, return true │
+│ + limpiarSolicitudes()             → result: solicitudes=[]           │
+│ + mostrarSinSolicitudes()          → result: solicitudesVacio=true    │
+│ + agregarTarjetaSolicitud(id,mail,fecha,tipo,linea,idAccion,         │
+│       datosSolicitud)              → extrae tokens[1..4] de           │
+│       datosSolicitud.split(" _ ")  → nombreCompleto, codigoSecuencia, │
+│       descripcion, fechaMuestra    → addCard("solicitudes", card)     │
+│ + dispose()                        → result.put("disposed", true)     │
+│ + navegarALogin()                  → result.setNavigate("login")      │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: MenuAdmin extends JFrame implements IVistaMenuAdmin            │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - azulClaro, azulBoton, naranjaTexto, grisFondo : Color              │
+│ - verdeAprobar, rojoRechazar, blanco, grisOscuro : Color             │
+│ - grisBorde, moradoBoton, verdeBoton : Color                          │
+│ + lblHola : JLabel                                                    │
+│ + btnCerrarSesion, btnUltimasSolicitudes : JButton                    │
+│ + btnLogs, btnAdministrarPerfiles : JButton                           │
+│ - panelSolicitudes : JPanel                                           │
+│ - emailAdmin : String                                                 │
+├────────────────────────────────────────────────────────────────────────┤
+│ + MenuAdmin()                                                         │
+│ - crearEncabezado() : JPanel                                          │
+│ - crearCuerpo() : JPanel                                              │
+│ + agregarTarjetaSolicitud(id,mail,fecha,tipo,linea,onAprobar,        │
+│       onRechazar)       (version ActionListener)                      │
+│ + limpiarSolicitudes()                                                │
+│ + mostrarSinSolicitudes()                                             │
+│ + setNombreAdmin(nombre : String)                                     │
+│ + setEmailAdmin(email : String)                                       │
+│ + getEmailAdmin() : String                                            │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + confirmar(msg : String) : boolean                                   │
+│ + agregarListenerCerrarSesion(l : ActionListener)                     │
+│ + agregarListenerUltimasSolicitudes(l : ActionListener)               │
+│ + agregarListenerLogs(l : ActionListener)                             │
+│ + agregarListenerAdministrarPerfiles(l : ActionListener)              │
+│ - crearBotonAzul(texto : String) : JButton                            │
+│ - crearBotonColoreado(texto : String, color : Color) : JButton        │
+│ - crearBotonIcono(icono : String, color : Color) : JButton            │
+│ - esc(s : String) : String                                            │
+│ + agregarTarjetaSolicitud(id,mail,fecha,tipo,linea,idAccion,         │
+│       datosSolicitud) (override IVistaMenuAdmin)                       │
+│ + navegarALogin()                                                     │
+│ + main(args : String[])                                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_MenuAdmin                                           │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaMenuAdmin                                             │
+│ - clienteSocket : ClienteSocket                                       │
+│ - adminLogueado : CuentaPersonal                                      │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_MenuAdmin(vista, clienteSocket, adminLogueado)                 │
+│ + consultarSolicitudesPendientes()                                    │
+│ + resolverSolicitud(idSolicitud : int, estadoNuevo : int)             │
+│ - verificarEstadoSolicitud(idSolicitud : int) : boolean               │
+│ - procesarResolucion(idSolicitud : int, respuesta : String,           │
+│       estadoNuevo : int)                                              │
+│ - obtenerSnapshotSolicitudes() : List<Solicitud>                      │
+│ - obtenerEmailPorPerfil(idPerfil : int) : String                      │
+│ + manejarCerrarSesion()                                               │
+│ + getAdminLogueado() : CuentaPersonal                                 │
+│ + getClienteSocket() : ClienteSocket                                  │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 5: BUSCAR PERFIL (USUARIO)
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaBuscarPerfil                                         │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getTipoFiltro() : String                                            │
+│ + getTextoBusqueda() : String                                         │
+│ + limpiarResultados()                                                 │
+│ + agregarResultado(id : String, nombre : String, codigo : String,     │
+│       descripcion : String, fecha : String)                           │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + dispose()                                                           │
+│ + navegarAMenu()                                                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaBuscarPerfilBridge implements IVistaBuscarPerfil         │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - tipoFiltro : String    = "Nombre"                                   │
+│ - textoBusqueda : String  = ""                                        │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setInputTipoFiltro(v : String)                                      │
+│ + setInputTextoBusqueda(v : String)                                   │
+│ + getTipoFiltro() : String                                            │
+│ + getTextoBusqueda() : String                                         │
+│ + limpiarResultados()          → result.put("resultados", [])         │
+│ + agregarResultado(id,n,c,d,f) → Map{idPerfil, nombreCompleto,       │
+│       codigoSecuencia, descripcion, fechaMuestra, estado:1}           │
+│       addCard("resultados", card)                                     │
+│ + mostrarError(msg : String)  → result.setError(msg)                 │
+│ + mostrarMensaje(msg : String) → result.setSuccess(true); msg        │
+│ + dispose()                    → result.put("disposed", true)         │
+│ + navegarAMenu()               → result.setNavigate("menuUsuario")    │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_BuscarPerfil extends JFrame implements IVistaBuscarPerfil │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - celesteEncabezado, grisFondoCuerpo, azulBoton, grisBordeClaro : Co │
+│ + btnAtras, btnBuscar : JButton                                       │
+│ + txtBusqueda : JTextField                                            │
+│ + cbFiltro : JComboBox<String>      (items: "Nombre", "ID")           │
+│ - resultsContainer : JPanel                                           │
+│ - perfilData : Map<JButton, Map<String, String>>                      │
+│ - botonesVer : List<JButton>                                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_BuscarPerfil()                                                 │
+│ - configurarDiseno()                                                  │
+│ - crearPanelResultado(id,nombre,codigo,desc,fecha) : JPanel           │
+│ + configurarAccionesVerPerfil(listener : ActionListener)              │
+│ + getTipoFiltro() : String                                            │
+│ + getTextoBusqueda() : String                                         │
+│ + getPerfilData(btnVer : JButton) : Map                               │
+│ + getBotonesVer() : List<JButton>                                     │
+│ + limpiarResultados()                                                 │
+│ + agregarResultado(id,nombre,codigo,descripcion,fecha)                │
+│ + mostrarError(mensaje : String)                                      │
+│ + mostrarMensaje(mensaje : String)                                    │
+│ + navegarAMenu()                                                      │
+│ + main(args : String[])                                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_BuscarPerfil                                        │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaBuscarPerfil                                          │
+│ - clienteSocket : ClienteSocket                                       │
+│ - cuentaActual : CuentaPersonal                                       │
+│ - resultadosActuales : List<PerfilGenetico>                           │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_BuscarPerfil(vista, clienteSocket, cuentaActual)               │
+│ + ejecutarBusqueda(tipoFiltro : String, texto : String)               │
+│ - procesarRespuesta(respuestas : List<String>)                        │
+│ + manejarVolver()                                                     │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 6: SOLICITAR PERFIL (REGISTRO)
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaSolicitarPerfil                                      │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + limpiarCampos()                                                     │
+│ + dispose()                                                           │
+│ + navegarAMenu()                                                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaSolicitarPerfilBridge implements IVistaSolicitarPerfil   │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - nombre : String       = ""                                          │
+│ - codigo : String       = ""                                          │
+│ - descripcion : String  = ""                                          │
+│ - fecha : String        = ""                                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setInputNombre(v : String)                                          │
+│ + setInputCodigo(v : String)                                          │
+│ + setInputDescripcion(v : String)                                     │
+│ + setInputFecha(v : String)                                           │
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + mostrarError(msg : String)    → result.setError(msg)                │
+│ + mostrarMensaje(msg : String)  → result.setSuccess(true); msg        │
+│ + limpiarCampos()               → no-op                               │
+│ + dispose()                     → result.put("disposed", true)        │
+│ + navegarAMenu()                → result.setNavigate("menuUsuario")   │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_SolicitarPerfil extends JFrame implements IVistaSolicitar │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - logger : Logger                                                     │
+│ + txtNombrePerfil : JTextField                                        │
+│ + txtCodigoSecuencia : JTextField                                     │
+│ + txtDescripcion : JTextArea                                          │
+│ + txtFechaMuestra : JTextField                                        │
+│ + btnEnviarSolicitud : JButton                                        │
+│ + btnVolver : JButton                                                 │
+│ - jLabel1 : JLabel                                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_SolicitarPerfil()                                              │
+│ - initComponents()                                                    │
+│ - configurarDiseno()                                                  │
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + setNombrePerfil(v : String)                                         │
+│ + setCodigoSecuencia(v : String)                                      │
+│ + setDescripcion(v : String)                                          │
+│ + setFechaMuestra(v : String)                                         │
+│ + limpiarCampos()                                                     │
+│ + mostrarError(mensaje : String)                                      │
+│ + mostrarMensaje(mensaje : String)                                    │
+│ + agregarListenerEnviarSolicitud(listener : ActionListener)           │
+│ + agregarListenerVolver(listener : ActionListener)                    │
+│ + navegarAMenu()                                                      │
+│ + main(args : String[])                                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_SolicitarPerfil                                     │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaSolicitarPerfil                                       │
+│ - clienteSocket : ClienteSocket                                       │
+│ - cuentaActual : CuentaPersonal                                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_SolicitarPerfil(vista, clienteSocket, cuentaActual)            │
+│ + ejecutarSolicitud(nombre, codigo, descripcion, fecha : String)      │
+│ - solicitarRegistrarPerfil(n,c,d,f : String)                          │
+│ - procesarRespuesta(respuesta : String)                               │
+│ + manejarVolver()                                                     │
+│ - validarFormatoFecha(fecha : String) : boolean                       │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 7: SOLICITAR MODIFICACION PERFIL
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaSolicitarModPerfil                                   │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + limpiarCampos()                                                     │
+│ + dispose()                                                           │
+│ + navegarAMenu()                                                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaSolicitarModPerfilBridge implements IVistaSolicitarMod   │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - nombre : String       = ""                                          │
+│ - codigo : String       = ""                                          │
+│ - descripcion : String  = ""                                          │
+│ - fecha : String        = ""                                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setInputNombre(v : String)                                          │
+│ + setInputCodigo(v : String)                                          │
+│ + setInputDescripcion(v : String)                                     │
+│ + setInputFecha(v : String)                                           │
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + mostrarError(msg : String)    → result.setError(msg)                │
+│ + mostrarMensaje(msg : String)  → result.setSuccess(true); msg        │
+│ + limpiarCampos()               → no-op                               │
+│ + dispose()                     → result.put("disposed", true)        │
+│ + navegarAMenu()                → result.setNavigate("menuUsuario")   │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_SolicitarModPerfil extends JFrame implements IVistaSolici │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - logger : Logger                                                     │
+│ + txtNombrePerfil : JTextField                                        │
+│ + txtCodigoSecuencia : JTextField                                     │
+│ + txtDescripcion : JTextArea                                          │
+│ + txtFechaMuestra : JTextField                                        │
+│ + btnEnviarSolicitud : JButton                                        │
+│ + btnVolver : JButton                                                 │
+│ - jLabel1 : JLabel                                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_SolicitarModPerfil()                                           │
+│ - initComponents()                                                    │
+│ - configurarDiseno()                                                  │
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + setNombrePerfil(v : String)                                         │
+│ + setCodigoSecuencia(v : String)                                      │
+│ + setDescripcion(v : String)                                          │
+│ + setFechaMuestra(v : String)                                         │
+│ + limpiarCampos()                                                     │
+│ + mostrarError(mensaje : String)                                      │
+│ + mostrarMensaje(mensaje : String)                                    │
+│ + agregarListenerEnviarSolicitud(listener : ActionListener)            │
+│ + agregarListenerVolver(listener : ActionListener)                    │
+│ + navegarAMenu()                                                      │
+│ + main(args : String[])                                               │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_SolicitarModPerfil                                  │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaSolicitarModPerfil                                    │
+│ - clienteSocket : ClienteSocket                                       │
+│ - cuentaActual : CuentaPersonal                                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_SolicitarModPerfil(vista, clienteSocket, cuentaActual)         │
+│ + ejecutarSolicitud(nombre, codigo, descripcion, fecha : String)      │
+│ - solicitarModificarPerfil(n,c,d,f : String)                          │
+│ - procesarRespuesta(respuesta : String)                               │
+│ + manejarVolver()                                                     │
+│ - validarFormatoFecha(fecha : String) : boolean                       │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 8: ADMIN PERFILES (BUSQUEDA + BAJA/RESTAURAR/MODIFICAR)
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaAdminPerfiles                                        │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getTipoFiltro() : String                                            │
+│ + getTextoBusqueda() : String                                         │
+│ + limpiarPerfiles()                                                   │
+│ + mostrarSinResultados()                                              │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + confirmar(msg : String) : boolean                                   │
+│ + agregarTarjetaPerfil(id : int, nombre : String, codigo : String,    │
+│       descripcion : String, fecha : String, email : String,           │
+│       activo : boolean, idPerfilParaAccion : int)                     │
+│ + dispose()                                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaAdminPerfilesBridge implements IVistaAdminPerfiles       │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - confirmResult : boolean    = true                                   │
+│ - tipoFiltro : String        = "Todos"                                │
+│ - textoBusqueda : String     = ""                                     │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setInputTipoFiltro(v : String)                                      │
+│ + setInputTextoBusqueda(v : String)                                   │
+│ + setConfirmResult(v : boolean)                                       │
+│ + getTipoFiltro() : String                                            │
+│ + getTextoBusqueda() : String                                         │
+│ + limpiarPerfiles()             → result.put("perfiles", [])          │
+│ + mostrarSinResultados()        → result.put("perfilesVacio", true)   │
+│ + mostrarError(msg : String)    → result.setError(msg)                │
+│ + mostrarMensaje(msg : String)  → result.setSuccess(true); msg        │
+│ + confirmar(msg : String) : boolean → result: confirmMsg, return true │
+│ + agregarTarjetaPerfil(id,n,c,d,f,email,activo,idAccion)              │
+│       → Map{idPerfil, nombreCompleto, codigoSecuencia, descripcion,   │
+│         fechaMuestra, email, estado:(1|0)} → addCard("perfiles",card) │
+│ + dispose()                    → result.put("disposed", true)         │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_AdminPerfiles extends JFrame implements IVistaAdminPerfi  │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - azulClaro, grisFondo, blanco, grisOscuro, grisBorde : Color        │
+│ - azulBoton, verdeBoton, rojoBoton, naranjaTexto : Color             │
+│ + btnVolver, btnBuscar : JButton                                      │
+│ + txtBusqueda : JTextField                                            │
+│ + cbFiltro : JComboBox<String>                                        │
+│ - panelPerfiles : JPanel                                              │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_AdminPerfiles()                                                │
+│ - construirUI()                                                       │
+│ - crearEncabezado() : JPanel                                          │
+│ - crearCuerpo() : JPanel                                              │
+│ + agregarTarjetaPerfil(id,n,c,d,f,email,activo,onModif,onBajaRest)   │
+│       (version ActionListener)                                        │
+│ + limpiarPerfiles()                                                   │
+│ + mostrarSinResultados()                                              │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + confirmar(msg : String) : boolean                                   │
+│ + getTipoFiltro() : String                                            │
+│ + getTextoBusqueda() : String                                         │
+│ + agregarListenerBuscar(l : ActionListener)                           │
+│ + agregarListenerVolver(l : ActionListener)                           │
+│ + agregarTarjetaPerfil(id,n,c,d,f,email,activo,idAccion)              │
+│       (override IVistaAdminPerfiles)                                   │
+│ - crearBotonAzul(texto : String) : JButton                            │
+│ - crearBotonIcono(texto : String, color : Color) : JButton            │
+│ - esc(s : String) : String                                            │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_AdminPerfiles                                       │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaAdminPerfiles                                         │
+│ - clienteSocket : ClienteSocket                                       │
+│ - adminLogueado : CuentaPersonal                                      │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_AdminPerfiles(vista, clienteSocket, adminLogueado)             │
+│ + ejecutarBusqueda(filtro : String, texto : String)                   │
+│ + solicitarBajaPerfil(emailTitular : String)                          │
+│ + solicitarRestaurarPerfil(emailTitular : String)                     │
+│ + abrirModificarPerfil(emailTitular : String, idPerfil : int)         │
+│ - obtenerSnapshotPerfiles(filtro, texto) : List<PerfilGenetico>       │
+│ - obtenerEmailTitular(idPerfil : int) : String                        │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 9: MODIFICAR PERFIL (ADMIN)
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaModificarPerfilAdmin                                 │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + dispose()                                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaModificarPerfilAdminBridge implements IVistaModificarAdm │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+│ - nombre : String       = ""                                          │
+│ - codigo : String       = ""                                          │
+│ - descripcion : String  = ""                                          │
+│ - fecha : String        = ""                                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ + setInputNombre(v : String)                                          │
+│ + setInputCodigo(v : String)                                          │
+│ + setInputDescripcion(v : String)                                     │
+│ + setInputFecha(v : String)                                           │
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + mostrarError(msg : String)    → result.setError(msg)                │
+│ + mostrarMensaje(msg : String)  → result.setSuccess(true); msg        │
+│ + dispose()                     → result.put("disposed", true)        │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_ModificarPerfilAdmin extends JFrame implements IVistaModi │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - logger : Logger                                                     │
+│ + txtNombrePerfil : JTextField                                        │
+│ + txtCodigoSecuencia : JTextField                                     │
+│ + txtDescripcion : JTextArea                                          │
+│ + txtFechaMuestra : JTextField                                        │
+│ + btnModificar : JButton                                              │
+│ + btnCancelar : JButton                                               │
+│ - jLabel1 : JLabel                                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_ModificarPerfilAdmin()                                         │
+│ - initComponents()                                                    │
+│ - configurarDiseno()                                                  │
+│ + getNombrePerfil() : String                                          │
+│ + getCodigoSecuencia() : String                                       │
+│ + getDescripcion() : String                                           │
+│ + getFechaMuestra() : String                                          │
+│ + setNombrePerfil(v : String)                                         │
+│ + setCodigoSecuencia(v : String)                                      │
+│ + setDescripcion(v : String)                                          │
+│ + setFechaMuestra(v : String)                                         │
+│ + mostrarError(msg : String)                                          │
+│ + mostrarMensaje(msg : String)                                        │
+│ + agregarListenerModificar(l : ActionListener)                        │
+│ + agregarListenerCancelar(l : ActionListener)                         │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_ModificarPerfilAdmin                                │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaModificarPerfilAdmin                                  │
+│ - clienteSocket : ClienteSocket                                       │
+│ - emailTitular : String                                               │
+│ - adminLogueado : CuentaPersonal                                      │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_ModificarPerfilAdmin(vista, clienteSocket, emailTitular,       │
+│       adminLogueado)                                                  │
+│ + ejecutarModificacion(nombre, codigo, desc, fecha : String)          │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 10: LOGS
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaLogs                                                 │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + agregarTarjetaLog(id : int, nombre : String, email : String,        │
+│       descripcion : String, fecha : String, acciones : String,        │
+│       esAdmin : boolean)                                              │
+│ + limpiarLogs()                                                       │
+│ + mostrarSinLogs()                                                    │
+│ + mostrarError(msg : String)                                          │
+│ + dispose()                                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaLogsBridge implements IVistaLogs                         │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ + agregarTarjetaLog(id,nombre,email,desc,fecha,acciones,esAdmin)      │
+│       → Map{idRegistro, nombreCuenta, email, descripcion, fecha,      │
+│         acciones, esAdmin} → addCard("logs", card)                    │
+│ + limpiarLogs()                → result.put("logs", [])               │
+│ + mostrarSinLogs()             → result.put("logsVacio", true)        │
+│ + mostrarError(msg : String)   → result.setError(msg)                │
+│ + dispose()                    → result.put("disposed", true)         │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_Logs extends JFrame implements IVistaLogs                 │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - azulClaro, grisFondo, blanco, grisOscuro, grisBorde : Color        │
+│ - naranjaTexto : Color                                                │
+│ + btnCerrar : JButton                                                 │
+│ - panelLogs : JPanel                                                  │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_Logs(isAdmin : boolean)                                        │
+│ - construirUI(isAdmin : boolean)                                       │
+│ - crearEncabezado(isAdmin : boolean) : JPanel                          │
+│ - crearCuerpo() : JPanel                                              │
+│ + agregarTarjetaLog(id,nombre,email,descripcion,fecha,acciones,       │
+│       esAdmin)                                                        │
+│ + limpiarLogs()                                                       │
+│ + mostrarSinLogs()                                                    │
+│ + mostrarError(msg : String)                                          │
+│ + agregarListenerCerrar(l : ActionListener)                           │
+│ - esc(s : String) : String                                            │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_Logs                                                │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaLogs                                                  │
+│ - clienteSocket : ClienteSocket                                       │
+│ - idCuenta : String                                                   │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_Logs(vista, clienteSocket, idCuenta)                           │
+│ - cargarLogs()                                                        │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+GRUPO 11: ULTIMAS SOLICITUDES
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ INTERFACE: IVistaUltimasSolicitudes                                   │
+│ Paquete: httpapi.bridge.interfaces                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + agregarTarjetaSolicitud(id : int, mail : String, fecha : String,    │
+│       fechaResolucion : String, tipo : String, estadoTexto : String,  │
+│       lineaExtra : String, datosSolicitud : String)                   │
+│ + limpiarSolicitudes()                                                │
+│ + mostrarSinSolicitudes()                                             │
+│ + mostrarError(msg : String)                                          │
+│ + dispose()                                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BRIDGE: VistaUltimasSolicitudesBridge implements IVistaUltimasSolici  │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - result : BridgeResult                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ + agregarTarjetaSolicitud(id,mail,fecha,fechaRes,tipo,estadoTexto,    │
+│       linea,datosSolicitud)                                           │
+│       → estado = (estadoTexto contains "aceptada") ? 1 : 2            │
+│       → Map{idSolicitud, email, fecha, fechaResolucion, tipo,         │
+│         estado, nombreCompleto, codigoSecuencia, descripcion,         │
+│         fechaMuestra} parseado de datosSolicitud.split(" _ ")         │
+│       → addCard("solicitudes", card)                                  │
+│ + limpiarSolicitudes()         → result.put("solicitudes", [])        │
+│ + mostrarSinSolicitudes()      → result.put("solicitudesVacio", true) │
+│ + mostrarError(msg : String)   → result.setError(msg)                │
+│ + dispose()                    → result.put("disposed", true)         │
+│ + getResult() : BridgeResult                                           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SWING: Pant_UltimasSolicitudes extends JFrame implements IVistaUltim  │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - azulClaro, grisFondo, blanco, grisOscuro, grisBorde : Color        │
+│ - verdeOk, rojoRech, naranjaTexto : Color                             │
+│ + btnCerrar : JButton                                                 │
+│ - panelSolicitudes : JPanel                                           │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Pant_UltimasSolicitudes()                                           │
+│ - construirUI()                                                       │
+│ - crearEncabezado() : JPanel                                          │
+│ - crearCuerpo() : JPanel                                              │
+│ + agregarTarjetaSolicitud(id,mail,fecha,tipo,estado,linea,onCerrar)   │
+│       (version ActionListener)                                        │
+│ + limpiarSolicitudes()                                                │
+│ + mostrarSinSolicitudes()                                             │
+│ + mostrarError(msg : String)                                          │
+│ + agregarListenerCerrar(l : ActionListener)                           │
+│ + agregarTarjetaSolicitud(id,mail,fecha,fechaRes,tipo,estadoTexto,    │
+│       linea,datosSolicitud)  (override IVistaUltimasSolicitudes)       │
+│ - esc(s : String) : String                                            │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CONTROLADOR: Ctrl_UltimasSolicitudes                                  │
+│ Paquete: com.mycompany.bancoadn.cliente                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - vista : IVistaUltimasSolicitudes                                    │
+│ - clienteSocket : ClienteSocket                                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + Ctrl_UltimasSolicitudes(vista, clienteSocket)                       │
+│ - obtenerSnapshotUltimasSolicitudes() : List<Solicitud>               │
+│ - cargarUltimasSolicitudes()                                          │
+│ - obtenerEmailPorPerfil(idPerfil : int) : String                      │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+CLASES DE INFRAESTRUCTURA COMPARTIDAS
+===============================================================================
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BridgeResult                                                          │
+│ Paquete: httpapi.bridge                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ - data : Map<String, Object>                                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ + put(key : String, value : Object)                                   │
+│ + get(key : String) : Object                                          │
+│ + toMap() : Map<String, Object>                                       │
+│ + setSuccess(boolean)                                                 │
+│ + setMessage(String)                                                  │
+│ + setError(String)                                                    │
+│ + setNavigate(String)                                                 │
+│ + setRedirect(String)                                                 │
+│ + addCard(type : String, cardData : Map<String, Object>)              │
+│   → usa computeIfAbsent para crear/agregar a lista por tipo           │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ SessionSocket                                                         │
+│ Paquete: httpapi.service                                              │
+├────────────────────────────────────────────────────────────────────────┤
+│ - sessionSocket : ClienteSocket                                       │
+│ - sessionEmail : String                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ + getSocket(email : String) : ClienteSocket                           │
+│   → retorna sessionSocket solo si conectado y email coincide          │
+│ + setSocket(socket : ClienteSocket, email : String)                   │
+│   → desconecta socket previo, asigna nuevo socket+email                │
+│ + sendCommand(email : String, command : String) : String              │
+│   → getSocket(email) → enviarYRecibir(command)                       │
+│ + sendListCommand(email : String, command : String) : List<String>    │
+│   → getSocket(email) → enviarYSolicitarLista(command)                │
+│ + close()                                                             │
+│   → desconecta y limpia socket+email                                  │
+│ + isActive() : boolean                                                │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ CreateAccountResult                                                   │
+│ Paquete: httpapi.service                                              │
+├────────────────────────────────────────────────────────────────────────┤
+│ + success : boolean                                                   │
+│ + message : String                                                    │
+├────────────────────────────────────────────────────────────────────────┤
+│ + CreateAccountResult(success : boolean, message : String)            │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ ApiServer                                                             │
+│ Paquete: httpapi                                                      │
+├────────────────────────────────────────────────────────────────────────┤
+│ - app : Javalin                                                       │
+├────────────────────────────────────────────────────────────────────────┤
+│ + start(port : int)                                                   │
+│ + stop()                                                              │
+└────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────────┐
+│ BridgeEndpoints                                                       │
+│ Paquete: httpapi                                                      │
+├────────────────────────────────────────────────────────────────────────┤
+│ - MAPPER : ObjectMapper                                               │
+├────────────────────────────────────────────────────────────────────────┤
+│ + register(app : Javalin)                                             │
+│   → registra todos los endpoints REST (/api/auth/*, /api/perfiles/*,  │
+│     /api/solicitudes/*, /api/logs)                                    │
+│   → cada endpoint:                                                    │
+│     1. Parsea headers/query/body del request HTTP                     │
+│     2. SessionSocket.getSocket(email) para socket persistente         │
+│     3. Crea Vista*Bridge con inputs del request                       │
+│     4. Crea Ctrl_* con bridge + socket + CuentaPersonal               │
+│     5. Ejecuta metodo del controlador                                 │
+│     6. Lee BridgeResult y devuelve JSON                                │
+│ - resolverEmailPorIdPerfil(socket, perfilId) : String                 │
+└────────────────────────────────────────────────────────────────────────┘
+
+
+===============================================================================
+CLASES DE MODELO (ClasesModelo/)
+===============================================================================
+
+  CuentaPersonal     → email, nombreCuenta, idCuenta, idRol
+  PerfilGenetico     → idPerfil, nombreCompleto, codigoSecuencia,
+                       descripcion, estado (1=ACTIVO), fechaMuestra, idCuenta
+                       → isActivo()
+  Solicitud          → idSolicitud, email, estado, fechaCreacion,
+                       idPerfil, datosSolicitud
+                       → isPendiente(), isAprobada()
+  Registro           → idRegistro, idCuenta, idTipoAccion,
+                       fechaRegistro, detalles
+  TipoAccion         → idTipoAccion, nombreAccion
+  Rol                → idRol, nombreRol
+  ClienteSocket      → maneja conexion TCP con LadoServer
+                       → enviarYRecibir(String) : String
+                       → enviarYSolicitarLista(String) : List<String>
+                       → estaConectado() : boolean
+                       → desconectar()
+
+
+===============================================================================
+RESUMEN DE CAMBIOS ARQUITECTONICOS
+===============================================================================
+
+  ANTES (eliminado):           AHORA (nuevo):
+  ─────────────────────        ─────────────────────
+  service/AuthService          httpapi/service/SessionSocket
+  service/PerfilService        (reemplazado por SessionSocket +
+  service/SolicitudService      bridge + controlador directo)
+  service/LogService
+  endpoint/AuthEndpoints       httpapi/BridgeEndpoints
+  endpoint/PerfilEndpoints     (unico punto de entrada REST)
+  endpoint/SolicitudEndpoints
+  endpoint/LogEndpoints
+  dto/AuthDto                   Eliminado - se usa Map<String,Object>
+  dto/PerfilDto                 directamente desde BridgeResult
+  dto/SolicitudDto
+  dto/LogDto
+  (no existia)                 httpapi/bridge/interfaces/IVista* (11 interfaces)
+  (no existia)                 httpapi/bridge/Vista*Bridge (11 bridges)
+  (no existia)                 httpapi/bridge/BridgeResult
+  (no existia)                 httpapi/service/SessionSocket
+  (no existia)                 httpapi/service/CreateAccountResult
+
+  SIN CAMBIOS (se mantienen):
+  ─────────────────────
+  BancoADN_Grupo6_Ctrl_*       (11 controladores, solo cambio
+                                campo vista de Pant_* a IVista*)
+  BancoADN_Grupo6_Pant_*       (9 pantallas Swing + 2 menus)
+  BancoADN_Grupo6_ClienteSocket
+  ClasesModelo/CuentaPersonal, PerfilGenetico, Solicitud, etc.
